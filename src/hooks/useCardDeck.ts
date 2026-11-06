@@ -11,7 +11,7 @@ interface DragState {
   active: boolean
 }
 
-const EXIT_MS = 350
+const EXIT_MS = 400
 const DRAG_START_PX = 8
 
 function clamp(value: number, min: number, max: number) {

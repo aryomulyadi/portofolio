@@ -48,7 +48,7 @@ export function ProjectDeck({ projects, lang, catalogIndex, catalogTotal, onActi
         aria-label={t('projectsTitle', lang)}
         tabIndex={0}
         onKeyDown={deck.onKeyDown}
-        className="deck relative w-full max-w-[400px] aspect-[5/7]"
+        className="deck relative w-[85vw] max-w-[460px] aspect-[5/7]"
       >
         {order.map((id, rank) => {
           const project = byId.get(id)
@@ -59,12 +59,12 @@ export function ProjectDeck({ projects, lang, catalogIndex, catalogTotal, onActi
 
           const stackStyle = {
             '--rank': rank,
-            zIndex: 40 - rank,
+            zIndex: exiting ? 1 : 40 - rank,
           } as CSSProperties
 
-          // Bottom stacked deck + subtle left fan: progressive offset / scale / rotation
-          let transform = `translate(${rank * -10}px, ${rank * 9}%) scale(${1 - rank * 0.04}) translateZ(${-rank * 64}px) rotate(${rank * -2.2}deg)`
-          let opacity = rank <= 3 ? [0, 0.95, 0.78, 0.58][rank] : 0
+          // Pure horizontal fan — shared perspective, natural rotation, depth (CSS vars: desktop/mobile)
+          let transform = `translateX(calc(var(--fan-x) * ${rank})) rotate(calc(var(--fan-rot) * ${rank})) translateZ(calc(var(--fan-z) * ${rank})) scale(calc(1 - var(--fan-scale-step) * ${rank}))`
+          let opacity = rank <= 3 ? [0, 0.95, 0.8, 0.65][rank] : 0
 
           if (isFront) {
             transform = `translate(${drag.x}px, ${drag.y}px) rotate(${drag.rotate}deg)`
@@ -72,7 +72,8 @@ export function ProjectDeck({ projects, lang, catalogIndex, catalogTotal, onActi
           }
           if (exiting) {
             const dirSign = exitDir === 'next' ? 1 : -1
-            transform = `translateX(${dirSign * 140}%) rotate(${dirSign * 18}deg)`
+            // Slight move-out + rotation, then shrink + depth back into fan
+            transform = `translateX(${dirSign * 36}%) rotate(${dirSign * 10}deg) scale(0.9) translateZ(-100px)`
             opacity = 0
           }
 
@@ -165,7 +166,7 @@ export function ProjectDeck({ projects, lang, catalogIndex, catalogTotal, onActi
         })}
       </div>
 
-      <div className="deck-controls flex w-full max-w-[400px] items-center justify-between gap-4">
+      <div className="deck-controls flex w-full max-w-[460px] items-center justify-between gap-4">
         <button
           type="button"
           onClick={deck.goPrev}

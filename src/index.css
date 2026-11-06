@@ -121,14 +121,29 @@
   /* ── Interactive trading-card deck ─────────────────────────── */
 
   .deck {
-    perspective: 1400px;
+    perspective: 1200px;
     transform-style: preserve-3d;
+    /* Pure horizontal fan — desktop (1920×1080): per-rank step */
+    --fan-x: -34px;
+    --fan-rot: -4deg;
+    --fan-z: -40px;
+    --fan-scale-step: 0.035;
+  }
+
+  @media (max-width: 640px) {
+    .deck {
+      /* Mobile (390×844): tighter fan */
+      --fan-x: -12px;
+      --fan-rot: -2deg;
+      --fan-z: -20px;
+      --fan-scale-step: 0.02;
+    }
   }
 
   .deck-card {
     position: absolute;
     inset: 0;
-    transform-origin: center top;
+    transform-origin: center center;
     transform-style: preserve-3d;
     transition:
       transform 0.55s var(--ease-spring),
@@ -171,7 +186,7 @@
   .deck-card.is-exit-prev {
     transition:
       transform 0.4s var(--ease-spring),
-      opacity 0.35s var(--ease-out);
+      opacity 0.25s var(--ease-out) 0.15s;
     pointer-events: none;
   }
 
@@ -205,7 +220,7 @@
 
   .card-artwork {
     position: relative;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 15 / 10;
     border-radius: 8px;
     overflow: hidden;
     border: 1px solid rgba(136, 249, 192, 0.2);
