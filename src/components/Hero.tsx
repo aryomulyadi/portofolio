@@ -35,16 +35,22 @@ export function Hero() {
               {profile.location ? profile.location[lang] : 'Creative Developer'}
             </p>
 
-            <div className="flex items-center justify-between gap-4 lg:block">
-              <h1
-                id="home-title"
-                className="font-display-bold text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[0.98] tracking-tight text-paper text-balance"
-              >
-                <span className="block">Rifqi Aryo</span>
-                <span className="block mt-1 font-serif italic text-mint font-normal text-[clamp(2rem,4.5vw,3.8rem)]">
-                  Mulyadi
-                </span>
-              </h1>
+            <div className="flex items-start justify-between gap-4 lg:block">
+              <div className="min-w-0">
+                <h1
+                  id="home-title"
+                  className="font-display-bold text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[0.98] tracking-tight text-paper text-balance"
+                >
+                  <span className="block">Rifqi Aryo</span>
+                  <span className="block mt-1 font-serif italic text-mint font-normal text-[clamp(2rem,4.5vw,3.8rem)]">
+                    Mulyadi
+                  </span>
+                </h1>
+
+                <p className="mt-3 lg:mt-6 font-display text-lg font-bold tracking-tight text-electric md:text-xl">
+                  {profile.role[lang]}
+                </p>
+              </div>
               <img
                 src={portraitSrc}
                 alt={t('portraitAlt', lang)}
@@ -59,10 +65,6 @@ export function Hero() {
                 }}
               />
             </div>
-
-            <p className="mt-6 font-display text-lg font-bold tracking-tight text-electric md:text-xl">
-              {profile.role[lang]}
-            </p>
 
             <p className="mt-4 text-[0.98rem] leading-relaxed text-paper/75 text-balance">
               {profile.intro[lang]}
