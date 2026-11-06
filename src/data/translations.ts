@@ -80,7 +80,7 @@ export const ui: Dict = {
   },
   deckPrev: { id: 'Proyek sebelumnya', en: 'Previous project' },
   deckNext: { id: 'Proyek berikutnya', en: 'Next project' },
-  deckPosition: { id: '{n} dari {total}', en: '{n} of {total}' },
+  deckPosition: { id: '{n} / {total}', en: '{n} / {total}' },
   closeLightbox: { id: 'Tutup preview', en: 'Close preview' },
   nextImage: { id: 'Gambar berikutnya', en: 'Next image' },
   prevImage: { id: 'Gambar sebelumnya', en: 'Previous image' },

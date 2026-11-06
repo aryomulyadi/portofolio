@@ -63,8 +63,8 @@ export function ProjectDeck({ projects, lang, catalogIndex, catalogTotal, onActi
           } as CSSProperties
 
           // Bottom stacked deck + subtle left fan: progressive offset / scale / rotation
-          let transform = `translate(${rank * -5}px, ${rank * 7}%) scale(${1 - rank * 0.045}) translateZ(${-rank * 56}px) rotate(${rank * -1.4}deg)`
-          let opacity = rank <= 3 ? [0, 0.92, 0.72, 0.5][rank] : 0
+          let transform = `translate(${rank * -10}px, ${rank * 9}%) scale(${1 - rank * 0.04}) translateZ(${-rank * 64}px) rotate(${rank * -2.2}deg)`
+          let opacity = rank <= 3 ? [0, 0.95, 0.78, 0.58][rank] : 0
 
           if (isFront) {
             transform = `translate(${drag.x}px, ${drag.y}px) rotate(${drag.rotate}deg)`
@@ -100,10 +100,10 @@ export function ProjectDeck({ projects, lang, catalogIndex, catalogTotal, onActi
                       src={project.image}
                       alt=""
                       loading={rank <= 1 ? 'eager' : 'lazy'}
-                      width={800}
-                      height={500}
+                      width={16}
+                      height={9}
                       draggable={false}
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-contain"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center bg-midnight text-xs text-paper/40">
@@ -177,7 +177,7 @@ export function ProjectDeck({ projects, lang, catalogIndex, catalogTotal, onActi
           <span className="hidden sm:inline">{t('deckPrev', lang)}</span>
         </button>
 
-        <p className="deck-indicator font-body text-xs font-bold tracking-[0.16em] text-paper/55" aria-live="polite">
+        <p className="deck-indicator whitespace-nowrap font-body text-xs font-bold tracking-[0.16em] text-paper/55" aria-live="polite">
           {t('deckPosition', lang)
             .replace('{n}', String(activeIndex + 1).padStart(2, '0'))
             .replace('{total}', String(total).padStart(2, '0'))}
