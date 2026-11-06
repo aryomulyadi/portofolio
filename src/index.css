@@ -117,114 +117,283 @@
     border-top: 2px solid var(--color-electric);
   }
 
-  .project-tilt {
-    perspective: 1000px;
-  }
+  /* ── Interactive trading-card deck ─────────────────────────── */
 
-  /* Must come after .reveal.is-visible so tilt wins the cascade. */
-  .project-card.is-visible {
-    --rx: 0deg;
-    --ry: 0deg;
-    --tz: 0px;
-    --mx: 50%;
-    --my: 50%;
+  .deck {
+    perspective: 1400px;
     transform-style: preserve-3d;
-    transform: rotateX(var(--rx)) rotateY(var(--ry)) translateZ(var(--tz));
-    transition:
-      transform 0.35s var(--ease-out) 0s,
-      box-shadow 0.3s ease 0s,
-      border-color 0.3s ease 0s,
-      opacity 0.8s var(--ease-out) var(--reveal-delay, 0ms);
   }
 
-  .project-card.is-visible:hover {
-    --tz: 12px;
+  .deck-card {
+    position: absolute;
+    inset: 0;
+    transform-origin: center top;
+    transform-style: preserve-3d;
+    transition:
+      transform 0.45s var(--ease-out),
+      opacity 0.45s var(--ease-out),
+      box-shadow 0.3s ease;
+    will-change: transform, opacity;
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .deck-card.is-front {
+    cursor: grab;
+    touch-action: none;
+  }
+
+  .deck-card.is-front:active {
+    cursor: grabbing;
+  }
+
+  .deck-card.is-front:hover {
     box-shadow:
       0 24px 48px rgba(2, 151, 222, 0.18),
-      0 0 0 1px rgba(136, 249, 192, 0.06);
-    border-color: var(--color-electric);
+      0 0 0 1px rgba(136, 249, 192, 0.12);
   }
 
-  /* Soft glare following the cursor */
-  .project-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: radial-gradient(
-      420px circle at var(--mx, 50%) var(--my, 50%),
-      rgba(136, 249, 192, 0.1),
-      rgba(2, 151, 222, 0.06) 35%,
-      transparent 65%
-    );
-    opacity: 0;
-    transition: opacity 0.4s ease;
+  .deck-card.is-exit-next,
+  .deck-card.is-exit-prev {
+    transition:
+      transform 0.35s var(--ease-out),
+      opacity 0.35s var(--ease-out);
     pointer-events: none;
-    z-index: 0;
   }
 
-  .project-card.is-visible:hover::before {
-    opacity: 1;
+  /* Collectible card frame (Pokémon TCG–inspired, original art direction) */
+  .card-frame {
+    background: linear-gradient(165deg, #041018 0%, var(--color-midnight-deep) 45%, #030a10 100%);
+    border: 1px solid rgba(2, 151, 222, 0.35);
+    border-radius: 16px;
+    padding: 10px;
+    box-shadow:
+      inset 0 0 0 1px rgba(136, 249, 192, 0.12),
+      0 16px 40px rgba(0, 0, 0, 0.45);
+    overflow: hidden;
   }
 
-  /* Subtle spotlight border following the cursor (mask technique) */
-  .project-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: radial-gradient(
-      240px circle at var(--mx, 50%) var(--my, 50%),
-      rgba(2, 151, 222, 0.55),
-      rgba(136, 249, 192, 0.15) 45%,
-      transparent 70%
-    );
-    -webkit-mask:
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask:
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
-    mask-composite: exclude;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
-    z-index: 2;
+  .card-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1rem, 2.2vw, 1.2rem);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-paper);
+    text-align: center;
+    padding: 6px 8px 10px;
+    border-bottom: 1px solid rgba(2, 151, 222, 0.25);
+    margin-bottom: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .project-card.is-visible:hover::after {
-    opacity: 1;
-  }
-
-  .project-card > * {
+  .card-artwork {
     position: relative;
-    z-index: 1;
+    aspect-ratio: 4 / 3;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(136, 249, 192, 0.2);
+    background: var(--color-midnight);
   }
 
-  .depth-img {
-    transform: translateZ(0);
+  /* Subtle holographic foil — cyan / teal / mint only, no rainbow */
+  .card-holo {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        125deg,
+        transparent 28%,
+        rgba(136, 249, 192, 0.12) 42%,
+        rgba(2, 151, 222, 0.18) 50%,
+        rgba(136, 249, 192, 0.1) 58%,
+        transparent 72%
+      ),
+      linear-gradient(
+        40deg,
+        transparent 40%,
+        rgba(2, 151, 222, 0.08) 55%,
+        transparent 70%
+      );
+    mix-blend-mode: screen;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
   }
 
-  .depth-body {
-    transform: translateZ(24px);
-    transform-style: preserve-3d;
+  .deck-card.is-front:hover .card-holo,
+  .deck-card.is-front:focus-within .card-holo {
+    opacity: 1;
   }
 
-  .depth-badge {
-    transform: translateZ(20px);
+  .card-meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 0 2px;
+  }
+
+  .card-badge {
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-midnight);
+    background: var(--color-mint);
+    border-radius: 999px;
+    padding: 3px 10px;
+    max-width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .card-number {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: rgba(2, 151, 222, 0.85);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .card-info {
+    margin-top: 10px;
+    padding: 8px 4px;
+    border-top: 1px dashed rgba(55, 65, 81, 0.8);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .card-info-line {
+    display: flex;
+    gap: 8px;
+    font-size: 0.7rem;
+    line-height: 1.45;
+    color: rgba(245, 244, 240, 0.7);
+  }
+
+  .card-info-label {
+    flex-shrink: 0;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.6rem;
+    color: rgba(136, 249, 192, 0.75);
+    width: 3.2rem;
+    padding-top: 1px;
+  }
+
+  .card-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 10px 4px 4px;
+    border-top: 1px solid rgba(2, 151, 222, 0.2);
+    margin-top: auto;
+  }
+
+  .card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--color-mint);
+    transition: color 0.2s ease;
+  }
+
+  .card-link:hover {
+    color: var(--color-paper);
+  }
+
+  .card-link-muted {
+    color: rgba(245, 244, 240, 0.65);
+  }
+
+  .deck-controls {
+    min-height: 2.5rem;
+  }
+
+  .deck-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-paper);
+    background: transparent;
+    border: 1px solid rgba(55, 65, 81, 0.9);
+    border-radius: 999px;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition:
+      border-color 0.2s ease,
+      color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .deck-btn:hover:not(:disabled) {
+    border-color: var(--color-electric);
+    color: var(--color-mint);
+  }
+
+  .deck-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .deck-hint {
+    animation: hint-pulse 2.4s ease-in-out infinite;
+  }
+
+  /* Description panel crossfade when front card changes */
+  .desc-swap {
+    animation: desc-in 0.45s var(--ease-out) both;
+  }
+
+  @keyframes desc-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes hint-pulse {
+    0%,
+    100% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 0.85;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .project-card,
-    .project-card.is-visible {
-      transform: none !important;
+    .deck-card {
+      transition: none !important;
     }
 
-    .project-card::before,
-    .project-card::after {
-      display: none !important;
+    .deck-hint,
+    .desc-swap {
+      animation: none;
     }
   }
 

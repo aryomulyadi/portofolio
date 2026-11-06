@@ -74,6 +74,13 @@ export const ui: Dict = {
     en: 'New artwork will appear here once published.',
   },
   filterAll: { id: 'Semua', en: 'All' },
+  deckHint: {
+    id: 'Geser kartu atau gunakan tombol',
+    en: 'Swipe the card or use the buttons',
+  },
+  deckPrev: { id: 'Proyek sebelumnya', en: 'Previous project' },
+  deckNext: { id: 'Proyek berikutnya', en: 'Next project' },
+  deckPosition: { id: '{n} dari {total}', en: '{n} of {total}' },
   closeLightbox: { id: 'Tutup preview', en: 'Close preview' },
   nextImage: { id: 'Gambar berikutnya', en: 'Next image' },
   prevImage: { id: 'Gambar sebelumnya', en: 'Previous image' },
