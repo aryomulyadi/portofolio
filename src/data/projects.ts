@@ -2,6 +2,36 @@ import type { Project } from '../types'
 
 export const projects: Project[] = [
   {
+    id: 'banjarcustom',
+    title: 'Banjar Custom',
+    summary: {
+      en: 'Official business website for Banjar Custom — custom apparel and printing services. Features digital product catalog, order management, and operational tracking system for administrators.',
+      id: 'Situs resmi bisnis Banjar Custom — layanan apparel dan printing kustom. Fitur katalog produk digital, manajemen pesanan, dan sistem pelacakan operasional untuk administrator.',
+    },
+    category: { en: 'Business Website', id: 'Website Bisnis' },
+    categoryKey: 'web',
+    role: {
+      en: 'Lead Developer & Designer',
+      id: 'Lead Developer & Desainer',
+    },
+    stack: ['Laravel', 'Alpine.js', 'Tailwind CSS'],
+    description: {
+      en: 'Custom apparel production workflow platform with inventory management and client order tracking.',
+      id: 'Platform alur kerja produksi apparel kustom dengan manajemen inventaris dan pelacakan pesanan klien.',
+    },
+    contribution: {
+      en: 'Full-stack development, UI/UX design, and operational system architecture.',
+      id: 'Pengembangan full-stack, desain UI/UX, dan arsitektur sistem operasional.',
+    },
+    image: './images/projects/banjar-custom.png',
+    githubUrl: 'https://github.com/aryomulyadi/banjarcustome',
+    liveUrl: 'https://banjarcustom.com',
+    status: {
+      en: 'Live',
+      id: 'Online',
+    },
+  },
+  {
     id: 'solusi-gim',
     title: 'SOLUSI GIM',
     summary: {
@@ -89,36 +119,6 @@ export const projects: Project[] = [
     status: {
       en: 'Open Source',
       id: 'Open Source',
-    },
-  },
-  {
-    id: 'banjarcustom',
-    title: 'Banjar Custom',
-    summary: {
-      en: 'Official business website for Banjar Custom — custom apparel and printing services. Features digital product catalog, order management, and operational tracking system for administrators.',
-      id: 'Situs resmi bisnis Banjar Custom — layanan apparel dan printing kustom. Fitur katalog produk digital, manajemen pesanan, dan sistem pelacakan operasional untuk administrator.',
-    },
-    category: { en: 'Business Website', id: 'Website Bisnis' },
-    categoryKey: 'web',
-    role: {
-      en: 'Lead Developer & Designer',
-      id: 'Lead Developer & Desainer',
-    },
-    stack: ['React', 'Tailwind CSS', 'Node.js'],
-    description: {
-      en: 'Custom apparel production workflow platform with inventory management and client order tracking.',
-      id: 'Platform alur kerja produksi apparel kustom dengan manajemen inventaris dan pelacakan pesanan klien.',
-    },
-    contribution: {
-      en: 'Full-stack development, UI/UX design, and operational system architecture.',
-      id: 'Pengembangan full-stack, desain UI/UX, dan arsitektur sistem operasional.',
-    },
-    image: './images/projects/banjar-custom.png',
-    githubUrl: 'https://github.com/aryomulyadi/banjarcustome',
-    liveUrl: 'https://banjarcustom.com',
-    status: {
-      en: 'Live',
-      id: 'Online',
     },
   },
 ]

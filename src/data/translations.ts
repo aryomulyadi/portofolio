@@ -62,8 +62,8 @@ export const ui: Dict = {
     en: 'Start a conversation',
   },
   contactBody: {
-    id: 'Untuk posisi, freelance, atau kolaborasi — pilih kanal yang paling pas. Hanya tautan langsung; tanpa formulir kontak.',
-    en: 'For roles, freelance work, or collaboration — pick the channel that fits. Direct links only; no contact form.',
+    id: 'Untuk posisi, freelance, atau kolaborasi — pilih kanal yang paling pas.',
+    en: 'For roles, freelance work, or collaboration — pick the channel that fits.',
   },
   emptyProjects: {
     id: 'Proyek baru akan muncul di sini setelah diterbitkan.',

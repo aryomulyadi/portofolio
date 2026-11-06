@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Github, ExternalLink } from 'lucide-react'
 import { useLanguage } from '../hooks/useLanguage'
 import { t } from '../data/translations'
@@ -7,11 +7,41 @@ import { projects } from '../data/projects'
 export function Projects() {
   const { lang } = useLanguage()
   const [filter, setFilter] = useState<string>('all')
+  const gridRef = useRef<HTMLDivElement>(null)
 
   const categories = useMemo(() => {
     const keys = new Set(projects.map((p) => p.categoryKey))
     return Array.from(keys)
   }, [])
+
+  // Re-observe reveal cards whenever the filter changes so newly mounted
+  // cards are not stuck at opacity:0 (the global useReveal only runs once).
+  useEffect(() => {
+    const root = gridRef.current
+    if (!root) return
+    const nodes = Array.from(root.querySelectorAll<HTMLElement>('.reveal:not(.is-visible)'))
+    if (nodes.length === 0) return
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      nodes.forEach((node) => node.classList.add('is-visible'))
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible')
+            observer.unobserve(entry.target)
+          }
+        }
+      },
+      { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+    )
+
+    nodes.forEach((node) => observer.observe(node))
+    return () => observer.disconnect()
+  }, [filter])
 
   const showFilters = categories.length > 1
   const visible =
@@ -87,7 +117,7 @@ export function Projects() {
         {visible.length === 0 ? (
           <p className="reveal text-sm text-paper/50">{t('emptyProjects', lang)}</p>
         ) : (
-          <div className="grid gap-8 sm:grid-cols-2">
+          <div ref={gridRef} className="grid gap-8 sm:grid-cols-2">
             {visible.map((project, index) => (
               <article
                 key={project.id}
