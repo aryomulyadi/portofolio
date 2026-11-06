@@ -35,20 +35,7 @@ export function Hero() {
               {profile.location ? profile.location[lang] : 'Creative Developer'}
             </p>
 
-            <div className="flex items-center gap-4 lg:block">
-              <img
-                src={portraitSrc}
-                alt={t('portraitAlt', lang)}
-                width={128}
-                height={128}
-                className="h-16 w-16 shrink-0 rounded-2xl border border-electric/30 bg-midnight-deep/60 object-cover object-center lg:hidden"
-                onError={(event) => {
-                  const img = event.currentTarget
-                  if (!img.src.includes('portrait.png')) {
-                    img.src = './images/profile/portrait.png'
-                  }
-                }}
-              />
+            <div className="flex items-center justify-between gap-4 lg:block">
               <h1
                 id="home-title"
                 className="font-display-bold text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[0.98] tracking-tight text-paper text-balance"
@@ -58,6 +45,19 @@ export function Hero() {
                   Mulyadi
                 </span>
               </h1>
+              <img
+                src={portraitSrc}
+                alt={t('portraitAlt', lang)}
+                width={128}
+                height={160}
+                className="aspect-[4/5] w-28 shrink-0 rounded-2xl border border-electric/30 bg-midnight-deep/60 object-cover object-center sm:w-32 lg:hidden"
+                onError={(event) => {
+                  const img = event.currentTarget
+                  if (!img.src.includes('portrait.png')) {
+                    img.src = './images/profile/portrait.png'
+                  }
+                }}
+              />
             </div>
 
             <p className="mt-6 font-display text-lg font-bold tracking-tight text-electric md:text-xl">
