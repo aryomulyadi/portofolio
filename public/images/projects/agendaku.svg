@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" fill="none">
+  <rect width="800" height="500" fill="#0a0a0f"/>
+  <rect x="100" y="80" width="280" height="180" fill="#000" stroke="#fafaf9" stroke-width="2"/>
+  <rect x="420" y="80" width="280" height="180" fill="#000" stroke="#3776AB" stroke-width="2"/>
+  <rect x="100" y="280" width="600" height="140" fill="#1f2937" stroke="#4169E1" stroke-width="2"/>
+  <text x="64" y="460" fill="#fafaf9" font-family="system-ui,sans-serif" font-size="28" font-weight="600">AgendaKu</text>
+  <text x="64" y="485" fill="#9ca3af" font-family="system-ui,sans-serif" font-size="12">Daily Agenda SaaS</text>
+  <rect x="64" y="400" width="120" height="4" fill="#06B6D4"/>
+  <rect x="196" y="400" width="80" height="4" fill="#4169E1"/>
+</svg>

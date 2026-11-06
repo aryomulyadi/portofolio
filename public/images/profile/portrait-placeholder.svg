@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750" fill="none">
+  <rect width="600" height="750" fill="#17191F"/>
+  <circle cx="300" cy="280" r="120" fill="#22252d" stroke="#3a3e49" stroke-width="2"/>
+  <rect x="180" y="440" width="240" height="16" fill="#2c2f38"/>
+  <rect x="210" y="472" width="180" height="10" fill="#3a3e49"/>
+  <rect x="48" y="640" width="160" height="4" fill="#7965E8"/>
+  <text x="48" y="700" fill="#6b6f7a" font-family="system-ui,sans-serif" font-size="14">Portrait slot</text>
+</svg>

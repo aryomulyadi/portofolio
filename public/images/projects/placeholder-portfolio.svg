@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" fill="none">
+  <rect width="800" height="500" fill="#101218"/>
+  <text x="64" y="160" fill="#F5F4F0" font-family="system-ui,sans-serif" font-size="64" font-weight="600">RM</text>
+  <rect x="64" y="200" width="320" height="4" fill="#7965E8"/>
+  <rect x="64" y="260" width="480" height="8" fill="#2c2f38"/>
+  <rect x="64" y="288" width="400" height="8" fill="#2c2f38"/>
+  <rect x="64" y="316" width="360" height="8" fill="#2c2f38"/>
+  <rect x="560" y="80" width="176" height="240" stroke="#3a3e49" stroke-width="2"/>
+  <text x="64" y="460" fill="#8a8e99" font-family="system-ui,sans-serif" font-size="14">Portfolio placeholder</text>
+</svg>
