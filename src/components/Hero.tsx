@@ -35,8 +35,8 @@ export function Hero() {
               {profile.location ? profile.location[lang] : 'Creative Developer'}
             </p>
 
-            <div className="flex items-start justify-between gap-4 lg:block">
-              <div className="min-w-0">
+            <div className="flex flex-wrap items-start gap-x-3 gap-y-0 sm:grid sm:grid-cols-[1fr_auto] sm:gap-x-5 lg:block">
+              <div className="min-w-0 sm:col-start-1 sm:row-start-1">
                 <h1
                   id="home-title"
                   className="font-display-bold text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[0.98] tracking-tight text-paper text-balance"
@@ -54,9 +54,9 @@ export function Hero() {
               <img
                 src={portraitSrc}
                 alt={t('portraitAlt', lang)}
-                width={128}
-                height={160}
-                className="aspect-[4/5] w-28 shrink-0 rounded-2xl border border-electric/30 bg-midnight-deep/60 object-cover object-center sm:w-32 lg:hidden"
+                width={160}
+                height={200}
+                className="aspect-[4/5] w-24 shrink-0 rounded-2xl border border-electric/30 bg-midnight-deep/60 object-cover object-center sm:col-start-2 sm:row-start-1 sm:row-span-2 sm:aspect-auto sm:w-40 lg:hidden"
                 onError={(event) => {
                   const img = event.currentTarget
                   if (!img.src.includes('portrait.png')) {
@@ -64,11 +64,10 @@ export function Hero() {
                   }
                 }}
               />
+              <p className="mt-4 w-full text-[0.98rem] leading-relaxed text-paper/75 text-balance sm:col-start-1 sm:row-start-2 sm:w-auto">
+                {profile.intro[lang]}
+              </p>
             </div>
-
-            <p className="mt-4 text-[0.98rem] leading-relaxed text-paper/75 text-balance">
-              {profile.intro[lang]}
-            </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a
