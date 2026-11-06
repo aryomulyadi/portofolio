@@ -35,15 +35,30 @@ export function Hero() {
               {profile.location ? profile.location[lang] : 'Creative Developer'}
             </p>
 
-            <h1
-              id="home-title"
-              className="font-display-bold text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[0.98] tracking-tight text-paper text-balance"
-            >
-              <span className="block">Rifqi Aryo</span>
-              <span className="block mt-1 font-serif italic text-mint font-normal text-[clamp(2rem,4.5vw,3.8rem)]">
-                Mulyadi
-              </span>
-            </h1>
+            <div className="flex items-center gap-4 lg:block">
+              <img
+                src={portraitSrc}
+                alt={t('portraitAlt', lang)}
+                width={128}
+                height={128}
+                className="h-16 w-16 shrink-0 rounded-2xl border border-electric/30 bg-midnight-deep/60 object-cover object-center lg:hidden"
+                onError={(event) => {
+                  const img = event.currentTarget
+                  if (!img.src.includes('portrait.png')) {
+                    img.src = './images/profile/portrait.png'
+                  }
+                }}
+              />
+              <h1
+                id="home-title"
+                className="font-display-bold text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[0.98] tracking-tight text-paper text-balance"
+              >
+                <span className="block">Rifqi Aryo</span>
+                <span className="block mt-1 font-serif italic text-mint font-normal text-[clamp(2rem,4.5vw,3.8rem)]">
+                  Mulyadi
+                </span>
+              </h1>
+            </div>
 
             <p className="mt-6 font-display text-lg font-bold tracking-tight text-electric md:text-xl">
               {profile.role[lang]}
@@ -107,7 +122,7 @@ export function Hero() {
           </div>
 
           {/* Center Column / Large Transparent Background Subject Photo */}
-          <div className="lg:col-span-7 flex justify-center items-center">
+          <div className="hidden lg:col-span-7 lg:flex lg:justify-center lg:items-center">
             <figure className="relative w-full max-w-lg group">
               <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl border border-electric/30 bg-midnight-deep/60 backdrop-blur-md shadow-[0_20px_60px_rgba(2,151,222,0.2)]">
                 <img
