@@ -1,13 +1,23 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import type { CSSProperties } from 'react'
 import { Github, ExternalLink } from 'lucide-react'
 import { useLanguage } from '../hooks/useLanguage'
+import { useTiltCard } from '../hooks/useTiltCard'
+import { usePointerPreview } from '../hooks/usePointerPreview'
 import { t } from '../data/translations'
 import { projects } from '../data/projects'
+
+const PREVIEW_WIDTH = 224
+const PREVIEW_OFFSET_X = 24
+const PREVIEW_OFFSET_Y = 80
 
 export function Projects() {
   const { lang } = useLanguage()
   const [filter, setFilter] = useState<string>('all')
   const gridRef = useRef<HTMLDivElement>(null)
+  const tilt = useTiltCard(8)
+  const pointer = usePointerPreview()
+  const hidePreview = pointer.hide
 
   const categories = useMemo(() => {
     const keys = new Set(projects.map((p) => p.categoryKey))
@@ -43,9 +53,19 @@ export function Projects() {
     return () => observer.disconnect()
   }, [filter])
 
+  // Cards may unmount mid-hover when the filter changes — hide any floating preview.
+  useEffect(() => {
+    hidePreview()
+  }, [filter, hidePreview])
+
   const showFilters = categories.length > 1
   const visible =
     filter === 'all' ? projects : projects.filter((p) => p.categoryKey === filter)
+
+  const previewLeft =
+    pointer.preview.x + PREVIEW_OFFSET_X + PREVIEW_WIDTH > window.innerWidth
+      ? pointer.preview.x - PREVIEW_OFFSET_X - PREVIEW_WIDTH
+      : pointer.preview.x + PREVIEW_OFFSET_X
 
   if (projects.length === 0) return null
 
@@ -117,15 +137,26 @@ export function Projects() {
         {visible.length === 0 ? (
           <p className="reveal text-sm text-paper/50">{t('emptyProjects', lang)}</p>
         ) : (
-          <div ref={gridRef} className="grid gap-8 sm:grid-cols-2">
+          <div ref={gridRef} className="project-tilt grid gap-8 sm:grid-cols-2">
             {visible.map((project, index) => (
               <article
                 key={project.id}
-                className="reveal project-card group flex flex-col border border-line-dark bg-midnight-deep p-6 transition-all hover:border-electric/60 hover:shadow-[0_20px_40px_rgba(2,151,222,0.15)]"
-                style={{ transitionDelay: `${index * 60}ms` }}
+                className="reveal project-card group relative flex flex-col border border-line-dark bg-midnight-deep p-6 transition-all hover:border-electric/60 hover:shadow-[0_20px_40px_rgba(2,151,222,0.15)]"
+                style={{ '--reveal-delay': `${index * 60}ms` } as CSSProperties}
+                onPointerMove={(event) => {
+                  tilt.onPointerMove(event)
+                  pointer.onPointerMove(event)
+                }}
+                onPointerLeave={(event) => {
+                  tilt.onPointerLeave(event)
+                  pointer.hide()
+                }}
+                onMouseEnter={() => {
+                  if (project.image) pointer.show(project.image, project.summary[lang])
+                }}
               >
                 {project.image && (
-                  <div className="mb-5 overflow-hidden bg-midnight">
+                  <div className="depth-img mb-5 overflow-hidden bg-midnight">
                     <img
                       src={project.image}
                       alt={project.summary[lang]}
@@ -137,7 +168,7 @@ export function Projects() {
                   </div>
                 )}
 
-                <div className="flex flex-1 flex-col">
+                <div className="depth-body flex flex-1 flex-col">
                   <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1">
                     <span className="font-body text-[0.68rem] font-bold uppercase tracking-[0.18em] text-mint">
                       {project.category[lang]}
@@ -173,7 +204,7 @@ export function Projects() {
                     </p>
                   )}
 
-                  <div className="mt-6 flex flex-wrap gap-4 pt-2 border-t border-line-dark/60">
+                  <div className="depth-badge mt-6 flex flex-wrap gap-4 border-t border-line-dark/60 pt-2">
                     {project.liveUrl && (
                       <a
                         href={project.liveUrl}
@@ -200,6 +231,24 @@ export function Projects() {
                 </div>
               </article>
             ))}
+          </div>
+        )}
+
+        {pointer.preview.visible && pointer.preview.src && (
+          <div
+            aria-hidden
+            className="pointer-events-none fixed z-[60] hidden lg:block"
+            style={{
+              left: previewLeft,
+              top: pointer.preview.y - PREVIEW_OFFSET_Y,
+              width: PREVIEW_WIDTH,
+            }}
+          >
+            <img
+              src={pointer.preview.src}
+              alt=""
+              className="w-full rounded-xl border border-electric/30 object-cover shadow-[0_16px_48px_rgba(2,151,222,0.25)]"
+            />
           </div>
         )}
       </div>

@@ -117,17 +117,115 @@
     border-top: 2px solid var(--color-electric);
   }
 
-  .project-card {
-    transition:
-      transform 0.3s var(--ease-out),
-      box-shadow 0.3s ease,
-      border-color 0.3s ease;
+  .project-tilt {
+    perspective: 1000px;
   }
 
-  .project-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 24px 48px rgba(2, 151, 222, 0.18);
+  /* Must come after .reveal.is-visible so tilt wins the cascade. */
+  .project-card.is-visible {
+    --rx: 0deg;
+    --ry: 0deg;
+    --tz: 0px;
+    --mx: 50%;
+    --my: 50%;
+    transform-style: preserve-3d;
+    transform: rotateX(var(--rx)) rotateY(var(--ry)) translateZ(var(--tz));
+    transition:
+      transform 0.35s var(--ease-out) 0s,
+      box-shadow 0.3s ease 0s,
+      border-color 0.3s ease 0s,
+      opacity 0.8s var(--ease-out) var(--reveal-delay, 0ms);
+  }
+
+  .project-card.is-visible:hover {
+    --tz: 12px;
+    box-shadow:
+      0 24px 48px rgba(2, 151, 222, 0.18),
+      0 0 0 1px rgba(136, 249, 192, 0.06);
     border-color: var(--color-electric);
+  }
+
+  /* Soft glare following the cursor */
+  .project-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      420px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(136, 249, 192, 0.1),
+      rgba(2, 151, 222, 0.06) 35%,
+      transparent 65%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .project-card.is-visible:hover::before {
+    opacity: 1;
+  }
+
+  /* Subtle spotlight border following the cursor (mask technique) */
+  .project-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: radial-gradient(
+      240px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(2, 151, 222, 0.55),
+      rgba(136, 249, 192, 0.15) 45%,
+      transparent 70%
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .project-card.is-visible:hover::after {
+    opacity: 1;
+  }
+
+  .project-card > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .depth-img {
+    transform: translateZ(0);
+  }
+
+  .depth-body {
+    transform: translateZ(24px);
+    transform-style: preserve-3d;
+  }
+
+  .depth-badge {
+    transform: translateZ(20px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-card,
+    .project-card.is-visible {
+      transform: none !important;
+    }
+
+    .project-card::before,
+    .project-card::after {
+      display: none !important;
+    }
   }
 
   .tech-badge {

@@ -47,7 +47,8 @@ export function usePointerPreview() {
 
   const show = useCallback((src: string, alt: string) => {
     if (!enabledRef.current) return
-    setPreview((prev) => ({ ...prev, src, alt, visible: true }))
+    // visible stays false until the first pointermove provides real coords
+    setPreview((prev) => ({ ...prev, src, alt, visible: false }))
   }, [])
 
   const hide = useCallback(() => {
