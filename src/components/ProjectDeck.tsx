@@ -55,14 +55,16 @@ export function ProjectDeck({ projects, lang, catalogIndex, catalogTotal, onActi
           if (!project) return null
           const isFront = rank === 0
           const exiting = isFront && exitDir !== null
+          const showBehind = rank >= 1 && rank <= 3
 
           const stackStyle = {
             '--rank': rank,
             zIndex: 40 - rank,
           } as CSSProperties
 
-          let transform = `translateY(${rank * 14}px) scale(${1 - rank * 0.04}) translateZ(${-rank * 48}px)`
-          let opacity = Math.max(0, 1 - rank * 0.28)
+          // Bottom stacked deck + subtle left fan: progressive offset / scale / rotation
+          let transform = `translate(${rank * -5}px, ${rank * 7}%) scale(${1 - rank * 0.045}) translateZ(${-rank * 56}px) rotate(${rank * -1.4}deg)`
+          let opacity = rank <= 3 ? [0, 0.92, 0.72, 0.5][rank] : 0
 
           if (isFront) {
             transform = `translate(${drag.x}px, ${drag.y}px) rotate(${drag.rotate}deg)`
@@ -77,12 +79,13 @@ export function ProjectDeck({ projects, lang, catalogIndex, catalogTotal, onActi
           return (
             <article
               key={project.id}
-              className={`deck-card${isFront ? ' is-front' : ''}${exiting ? (exitDir === 'next' ? ' is-exit-next' : ' is-exit-prev') : ''}`}
+              className={`deck-card${isFront ? ' is-front' : ''}${!isFront && showBehind ? ' is-behind' : ''}${exiting ? (exitDir === 'next' ? ' is-exit-next' : ' is-exit-prev') : ''}`}
               style={{
                 ...stackStyle,
                 transform,
                 opacity,
                 ...(isFront && !exiting && drag.active ? { transition: 'none' } : null),
+                ...(!isFront && !showBehind && !exiting ? { visibility: 'hidden' } : null),
               }}
               aria-hidden={!isFront}
               inert={!isFront}
