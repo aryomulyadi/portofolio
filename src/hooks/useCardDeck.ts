@@ -38,6 +38,7 @@ export function useCardDeck(projects: Project[]) {
   const animatingRef = useRef(false)
   const suppressClickRef = useRef(false)
   const reducedMotionRef = useRef(false)
+  const commitTokenRef = useRef(0)
 
   useEffect(() => {
     reducedMotionRef.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -45,6 +46,7 @@ export function useCardDeck(projects: Project[]) {
 
   // Reset deck when the project set changes (filter)
   useEffect(() => {
+    commitTokenRef.current += 1
     setOrder(ids)
     setDrag({ x: 0, y: 0, rotate: 0, active: false })
     setExitDir(null)
@@ -69,10 +71,15 @@ export function useCardDeck(projects: Project[]) {
       if (animatingRef.current || order.length < 2) return
       setHintDismissed(true)
 
+      const token = ++commitTokenRef.current
+
       const finish = () => {
+        if (token !== commitTokenRef.current) return
         setOrder((prev) => {
           if (prev.length < 2) return prev
-          return dir === 'next' ? [...prev.slice(1), prev[0]] : [prev[prev.length - 1], ...prev.slice(0, -1)]
+          if (dir === 'next') return [...prev.slice(1), prev[0]]
+          // prev (post pre-reorder): [front, prevCard, ...rest] → [prevCard, front, ...rest]
+          return [prev[1], prev[0], ...prev.slice(2)]
         })
         setExitDir(null)
         setDrag({ x: 0, y: 0, rotate: 0, active: false })
@@ -81,12 +88,31 @@ export function useCardDeck(projects: Project[]) {
       }
 
       if (reducedMotionRef.current) {
-        finish()
+        // Instant reorder, no pre-reorder or exit anim
+        setOrder((prev) => {
+          if (prev.length < 2) return prev
+          if (dir === 'next') return [...prev.slice(1), prev[0]]
+          return [prev[prev.length - 1], ...prev.slice(0, -1)]
+        })
+        setExitDir(null)
+        setDrag({ x: 0, y: 0, rotate: 0, active: false })
+        setIsAnimating(false)
+        animatingRef.current = false
         return
       }
 
       animatingRef.current = true
       setIsAnimating(true)
+
+      // Prev: promote last card to rank 1 (just behind front) first,
+      // so finish only does a short front↔rank1 swap — no rank3→0 jump glitch
+      if (dir === 'prev') {
+        setOrder((prev) => {
+          if (prev.length < 2) return prev
+          return [prev[0], prev[prev.length - 1], ...prev.slice(1, -1)]
+        })
+      }
+
       setExitDir(dir)
       window.setTimeout(finish, EXIT_MS)
     },
