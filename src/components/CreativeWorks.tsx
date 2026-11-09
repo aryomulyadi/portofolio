@@ -1,22 +1,18 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
 import { Lightbox } from './Lightbox'
+import { ShowcaseStage } from './creative/ShowcaseStage'
+import { GalleryGrid } from './creative/GalleryGrid'
+import { GalleryCursor } from './creative/GalleryCursor'
 import { t } from '../data/translations'
 import { creativeWorks } from '../data/creativeWorks'
-
-const sizeClasses = [
-  'sm:col-span-2 sm:row-span-2',
-  '',
-  '',
-  'sm:col-span-2',
-  '',
-  '',
-]
 
 export function CreativeWorks() {
   const { lang } = useLanguage()
   const [filter, setFilter] = useState<string>('all')
+  const [stageIndex, setStageIndex] = useState(0)
   const [lightboxIndex, setLightboxIndex] = useState(-1)
+  const sectionRef = useRef<HTMLElement>(null)
 
   const categories = useMemo(() => {
     const map = new Map<string, string>()
@@ -28,29 +24,67 @@ export function CreativeWorks() {
     () => (filter === 'all' ? creativeWorks : creativeWorks.filter((w) => w.category === filter)),
     [filter],
   )
+  const visibleKey = visible.map((w) => w.id).join('|')
+
+  // Reset stage + lightbox when the filtered set changes
+  useEffect(() => {
+    setStageIndex(0)
+    setLightboxIndex(-1)
+  }, [visibleKey])
+
+  // Re-observe reveal nodes when filter changes (global useReveal runs once)
+  useEffect(() => {
+    const root = sectionRef.current
+    if (!root) return
+    const nodes = Array.from(root.querySelectorAll<HTMLElement>('.reveal:not(.is-visible)'))
+    if (nodes.length === 0) return
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      nodes.forEach((node) => node.classList.add('is-visible'))
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible')
+            observer.unobserve(entry.target)
+          }
+        }
+      },
+      { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+    )
+
+    nodes.forEach((node) => observer.observe(node))
+    return () => observer.disconnect()
+  }, [filter])
 
   if (creativeWorks.length === 0) return null
 
   const showFilters = categories.length > 1
+  const stageWork = visible[stageIndex] ?? visible[0]
 
   return (
     <section
       id="creative"
+      ref={sectionRef}
+      data-cursor-zone
       aria-labelledby="creative-title"
-      className="border-b border-line bg-paper py-20 md:py-28"
+      className="border-b border-line-dark bg-midnight-deep py-20 text-paper md:py-28"
     >
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <header className="reveal mb-10 md:mb-14">
           <div className="mb-4 flex items-baseline gap-4">
-            <span className="index-num font-display text-sm font-medium text-electric">06</span>
-            <p className="font-body text-[0.7rem] font-medium uppercase tracking-[0.22em] text-ink-faint">
+            <span className="font-display-bold text-sm text-electric">06</span>
+            <p className="font-body text-[0.7rem] font-bold uppercase tracking-[0.22em] text-paper/45">
               {t('creativeLabel', lang)}
             </p>
           </div>
           <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <h2
               id="creative-title"
-              className="max-w-2xl font-display text-[clamp(1.9rem,4.5vw,3.1rem)] font-medium leading-[1.08] tracking-tight text-ink text-balance"
+              className="max-w-2xl font-display-bold text-[clamp(1.9rem,4.5vw,3.1rem)] font-medium leading-[1.08] tracking-tight text-paper text-balance"
             >
               {t('creativeTitle', lang)}
             </h2>
@@ -64,10 +98,10 @@ export function CreativeWorks() {
                   type="button"
                   onClick={() => setFilter('all')}
                   aria-pressed={filter === 'all'}
-                  className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
+                  className={`rounded-full px-4 py-2 text-xs font-bold transition-colors ${
                     filter === 'all'
-                      ? 'bg-ink text-paper'
-                      : 'border border-line text-ink-soft hover:border-ink hover:text-ink'
+                      ? 'bg-mint text-midnight'
+                      : 'border border-paper/25 text-paper/70 hover:border-paper hover:text-paper'
                   }`}
                 >
                   {t('filterAll', lang)}
@@ -80,10 +114,10 @@ export function CreativeWorks() {
                       type="button"
                       onClick={() => setFilter(key)}
                       aria-pressed={active}
-                      className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
+                      className={`rounded-full px-4 py-2 text-xs font-bold transition-colors ${
                         active
-                          ? 'bg-ink text-paper'
-                          : 'border border-line text-ink-soft hover:border-ink hover:text-ink'
+                          ? 'bg-mint text-midnight'
+                          : 'border border-paper/25 text-paper/70 hover:border-paper hover:text-paper'
                       }`}
                     >
                       {label}
@@ -93,49 +127,44 @@ export function CreativeWorks() {
               </div>
             )}
           </div>
-          <div className="rule-strong mt-8" />
+          <div className="rule-electric mt-8" />
         </header>
 
-        {visible.length === 0 ? (
-          <p className="reveal text-sm text-ink-faint">{t('emptyCreative', lang)}</p>
-        ) : (
-          <ul className="grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-3">
-            {visible.map((work, index) => (
-              <li
-                key={work.id}
-                className={`reveal ${sizeClasses[index % sizeClasses.length]}`}
-                style={{ transitionDelay: `${index * 50}ms` }}
-              >
-                <button
-                  type="button"
-                  onClick={() => setLightboxIndex(index)}
-                  className="group block w-full text-left"
-                  aria-label={`${work.title[lang]} — ${t('openDetails', lang)}`}
-                >
-                  <span className="block overflow-hidden bg-ink/5">
-                    <img
-                      src={work.image}
-                      alt={work.caption?.[lang] ?? work.title[lang]}
-                      loading="lazy"
-                      width={600}
-                      height={750}
-                      className="aspect-[4/5] w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-                    />
-                  </span>
-                  <span className="mt-3 flex items-baseline justify-between gap-3">
-                    <span className="font-display text-sm font-medium text-ink transition-colors group-hover:text-electric">
-                      {work.title[lang]}
-                    </span>
-                    <span className="font-body text-[0.68rem] uppercase tracking-wider text-ink-faint">
-                      {work.categoryLabel[lang]}
-                    </span>
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
+        {visible.length === 0 || !stageWork ? (
+          <p className="reveal text-sm text-paper/50">{t('emptyCreative', lang)}</p>
+        ) : null}
       </div>
+
+      {visible.length > 0 && stageWork && (
+        <div className="reveal mt-2 md:mt-4">
+          <ShowcaseStage
+            work={stageWork}
+            index={stageIndex < visible.length ? stageIndex : 0}
+            total={visible.length}
+            lang={lang}
+            onOpen={() => setLightboxIndex(stageIndex < visible.length ? stageIndex : 0)}
+            onPrev={() => setStageIndex((i) => (i - 1 + visible.length) % visible.length)}
+            onNext={() => setStageIndex((i) => (i + 1) % visible.length)}
+            labels={{
+              eyebrow: t('showcaseLabel', lang),
+              prev: t('stagePrev', lang),
+              next: t('stageNext', lang),
+              open: t('openDetails', lang),
+            }}
+          />
+        </div>
+      )}
+
+      {visible.length > 0 && (
+        <div className="mx-auto mt-12 max-w-6xl px-5 md:mt-16 md:px-8">
+          <GalleryGrid
+            items={visible}
+            lang={lang}
+            onOpen={setLightboxIndex}
+            openLabel={t('openDetails', lang)}
+          />
+        </div>
+      )}
 
       <Lightbox
         items={visible}
@@ -149,6 +178,10 @@ export function CreativeWorks() {
         onClose={() => setLightboxIndex(-1)}
         onNavigate={setLightboxIndex}
       />
+
+      {lightboxIndex < 0 && visible.length > 0 && (
+        <GalleryCursor label={t('viewBadge', lang)} />
+      )}
     </section>
   )
 }

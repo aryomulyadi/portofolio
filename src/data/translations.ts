@@ -56,6 +56,10 @@ export const ui: Dict = {
     id: 'Desain di luar layar',
     en: 'Design beyond the screen',
   },
+  showcaseLabel: { id: 'Sorotan', en: 'Featured' },
+  stagePrev: { id: 'Karya sebelumnya', en: 'Previous work' },
+  stageNext: { id: 'Karya berikutnya', en: 'Next work' },
+  viewBadge: { id: 'Lihat', en: 'View' },
   contactLabel: { id: 'Kontak', en: 'Contact' },
   contactTitle: {
     id: 'Mulai percakapan',

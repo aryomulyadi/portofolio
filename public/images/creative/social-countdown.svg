@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080" role="img" aria-label="Abstract social type placeholder">
+  <rect width="1080" height="1080" fill="#0297de"/>
+  <rect x="60" y="60" width="960" height="960" fill="none" stroke="#02070a" stroke-width="6"/>
+  <text x="540" y="480" text-anchor="middle" font-family="Arial, sans-serif" font-size="300" font-weight="700" fill="#02070a">45</text>
+  <text x="540" y="620" text-anchor="middle" font-family="Arial, sans-serif" font-size="76" font-weight="700" fill="#f5f4f0" letter-spacing="14">DAYS</text>
+  <rect x="300" y="700" width="480" height="6" fill="#02070a"/>
+  <text x="540" y="810" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" fill="#02070a" letter-spacing="8">COUNTDOWN POST</text>
+  <circle cx="170" cy="170" r="46" fill="#88f9c0"/>
+  <circle cx="910" cy="910" r="46" fill="#02070a"/>
+</svg>

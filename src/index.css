@@ -425,6 +425,90 @@
     }
   }
 
+  /* ── Immersive creative gallery ────────────────────────────── */
+
+  .showcase-fade {
+    animation: showcase-in 0.6s var(--ease-out) both;
+  }
+
+  @keyframes showcase-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* Custom gallery cursor — desktop fine-pointer enhancement only */
+  .gallery-cursor {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 70;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: var(--color-paper);
+    mix-blend-mode: difference;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      width 0.3s var(--ease-spring),
+      height 0.3s var(--ease-spring),
+      opacity 0.25s ease,
+      background-color 0.25s ease;
+    will-change: transform;
+  }
+
+  .gallery-cursor.is-dot,
+  .gallery-cursor.is-view {
+    opacity: 1;
+  }
+
+  .gallery-cursor.is-view {
+    width: 72px;
+    height: 72px;
+    background: var(--color-mint);
+    mix-blend-mode: normal;
+  }
+
+  .gallery-cursor-label {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-midnight);
+    opacity: 0;
+    transform: scale(0.6);
+    transition:
+      opacity 0.2s ease,
+      transform 0.3s var(--ease-spring);
+  }
+
+  .gallery-cursor.is-view .gallery-cursor-label {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Hide native cursor over gallery media only when custom cursor is active */
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    [data-cursor-zone] .showcase-media,
+    [data-cursor-zone] .gallery-tile {
+      cursor: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .showcase-fade {
+      animation: none;
+    }
+  }
+
   .tech-badge {
     @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide;
   }

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200" role="img" aria-label="Abstract branding mark placeholder">
+  <rect width="1200" height="1200" fill="#f5f4f0"/>
+  <rect x="0" y="0" width="1200" height="18" fill="#02070a"/>
+  <rect x="0" y="1182" width="1200" height="18" fill="#02070a"/>
+  <path d="M600 220 L940 880 L260 880 Z" fill="none" stroke="#02070a" stroke-width="10"/>
+  <path d="M600 400 L800 800 L400 800 Z" fill="#0297de"/>
+  <circle cx="600" cy="660" r="64" fill="#f5f4f0"/>
+  <rect x="100" y="960" width="300" height="70" fill="#02070a"/>
+  <text x="122" y="1010" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#f5f4f0" letter-spacing="6">MARK 03</text>
+  <text x="820" y="1010" font-family="Arial, sans-serif" font-size="24" fill="#02070a" letter-spacing="4">BRAND SYSTEM</text>
+</svg>
