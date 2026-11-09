@@ -1,15 +1,16 @@
 import type { CreativeWork } from '../types'
 
 /**
- * Creative work — owner adds real artwork here.
- * Use actual artwork files under /public/images/creative/.
- * Keep array empty to hide the section.
- * Sources live in /scripts/artwork-src/ (render via scripts/render-creative-png.ps1).
- * Array order = strip order, grouped by chapter: apparel → digital poster → social → banner → ui.
- * `aspect` must match the artwork file's native ratio (tiles/stage show it uncropped).
- * `process` / `result` feed the fullscreen case-study view (optional).
+ * Creative work exhibition database.
+ * Organized strictly into 5 Pages / Chapters:
+ * PAGE 01 — APPAREL (3 works: 16:9, 4:5, 4:5)
+ * PAGE 02 — DIGITAL POSTER (3 works: 16:9, 16:9, 5:4)
+ * PAGE 03 — SOCIAL MEDIA (1 work: 4:5)
+ * PAGE 04 — BANNER (1 work: 4:5)
+ * PAGE 05 — UI/UX (2 works: 16:9, 16:9)
  */
 export const creativeWorks: CreativeWork[] = [
+  // PAGE 01 — APPAREL
   {
     id: 'thread-graphic',
     title: { id: 'Thread', en: 'Thread' },
@@ -18,10 +19,11 @@ export const creativeWorks: CreativeWork[] = [
     image: './images/creative/apparel-thread.png',
     aspect: '16/9',
     caption: {
-      id: 'Grafik sablon untuk koleksi pakaian experimental.',
+      id: 'Grafik sablon untuk koleksi pakaian eksperimental.',
       en: 'Screen-print graphic for an experimental apparel drop.',
     },
     year: '2025',
+    software: ['Illustrator', 'Photoshop'],
     process: {
       id: 'Desain dibuat terbatas dua warna tinta agar cocok untuk sablon manual, dengan garis tebal agar tidak hilang di kain knit.',
       en: 'Limited to two ink colors for manual screen printing, with thick lines so nothing disappears on knit fabric.',
@@ -43,6 +45,7 @@ export const creativeWorks: CreativeWork[] = [
       en: 'Overprint experiment with deliberately misregistered color plates.',
     },
     year: '2026',
+    software: ['Illustrator', 'Print Simulation'],
     process: {
       id: 'Dua plat warna dicetak terpisah lalu digeser beberapa milimeter — kesalahan registrasi justru menjadi bahasa visual utama.',
       en: 'Two color plates printed separately and shifted a few millimeters — the registration error itself became the main visual language.',
@@ -64,6 +67,7 @@ export const creativeWorks: CreativeWork[] = [
       en: 'Back-print graphic for a two-color collection.',
     },
     year: '2026',
+    software: ['Illustrator'],
     process: {
       id: 'Komposisi vertikal disusun agar tetap seimbang saat dipotong untuk sablon punggung, dengan jarak aman di bagian leher.',
       en: 'A vertical composition balanced for a back-print cut, with safe spacing near the collar.',
@@ -73,6 +77,8 @@ export const creativeWorks: CreativeWork[] = [
       en: 'One graphic that works on dark and light tees without an ink swap.',
     },
   },
+
+  // PAGE 02 — DIGITAL POSTER
   {
     id: 'horizon-poster',
     title: { id: 'Horizon', en: 'Horizon' },
@@ -85,9 +91,10 @@ export const creativeWorks: CreativeWork[] = [
       en: 'Landscape gradient study for an editorial poster series.',
     },
     year: '2026',
+    software: ['Illustrator', 'Photoshop'],
     process: {
-      id: 'Riset warna matahari terbit, lalu penyusunan bentuk lanskap dari tiga lapis gradien. Tipografi diuji pada tiga skala berbeda sebelum dipilih satu ukuran display.',
-      en: 'Sunrise color research, then landscape shapes built from three gradient layers. Typography was tested at three scales before settling on one display size.',
+      id: 'Riset warna matahari terbit, lalu penyusunan bentuk lanskap dari tiga lapis gradien. Tipografi diuji pada tiga skala berbeda.',
+      en: 'Sunrise color research, then landscape shapes built from three gradient layers. Typography was tested at three scales.',
     },
     result: {
       id: 'Seri poster yang tenang tapi tetap kontras, siap untuk cetak A2 maupun unggahan vertikal.',
@@ -106,9 +113,10 @@ export const creativeWorks: CreativeWork[] = [
       en: 'Geometric composition focused on rhythm and contrast.',
     },
     year: '2026',
+    software: ['Illustrator'],
     process: {
-      id: 'Eksplorasi grid bundar dan rotasi bertahap. Setiap bentuk diuji pada posisi berbeda untuk menemukan ritme visual tanpa kehilangan titik fokus.',
-      en: 'Circular grid and stepped-rotation exploration. Each shape was tested in different positions to find visual rhythm without losing the focal point.',
+      id: 'Eksplorasi grid bundar dan rotasi bertahap. Setiap bentuk diuji pada posisi berbeda untuk menemukan ritme visual.',
+      en: 'Circular grid and stepped-rotation exploration. Each shape was tested in different positions to find visual rhythm.',
     },
     result: {
       id: 'Komposisi yang bergerak tanpa acak — ritme bentuk mengarahkan mata dari pusat ke tepi.',
@@ -127,6 +135,7 @@ export const creativeWorks: CreativeWork[] = [
       en: 'Grid and color-palette system for a visual identity.',
     },
     year: '2025',
+    software: ['Figma', 'Illustrator'],
     process: {
       id: 'Menyusun modul grid 8 kolom lalu menguji pasangan warna pada kontras teks dan latar sesuai WCAG AA.',
       en: 'Built an 8-column grid module, then tested color pairs for text/background contrast against WCAG AA.',
@@ -136,60 +145,91 @@ export const creativeWorks: CreativeWork[] = [
       en: 'A consistent identity system: one grid, one palette, many formats.',
     },
   },
+
+  // PAGE 03 — SOCIAL MEDIA
   {
     id: 'pulse-campaign',
-    title: { id: 'Pulse', en: 'Pulse' },
+    title: { id: 'Pulse Campaign', en: 'Pulse Campaign' },
     category: 'social',
     categoryLabel: { id: 'Media sosial', en: 'Social media' },
     image: './images/creative/social-pulse.png',
     aspect: '4/5',
     caption: {
-      id: 'Materi kampanye vertikal untuk kanal sosial.',
-      en: 'Vertical campaign assets for social channels.',
+      id: 'Materi kampanye vertikal untuk kanal sosial resmi.',
+      en: 'Vertical campaign assets for official social channels.',
     },
     year: '2026',
+    platform: 'Instagram, TikTok, LinkedIn',
+    software: ['After Effects', 'Figma', 'Photoshop'],
+    objective: {
+      id: 'Meningkatkan kesadaran merek melalui visual bergerak pendek berdurasi 3-5 detik dengan tingkat retensi tinggi.',
+      en: 'Boost brand awareness through high-retention short 3-5 second motion visuals.',
+    },
+    creativeDirection: {
+      id: 'Sistem warna neon-mint dan biru elektrik di atas latar gelap, dipadukan tipografi bertumpuk yang berani.',
+      en: 'Neon-mint and electric blue accents on dark background paired with bold stacked typography.',
+    },
     process: {
       id: 'Template 4:5 dengan safe area untuk UI platform. Elemen animasi ringan diuji agar tetap terbaca dalam potongan tiga detik.',
       en: 'A 4:5 template with platform-UI safe areas. Light motion elements were tested to stay readable in three-second cuts.',
     },
     result: {
-      id: 'Paket materi kampanye yang bisa diperluas tim tanpa mengubah sistem visual.',
-      en: 'A campaign asset package the team can extend without changing the visual system.',
+      id: 'Paket materi kampanye yang bisa diperluas tim tanpa mengubah sistem visual dasar.',
+      en: 'A campaign asset package the team can extend without changing the foundational visual system.',
     },
   },
+
+  // PAGE 04 — BANNER
   {
     id: 'mark-system',
-    title: { id: 'Mark 03', en: 'Mark 03' },
+    title: { id: 'Mark 03 Exhibition Banner', en: 'Mark 03 Exhibition Banner' },
     category: 'banner',
     categoryLabel: { id: 'Banner', en: 'Banner' },
     image: './images/creative/banner-mark.png',
     aspect: '4/5',
     caption: {
-      id: 'Eksplorasi lambang merek berbasis bentuk segitiga.',
-      en: 'Triangle-based brand mark exploration.',
+      id: 'Eksplorasi lambang merek berbasis bentuk segitiga untuk spanduk pameran.',
+      en: 'Triangle-based brand mark exploration for an exhibition banner.',
     },
     year: '2025',
+    software: ['Illustrator', 'Dimension'],
     process: {
       id: 'Dua puluh varian segitiga disaring lewat tiga kriteria: keterbacaan ukuran kecil, simetri, dan kemudahan reproduksi satu warna.',
       en: 'Twenty triangle variants filtered by three criteria: small-size legibility, symmetry, and single-color reproducibility.',
     },
     result: {
-      id: 'Lambang final yang stabil di 16px dan tetap tegas saat diperbesar pada signage.',
-      en: 'A final mark that holds up at 16px and stays bold when scaled up on signage.',
+      id: 'Lambang final yang stabil di 16px dan tetap tegas saat diperbesar pada signage pameran.',
+      en: 'A final mark that holds up at 16px and stays bold when scaled up on exhibition signage.',
     },
   },
+
+  // PAGE 05 — UI/UX
   {
     id: 'ui-concept',
-    title: { id: 'UI Concept', en: 'UI Concept' },
+    title: { id: 'Fintech Analytics Dashboard', en: 'Fintech Analytics Dashboard' },
     category: 'ui',
     categoryLabel: { id: 'UI/UX', en: 'UI/UX' },
     image: './images/creative/ui-concept.png',
     aspect: '16/9',
     caption: {
-      id: 'Konsep antarmuka dashboard dengan data visual.',
-      en: 'Dashboard interface concept with data visualization.',
+      id: 'Konsep antarmuka dashboard dengan data visual real-time.',
+      en: 'Dashboard interface concept with real-time data visualization.',
     },
     year: '2026',
+    software: ['Figma', 'React', 'Tailwind CSS'],
+    prototypeUrl: 'https://github.com/aryomulyadi/portofolio',
+    problem: {
+      id: 'Pengguna merasa kewalahan dengan tampilan grafik keuangan konvensional yang padat dan lambat dipahami.',
+      en: 'Users were overwhelmed by dense, slow-to-digest conventional financial charts.',
+    },
+    research: {
+      id: 'Wawancara dengan 8 pengambil keputusan finansial menunjukkan kebutuhan akan angka kunci dalam 3 detik pertama.',
+      en: 'Interviews with 8 financial decision-makers revealed a need for key figures within the first 3 seconds.',
+    },
+    wireframes: {
+      id: 'Arsitektur informasi modular 3 kolom dengan kartu KPI di bagian atas dan grafik tren utama di tengah.',
+      en: '3-column modular information architecture with top KPI cards and central primary trend charts.',
+    },
     process: {
       id: 'Pemetaan hierarki data dulu — metrik utama selalu di atas, grafik sekunder menyusul. Mode gelap sebagai baseline agar aksen data menonjol.',
       en: 'Mapped data hierarchy first — key metrics always on top, secondary charts below. Dark mode as baseline so data accents pop.',
@@ -201,23 +241,37 @@ export const creativeWorks: CreativeWork[] = [
   },
   {
     id: 'analytics-concept',
-    title: { id: 'Analytics', en: 'Analytics' },
+    title: { id: 'Data Studio Control Center', en: 'Data Studio Control Center' },
     category: 'ui',
     categoryLabel: { id: 'UI/UX', en: 'UI/UX' },
     image: './images/creative/ui-analytics.png',
     aspect: '16/9',
     caption: {
-      id: 'Konsep dasbor analitik dengan fokus pada hierarki metrik.',
-      en: 'Analytics dashboard concept focused on metric hierarchy.',
+      id: 'Konsep dasbor analitik dengan fokus pada hierarki metrik tim.',
+      en: 'Analytics dashboard concept focused on team metric hierarchy.',
     },
     year: '2026',
+    software: ['Figma', 'TypeScript', 'Recharts'],
+    prototypeUrl: 'https://github.com/aryomulyadi/portofolio',
+    problem: {
+      id: 'Penyajian data lintas kanal tidak terpusat sehingga pemantauan kampanye menjadi tidak efisien.',
+      en: 'Decentralized cross-channel data made campaign monitoring inefficient.',
+    },
+    research: {
+      id: 'Audit UX pada 5 alat analitik populer menemukan kurangnya kontras visual pada mode pemantauan layar TV.',
+      en: 'UX audit across 5 popular analytics tools identified poor visual contrast in TV-screen monitoring modes.',
+    },
+    wireframes: {
+      id: 'Grid adaptif dengan kontras tinggi, widget donut chart khusus, dan bar chart yang konsisten.',
+      en: 'Adaptive high-contrast grid featuring custom donut chart widgets and consistent bar charts.',
+    },
     process: {
       id: 'Empat KPI dipetakan ke satu layar: angka besar dulu, grafik 30 hari menyusul, komposisi trafik di panel kanan.',
       en: 'Four KPIs mapped to one screen: big numbers first, 30-day chart second, traffic mix in the right panel.',
     },
     result: {
-      id: 'Layar yang bisa dipindai dari jarak satu meter — penting untuk mode TV tim.',
-      en: 'A screen scannable from a meter away — built for the team TV mode.',
+      id: 'Layar yang bisa dipindai dari jarak satu meter — penting untuk mode TV pameran tim.',
+      en: 'A screen scannable from a meter away — built for team exhibition TV mode.',
     },
   },
 ]

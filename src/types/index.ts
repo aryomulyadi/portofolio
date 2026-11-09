@@ -72,6 +72,16 @@ export interface CreativeWork {
   process?: Localized | null
   /** Case study — outcome / result (optional). */
   result?: Localized | null
+  /** Social media campaign metadata */
+  platform?: string
+  objective?: Localized
+  creativeDirection?: Localized
+  software?: string[]
+  /** UI/UX case study tabs */
+  problem?: Localized
+  research?: Localized
+  wireframes?: Localized
+  prototypeUrl?: string
 }
 
 export type SectionId =
