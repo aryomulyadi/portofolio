@@ -64,6 +64,8 @@ export interface CreativeWork {
   category: string
   categoryLabel: Localized
   image: string
+  /** Native presentation ratio — tiles and stage honor it (no crop). */
+  aspect: '16/9' | '4/5' | '5/4'
   caption: Localized | null
   year: string | null
   /** Case study — design process notes (optional). */

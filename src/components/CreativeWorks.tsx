@@ -1,70 +1,37 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
 import { Lightbox } from './Lightbox'
 import { ShowcaseStage } from './creative/ShowcaseStage'
 import { InfiniteRail } from './creative/InfiniteRail'
+import type { RailChapter } from './creative/InfiniteRail'
 import { t } from '../data/translations'
 import { creativeWorks } from '../data/creativeWorks'
 
 export function CreativeWorks() {
   const { lang } = useLanguage()
-  const [filter, setFilter] = useState<string>('all')
   const [stageIndex, setStageIndex] = useState(0)
   const [lightboxIndex, setLightboxIndex] = useState(-1)
-  const sectionRef = useRef<HTMLElement>(null)
 
-  const categories = useMemo(() => {
-    const map = new Map<string, string>()
-    creativeWorks.forEach((work) => map.set(work.category, work.categoryLabel[lang]))
-    return Array.from(map.entries())
+  const chapters = useMemo(() => {
+    const list: RailChapter[] = []
+    creativeWorks.forEach((work, i) => {
+      const existing = list.find((c) => c.key === work.category)
+      if (existing) existing.count++
+      else list.push({ key: work.category, label: work.categoryLabel[lang], startIndex: i, count: 1 })
+    })
+    return list
   }, [lang])
-
-  const visible = useMemo(
-    () => (filter === 'all' ? creativeWorks : creativeWorks.filter((w) => w.category === filter)),
-    [filter],
-  )
-  const visibleKey = visible.map((w) => w.id).join('|')
-
-  // Reset stage + lightbox when the filtered set changes
-  useEffect(() => {
-    setStageIndex(0)
-    setLightboxIndex(-1)
-  }, [visibleKey])
-
-  // Re-observe reveal nodes when filter changes (global useReveal runs once)
-  useEffect(() => {
-    const root = sectionRef.current
-    if (!root) return
-    const nodes = Array.from(root.querySelectorAll<HTMLElement>('.reveal:not(.is-visible)'))
-    if (nodes.length === 0) return
-
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      nodes.forEach((node) => node.classList.add('is-visible'))
-      return
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible')
-            observer.unobserve(entry.target)
-          }
-        }
-      },
-      { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
-    )
-
-    nodes.forEach((node) => observer.observe(node))
-    return () => observer.disconnect()
-  }, [filter])
 
   if (creativeWorks.length === 0) return null
 
-  const showFilters = categories.length > 1
-  const stageWork = visible[stageIndex] ?? visible[0]
+  const total = creativeWorks.length
+  const stageIndexSafe = stageIndex < total ? stageIndex : 0
+  const stageWork = creativeWorks[stageIndexSafe]
+  const activeChapter = chapters.find(
+    (c) => stageIndexSafe >= c.startIndex && stageIndexSafe < c.startIndex + c.count,
+  ) ?? chapters[0]
+  const posInChapter = stageIndexSafe - activeChapter.startIndex + 1
 
-  // Selecting a work (rail click / stage open / case-study arrows) keeps stage in sync
   const selectWork = (index: number) => {
     setStageIndex(index)
     setLightboxIndex(index)
@@ -73,7 +40,6 @@ export function CreativeWorks() {
   return (
     <section
       id="creative"
-      ref={sectionRef}
       aria-labelledby="creative-title"
       className="relative border-b border-line-dark bg-midnight-deep py-20 text-paper md:py-28"
     >
@@ -92,39 +58,27 @@ export function CreativeWorks() {
             >
               {t('creativeTitle', lang)}
             </h2>
-            {showFilters && (
+            {chapters.length > 1 && (
               <div
                 className="flex flex-wrap gap-2"
                 role="group"
-                aria-label={lang === 'en' ? 'Filter creative work' : 'Filter karya kreatif'}
+                aria-label={t('jumpLabel', lang)}
               >
-                <button
-                  type="button"
-                  onClick={() => setFilter('all')}
-                  aria-pressed={filter === 'all'}
-                  className={`rounded-full px-4 py-2 text-xs font-bold transition-colors ${
-                    filter === 'all'
-                      ? 'bg-mint text-midnight'
-                      : 'border border-paper/25 text-paper/70 hover:border-paper hover:text-paper'
-                  }`}
-                >
-                  {t('filterAll', lang)}
-                </button>
-                {categories.map(([key, label]) => {
-                  const active = filter === key
+                {chapters.map((ch) => {
+                  const active = activeChapter.key === ch.key
                   return (
                     <button
-                      key={key}
+                      key={ch.key}
                       type="button"
-                      onClick={() => setFilter(key)}
-                      aria-pressed={active}
+                      onClick={() => setStageIndex(ch.startIndex)}
+                      aria-current={active ? 'true' : undefined}
                       className={`rounded-full px-4 py-2 text-xs font-bold transition-colors ${
                         active
                           ? 'bg-mint text-midnight'
                           : 'border border-paper/25 text-paper/70 hover:border-paper hover:text-paper'
                       }`}
                     >
-                      {label}
+                      {ch.label}
                     </button>
                   )
                 })}
@@ -134,20 +88,20 @@ export function CreativeWorks() {
           <div className="rule-electric mt-8" />
         </header>
 
-        {visible.length === 0 || !stageWork ? (
+        {!stageWork ? (
           <p className="reveal text-sm text-paper/50">{t('emptyCreative', lang)}</p>
         ) : (
           <>
             <div className="reveal">
               <ShowcaseStage
                 work={stageWork}
-                index={stageIndex < visible.length ? stageIndex : 0}
-                total={visible.length}
+                index={stageIndexSafe}
+                total={total}
                 lang={lang}
-                fadeKey={`${filter}:${stageWork.id}`}
-                onOpen={() => setLightboxIndex(stageIndex < visible.length ? stageIndex : 0)}
-                onPrev={() => setStageIndex((i) => (i - 1 + visible.length) % visible.length)}
-                onNext={() => setStageIndex((i) => (i + 1) % visible.length)}
+                fadeKey={stageWork.id}
+                onOpen={() => setLightboxIndex(stageIndexSafe)}
+                onPrev={() => setStageIndex((i) => (i - 1 + total) % total)}
+                onNext={() => setStageIndex((i) => (i + 1) % total)}
                 labels={{
                   eyebrow: t('showcaseLabel', lang),
                   prev: t('stagePrev', lang),
@@ -159,25 +113,28 @@ export function CreativeWorks() {
 
             <div className="mt-12 md:mt-16">
               <InfiniteRail
-                items={visible}
-                filterKey={filter}
+                items={creativeWorks}
+                chapters={chapters}
                 lang={lang}
-                activeIndex={stageIndex}
+                activeIndex={stageIndexSafe}
                 onSelect={selectWork}
                 onActiveChange={setStageIndex}
-                paused={lightboxIndex >= 0}
                 selectLabel={t('openDetails', lang)}
               />
               <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
-                <span className="font-body text-xs font-bold tabular-nums tracking-[0.12em] text-electric">
-                  {String(stageIndex + 1).padStart(2, '0')}
-                  <span className="text-paper/35"> — </span>
-                  {String(visible.length).padStart(2, '0')}
+                <span className="font-body text-xs font-bold uppercase tracking-[0.14em] text-electric">
+                  {activeChapter.label}
+                  <span className="text-paper/35"> · </span>
+                  <span className="tabular-nums">
+                    {String(posInChapter).padStart(2, '0')}
+                    <span className="text-paper/35">/</span>
+                    {String(activeChapter.count).padStart(2, '0')}
+                  </span>
                 </span>
                 <div className="h-[2px] min-w-[120px] flex-1 bg-paper/15">
                   <div
                     className="h-full bg-electric transition-[width] duration-500 ease-out"
-                    style={{ width: `${((stageIndex + 1) / visible.length) * 100}%` }}
+                    style={{ width: `${((stageIndexSafe + 1) / total) * 100}%` }}
                   />
                 </div>
                 <span className="font-body text-[0.7rem] uppercase tracking-[0.18em] text-paper/40">
@@ -190,7 +147,7 @@ export function CreativeWorks() {
       </div>
 
       <Lightbox
-        items={visible}
+        items={creativeWorks}
         index={lightboxIndex}
         lang={lang}
         labels={{

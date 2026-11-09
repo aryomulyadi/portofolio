@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350" role="img" aria-label="Abstract backline apparel placeholder">
+  <rect width="1080" height="1350" fill="#02070a"/>
+  <circle cx="540" cy="360" r="150" fill="none" stroke="#f5f4f0" stroke-width="6"/>
+  <text x="540" y="374" text-anchor="middle" font-family="Arial, sans-serif" font-size="40" font-weight="700" fill="#f5f4f0" letter-spacing="6">BACKLINE</text>
+  <rect x="510" y="170" width="60" height="6" fill="#0297de"/>
+  <g fill="none" stroke-width="10">
+    <path d="M240 780 L540 620 L840 780" stroke="#88f9c0"/>
+    <path d="M240 850 L540 690 L840 850" stroke="#0297de"/>
+    <path d="M240 920 L540 760 L840 920" stroke="#f5f4f0" opacity=".85"/>
+    <path d="M300 990 L540 860 L780 990" stroke="#f5f4f0" opacity=".4"/>
+  </g>
+  <path d="M240 1060 H840" stroke="#f5f4f0" stroke-width="2" opacity=".35"/>
+  <text x="540" y="1140" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" fill="#0297de" letter-spacing="10">TWO-COLOR DROP</text>
+  <text x="540" y="1204" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#f5f4f0" opacity=".55" letter-spacing="8">APPAREL GRAPHIC 09</text>
+  <rect x="90" y="90" width="60" height="60" fill="none" stroke="#f5f4f0" stroke-width="3" opacity=".5"/>
+  <rect x="930" y="90" width="60" height="60" fill="#88f9c0" opacity=".7"/>
+</svg>

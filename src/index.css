@@ -440,7 +440,7 @@
     }
   }
 
-  /* Living-reel horizontal rail — ambient drift / drag / native touch */
+  /* Living-reel horizontal rail — drag / native touch / magnetic settle */
   .rail-viewport {
     overflow-x: auto;
     overflow-y: hidden;
@@ -466,7 +466,7 @@
     cursor: grabbing;
   }
 
-  /* Grayscale while drifting — color returns on active / hover */
+  /* Grayscale while inactive — color returns on active / hover */
   .rail-tile img {
     filter: grayscale(1) brightness(0.82);
     transition:
@@ -477,6 +477,24 @@
   .rail-tile.is-active img,
   .rail-tile:hover img {
     filter: none;
+  }
+
+  /* Chapter header block inside the filmstrip */
+  .rail-chapter {
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .aspect-16-9 {
+    aspect-ratio: 16 / 9;
+  }
+
+  .aspect-5-4 {
+    aspect-ratio: 5 / 4;
+  }
+
+  .aspect-4-5 {
+    aspect-ratio: 4 / 5;
   }
 
   /* Reel focus: siblings recede while one tile is hovered (filter, not opacity —

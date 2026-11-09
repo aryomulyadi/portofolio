@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Abstract analytics dashboard placeholder">
+  <rect width="1600" height="900" fill="#010406"/>
+  <rect x="60" y="50" width="1480" height="70" rx="14" fill="#02070a" stroke="#0297de" stroke-width="2" opacity=".95"/>
+  <rect x="90" y="72" width="180" height="26" rx="13" fill="#0297de" opacity=".8"/>
+  <rect x="300" y="76" width="120" height="18" rx="9" fill="#f5f4f0" opacity=".25"/>
+  <rect x="450" y="76" width="120" height="18" rx="9" fill="#f5f4f0" opacity=".25"/>
+  <circle cx="1480" cy="85" r="18" fill="#88f9c0" opacity=".85"/>
+  <g font-family="Arial, sans-serif">
+    <rect x="60" y="150" width="345" height="140" rx="16" fill="#02070a" stroke="#f5f4f0" stroke-width="2" opacity=".9"/>
+    <rect x="90" y="180" width="120" height="14" rx="7" fill="#f5f4f0" opacity=".3"/>
+    <text x="90" y="258" font-size="52" font-weight="700" fill="#88f9c0">99.9%</text>
+    <rect x="420" y="150" width="345" height="140" rx="16" fill="#02070a" stroke="#f5f4f0" stroke-width="2" opacity=".9"/>
+    <rect x="450" y="180" width="140" height="14" rx="7" fill="#f5f4f0" opacity=".3"/>
+    <text x="450" y="258" font-size="52" font-weight="700" fill="#0297de">84.2%</text>
+    <rect x="780" y="150" width="345" height="140" rx="16" fill="#02070a" stroke="#f5f4f0" stroke-width="2" opacity=".9"/>
+    <rect x="810" y="180" width="130" height="14" rx="7" fill="#f5f4f0" opacity=".3"/>
+    <text x="810" y="258" font-size="52" font-weight="700" fill="#88f9c0">61%</text>
+    <rect x="1140" y="150" width="345" height="140" rx="16" fill="#02070a" stroke="#f5f4f0" stroke-width="2" opacity=".9"/>
+    <rect x="1170" y="180" width="120" height="14" rx="7" fill="#f5f4f0" opacity=".3"/>
+    <text x="1170" y="258" font-size="52" font-weight="700" fill="#0297de">0.4%</text>
+    <rect x="60" y="330" width="960" height="500" rx="20" fill="#02070a" stroke="#f5f4f0" stroke-width="2" opacity=".92"/>
+    <text x="110" y="390" font-size="22" fill="#f5f4f0" opacity=".6" letter-spacing="6">SESSIONS — 30 DAYS</text>
+    <g fill="#88f9c0" opacity=".8">
+      <rect x="110" y="590" width="60" height="180"/>
+      <rect x="206" y="510" width="60" height="260"/>
+      <rect x="302" y="560" width="60" height="210"/>
+      <rect x="398" y="440" width="60" height="330"/>
+      <rect x="494" y="480" width="60" height="290"/>
+      <rect x="590" y="370" width="60" height="400"/>
+      <rect x="686" y="410" width="60" height="360"/>
+      <rect x="782" y="300" width="60" height="470"/>
+      <rect x="878" y="340" width="60" height="430"/>
+    </g>
+    <polyline points="140,570 236,490 332,540 428,420 524,460 620,350 716,390 812,280 908,320" fill="none" stroke="#0297de" stroke-width="5"/>
+    <g fill="#010406" stroke="#0297de" stroke-width="4">
+      <circle cx="140" cy="570" r="9"/><circle cx="332" cy="540" r="9"/><circle cx="524" cy="460" r="9"/><circle cx="716" cy="390" r="9"/><circle cx="908" cy="320" r="9"/>
+    </g>
+    <path d="M110 770 H970" stroke="#f5f4f0" stroke-width="2" opacity=".3"/>
+    <rect x="1050" y="330" width="490" height="500" rx="20" fill="#02070a" stroke="#0297de" stroke-width="2"/>
+    <text x="1090" y="390" font-size="22" fill="#f5f4f0" opacity=".6" letter-spacing="6">TRAFFIC MIX</text>
+    <circle cx="1295" cy="510" r="110" fill="none" stroke="#f5f4f0" stroke-opacity=".12" stroke-width="34"/>
+    <circle cx="1295" cy="510" r="110" fill="none" stroke="#0297de" stroke-width="34" stroke-dasharray="311 381" transform="rotate(-90 1295 510)"/>
+    <circle cx="1295" cy="510" r="110" fill="none" stroke="#88f9c0" stroke-width="34" stroke-dasharray="207 485" stroke-dashoffset="-311" transform="rotate(-90 1295 510)"/>
+    <text x="1295" y="525" text-anchor="middle" font-size="44" font-weight="700" fill="#f5f4f0">45%</text>
+    <rect x="1090" y="668" width="18" height="18" fill="#0297de"/>
+    <text x="1122" y="683" font-size="22" fill="#f5f4f0" opacity=".75">Organic 45%</text>
+    <rect x="1090" y="710" width="18" height="18" fill="#88f9c0"/>
+    <text x="1122" y="725" font-size="22" fill="#f5f4f0" opacity=".75">Referral 30%</text>
+    <rect x="1090" y="752" width="18" height="18" fill="#f5f4f0" opacity=".3"/>
+    <text x="1122" y="767" font-size="22" fill="#f5f4f0" opacity=".75">Direct 25%</text>
+    <text x="60" y="876" font-size="22" fill="#0297de" letter-spacing="8">ANALYTICS CONCEPT / 02</text>
+  </g>
+</svg>

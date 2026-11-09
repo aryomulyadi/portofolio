@@ -1,0 +1,20 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Abstract geometric poster placeholder">
+  <defs>
+    <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#010406"/>
+      <stop offset="1" stop-color="#031820"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#g2)"/>
+  <rect x="760" y="120" width="700" height="660" fill="none" stroke="#0297de" stroke-width="3" opacity=".8"/>
+  <rect x="830" y="190" width="560" height="520" fill="#0297de" opacity=".16"/>
+  <circle cx="1110" cy="450" r="170" fill="none" stroke="#88f9c0" stroke-width="4"/>
+  <circle cx="1110" cy="450" r="80" fill="#88f9c0" opacity=".85"/>
+  <rect x="120" y="250" width="520" height="8" fill="#f5f4f0" opacity=".8"/>
+  <rect x="120" y="290" width="340" height="8" fill="#f5f4f0" opacity=".4"/>
+  <text x="120" y="440" font-family="Arial, sans-serif" font-size="72" font-weight="700" fill="#f5f4f0" letter-spacing="4">ORBIT</text>
+  <text x="120" y="500" font-family="Arial, sans-serif" font-size="26" fill="#0297de" letter-spacing="10">POSTER SERIES</text>
+  <rect x="120" y="700" width="46" height="46" fill="#88f9c0" opacity=".85"/>
+  <rect x="186" y="700" width="46" height="46" fill="#0297de" opacity=".85"/>
+  <rect x="252" y="700" width="46" height="46" fill="none" stroke="#f5f4f0" stroke-width="3" opacity=".7"/>
+</svg>

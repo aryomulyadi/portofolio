@@ -60,9 +60,10 @@ export const ui: Dict = {
   stagePrev: { id: 'Karya sebelumnya', en: 'Previous work' },
   stageNext: { id: 'Karya berikutnya', en: 'Next work' },
   railHint: {
-    id: 'Arahkan untuk menjeda · klik untuk membuka',
-    en: 'Hover to pause · click to open',
+    id: 'Seret, gunakan ← →, atau klik untuk menjelajah',
+    en: 'Drag, use ← →, or click to browse',
   },
+  jumpLabel: { id: 'Lompat ke bagian', en: 'Jump to section' },
   processLabel: { id: 'Proses', en: 'Process' },
   resultLabel: { id: 'Hasil', en: 'Result' },
   contactLabel: { id: 'Kontak', en: 'Contact' },
@@ -118,5 +119,7 @@ export const ui: Dict = {
 }
 
 export function t(key: keyof Dict, lang: Lang): string {
-  return ui[key][lang]
+  const entry = ui[key]
+  if (!entry) return key
+  return entry[lang] ?? entry.en ?? key
 }

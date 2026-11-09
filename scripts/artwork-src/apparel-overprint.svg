@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350" role="img" aria-label="Abstract overprint apparel placeholder">
+  <rect width="1080" height="1350" fill="#17191f"/>
+  <rect x="150" y="240" width="600" height="620" fill="#0297de" opacity=".55" transform="rotate(-4 450 550)"/>
+  <rect x="300" y="300" width="600" height="620" fill="#88f9c0" opacity=".5" transform="rotate(3 600 610)"/>
+  <rect x="225" y="380" width="600" height="480" fill="none" stroke="#f5f4f0" stroke-width="4" opacity=".7" transform="rotate(-1 525 620)"/>
+  <circle cx="525" cy="610" r="150" fill="none" stroke="#02070a" stroke-width="8" opacity=".8"/>
+  <path d="M445 610 h160 M525 530 v160" stroke="#02070a" stroke-width="8" opacity=".8"/>
+  <text x="146" y="1094" font-family="Arial, sans-serif" font-size="96" font-weight="700" fill="#0297de" opacity=".55" letter-spacing="6">OVERPRINT</text>
+  <text x="154" y="1072" font-family="Arial, sans-serif" font-size="96" font-weight="700" fill="#88f9c0" opacity=".5" letter-spacing="6">OVERPRINT</text>
+  <text x="150" y="1084" font-family="Arial, sans-serif" font-size="96" font-weight="700" fill="#f5f4f0" letter-spacing="6">OVERPRINT</text>
+  <text x="150" y="1156" font-family="Arial, sans-serif" font-size="26" fill="#88f9c0" letter-spacing="10">APPAREL GRAPHIC 08</text>
+  <g stroke="#f5f4f0" stroke-width="3" opacity=".55" fill="none">
+    <circle cx="950" cy="120" r="34"/>
+    <path d="M950 94 v52 M924 120 h52"/>
+    <circle cx="130" cy="1250" r="34"/>
+    <path d="M130 1224 v52 M104 1250 h52"/>
+  </g>
+  <rect x="880" y="1210" width="70" height="70" fill="#0297de" opacity=".8"/>
+  <rect x="965" y="1210" width="70" height="70" fill="#88f9c0" opacity=".7"/>
+</svg>

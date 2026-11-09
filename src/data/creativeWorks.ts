@@ -4,16 +4,82 @@ import type { CreativeWork } from '../types'
  * Creative work — owner adds real artwork here.
  * Use actual artwork files under /public/images/creative/.
  * Keep array empty to hide the section.
- * Current entries use placeholder SVGs — swap image paths when real artwork lands.
+ * Sources live in /scripts/artwork-src/ (render via scripts/render-creative-png.ps1).
+ * Array order = strip order, grouped by chapter: apparel → digital poster → social → banner → ui.
+ * `aspect` must match the artwork file's native ratio (tiles/stage show it uncropped).
  * `process` / `result` feed the fullscreen case-study view (optional).
  */
 export const creativeWorks: CreativeWork[] = [
   {
+    id: 'thread-graphic',
+    title: { id: 'Thread', en: 'Thread' },
+    category: 'apparel',
+    categoryLabel: { id: 'Apparel', en: 'Apparel' },
+    image: './images/creative/apparel-thread.png',
+    aspect: '16/9',
+    caption: {
+      id: 'Grafik sablon untuk koleksi pakaian experimental.',
+      en: 'Screen-print graphic for an experimental apparel drop.',
+    },
+    year: '2025',
+    process: {
+      id: 'Desain dibuat terbatas dua warna tinta agar cocok untuk sablon manual, dengan garis tebal agar tidak hilang di kain knit.',
+      en: 'Limited to two ink colors for manual screen printing, with thick lines so nothing disappears on knit fabric.',
+    },
+    result: {
+      id: 'Grafik yang terbaca dari jauh dan stabil saat dicetak ulang batch kecil.',
+      en: 'A graphic that reads from a distance and stays stable across small reprint batches.',
+    },
+  },
+  {
+    id: 'overprint-graphic',
+    title: { id: 'Overprint', en: 'Overprint' },
+    category: 'apparel',
+    categoryLabel: { id: 'Apparel', en: 'Apparel' },
+    image: './images/creative/apparel-overprint.png',
+    aspect: '4/5',
+    caption: {
+      id: 'Eksperimen cetak ulang dengan lapisan warna yang sengaja meleset.',
+      en: 'Overprint experiment with deliberately misregistered color plates.',
+    },
+    year: '2026',
+    process: {
+      id: 'Dua plat warna dicetak terpisah lalu digeser beberapa milimeter — kesalahan registrasi justru menjadi bahasa visual utama.',
+      en: 'Two color plates printed separately and shifted a few millimeters — the registration error itself became the main visual language.',
+    },
+    result: {
+      id: 'Grafik yang terasa hand-made dan tidak bisa direplikasi persis oleh mesin digital.',
+      en: 'A graphic that feels hand-made and cannot be exactly replicated by a digital press.',
+    },
+  },
+  {
+    id: 'backline-graphic',
+    title: { id: 'Backline', en: 'Backline' },
+    category: 'apparel',
+    categoryLabel: { id: 'Apparel', en: 'Apparel' },
+    image: './images/creative/apparel-backline.png',
+    aspect: '4/5',
+    caption: {
+      id: 'Grafik punggung untuk koleksi dua warna.',
+      en: 'Back-print graphic for a two-color collection.',
+    },
+    year: '2026',
+    process: {
+      id: 'Komposisi vertikal disusun agar tetap seimbang saat dipotong untuk sablon punggung, dengan jarak aman di bagian leher.',
+      en: 'A vertical composition balanced for a back-print cut, with safe spacing near the collar.',
+    },
+    result: {
+      id: 'Satu grafik yang bekerja baik di kaos gelap maupun terang tanpa harus ganti tinta.',
+      en: 'One graphic that works on dark and light tees without an ink swap.',
+    },
+  },
+  {
     id: 'horizon-poster',
     title: { id: 'Horizon', en: 'Horizon' },
-    category: 'poster',
-    categoryLabel: { id: 'Poster', en: 'Poster' },
+    category: 'digital-poster',
+    categoryLabel: { id: 'Poster digital', en: 'Digital poster' },
     image: './images/creative/poster-horizon.png',
+    aspect: '16/9',
     caption: {
       id: 'Studi gradien lanskap untuk seri poster editorial.',
       en: 'Landscape gradient study for an editorial poster series.',
@@ -31,9 +97,10 @@ export const creativeWorks: CreativeWork[] = [
   {
     id: 'orbit-poster',
     title: { id: 'Orbit', en: 'Orbit' },
-    category: 'poster',
-    categoryLabel: { id: 'Poster', en: 'Poster' },
+    category: 'digital-poster',
+    categoryLabel: { id: 'Poster digital', en: 'Digital poster' },
     image: './images/creative/poster-orbit.png',
+    aspect: '16/9',
     caption: {
       id: 'Komposisi geometris dengan fokus ritme dan kontras.',
       en: 'Geometric composition focused on rhythm and contrast.',
@@ -49,31 +116,12 @@ export const creativeWorks: CreativeWork[] = [
     },
   },
   {
-    id: 'mark-system',
-    title: { id: 'Mark 03', en: 'Mark 03' },
-    category: 'branding',
-    categoryLabel: { id: 'Branding', en: 'Branding' },
-    image: './images/creative/brand-mark.png',
-    caption: {
-      id: 'Eksplorasi lambang merek berbasis bentuk segitiga.',
-      en: 'Triangle-based brand mark exploration.',
-    },
-    year: '2025',
-    process: {
-      id: 'Dua puluh varian segitiga disaring lewat tiga kriteria: keterbacaan ukuran kecil, simetri, dan kemudahan reproduksi satu warna.',
-      en: 'Twenty triangle variants filtered by three criteria: small-size legibility, symmetry, and single-color reproducibility.',
-    },
-    result: {
-      id: 'Lambang final yang stabil di 16px dan tetap tegas saat diperbesar pada signage.',
-      en: 'A final mark that holds up at 16px and stays bold when scaled up on signage.',
-    },
-  },
-  {
     id: 'palette-grid',
     title: { id: 'Palette Grid', en: 'Palette Grid' },
-    category: 'branding',
-    categoryLabel: { id: 'Branding', en: 'Branding' },
-    image: './images/creative/brand-grid.png',
+    category: 'digital-poster',
+    categoryLabel: { id: 'Poster digital', en: 'Digital poster' },
+    image: './images/creative/poster-grid.png',
+    aspect: '5/4',
     caption: {
       id: 'Sistem grid dan palet warna untuk identitas visual.',
       en: 'Grid and color-palette system for a visual identity.',
@@ -94,14 +142,15 @@ export const creativeWorks: CreativeWork[] = [
     category: 'social',
     categoryLabel: { id: 'Media sosial', en: 'Social media' },
     image: './images/creative/social-pulse.png',
+    aspect: '4/5',
     caption: {
       id: 'Materi kampanye vertikal untuk kanal sosial.',
       en: 'Vertical campaign assets for social channels.',
     },
     year: '2026',
     process: {
-      id: 'Template 9:16 dengan safe area untuk UI platform. Elemen animasi ringan diuji agar tetap terbaca dalam potongan tiga detik.',
-      en: 'A 9:16 template with platform-UI safe areas. Light motion elements were tested to stay readable in three-second cuts.',
+      id: 'Template 4:5 dengan safe area untuk UI platform. Elemen animasi ringan diuji agar tetap terbaca dalam potongan tiga detik.',
+      en: 'A 4:5 template with platform-UI safe areas. Light motion elements were tested to stay readable in three-second cuts.',
     },
     result: {
       id: 'Paket materi kampanye yang bisa diperluas tim tanpa mengubah sistem visual.',
@@ -109,51 +158,33 @@ export const creativeWorks: CreativeWork[] = [
     },
   },
   {
-    id: 'countdown-post',
-    title: { id: 'Countdown 45', en: 'Countdown 45' },
-    category: 'social',
-    categoryLabel: { id: 'Media sosial', en: 'Social media' },
-    image: './images/creative/social-countdown.png',
+    id: 'mark-system',
+    title: { id: 'Mark 03', en: 'Mark 03' },
+    category: 'banner',
+    categoryLabel: { id: 'Banner', en: 'Banner' },
+    image: './images/creative/banner-mark.png',
+    aspect: '4/5',
     caption: {
-      id: 'Template hitung mundur dengan tipografi berani.',
-      en: 'Countdown template with bold typography.',
-    },
-    year: '2026',
-    process: {
-      id: 'Variasi angka besar dengan hierarki jam, menit, detik. Latar gelap dipilih agar komposisi tetap terbaca di feed terang maupun gelap.',
-      en: 'Large-numeral variations with hour/minute/second hierarchy. A dark background keeps the composition readable in both light and dark feeds.',
-    },
-    result: {
-      id: 'Template siap pakai yang hanya perlu ganti angka untuk setiap rilis.',
-      en: 'A ready-to-use template that only needs a number swap for every release.',
-    },
-  },
-  {
-    id: 'thread-graphic',
-    title: { id: 'Thread', en: 'Thread' },
-    category: 'apparel',
-    categoryLabel: { id: 'Apparel', en: 'Apparel' },
-    image: './images/creative/apparel-thread.png',
-    caption: {
-      id: 'Grafik sablon untuk koleksi pakaian experimental.',
-      en: 'Screen-print graphic for an experimental apparel drop.',
+      id: 'Eksplorasi lambang merek berbasis bentuk segitiga.',
+      en: 'Triangle-based brand mark exploration.',
     },
     year: '2025',
     process: {
-      id: 'Desain dibuat terbatas dua warna tinta agar cocok untuk sablon manual, dengan garis tebal agar tidak hilang di kain knit.',
-      en: 'Limited to two ink colors for manual screen printing, with thick lines so nothing disappears on knit fabric.',
+      id: 'Dua puluh varian segitiga disaring lewat tiga kriteria: keterbacaan ukuran kecil, simetri, dan kemudahan reproduksi satu warna.',
+      en: 'Twenty triangle variants filtered by three criteria: small-size legibility, symmetry, and single-color reproducibility.',
     },
     result: {
-      id: 'Grafik yang terbaca dari jauh dan stabil saat dicetak ulang batch kecil.',
-      en: 'A graphic that reads from a distance and stays stable across small reprint batches.',
+      id: 'Lambang final yang stabil di 16px dan tetap tegas saat diperbesar pada signage.',
+      en: 'A final mark that holds up at 16px and stays bold when scaled up on signage.',
     },
   },
   {
     id: 'ui-concept',
     title: { id: 'UI Concept', en: 'UI Concept' },
     category: 'ui',
-    categoryLabel: { id: 'UI', en: 'UI' },
+    categoryLabel: { id: 'UI/UX', en: 'UI/UX' },
     image: './images/creative/ui-concept.png',
+    aspect: '16/9',
     caption: {
       id: 'Konsep antarmuka dashboard dengan data visual.',
       en: 'Dashboard interface concept with data visualization.',
@@ -166,6 +197,27 @@ export const creativeWorks: CreativeWork[] = [
     result: {
       id: 'Konsep dashboard yang bisa dipindai dalam lima detik: angka dulu, cerita kemudian.',
       en: 'A dashboard concept scannable in five seconds: numbers first, story second.',
+    },
+  },
+  {
+    id: 'analytics-concept',
+    title: { id: 'Analytics', en: 'Analytics' },
+    category: 'ui',
+    categoryLabel: { id: 'UI/UX', en: 'UI/UX' },
+    image: './images/creative/ui-analytics.png',
+    aspect: '16/9',
+    caption: {
+      id: 'Konsep dasbor analitik dengan fokus pada hierarki metrik.',
+      en: 'Analytics dashboard concept focused on metric hierarchy.',
+    },
+    year: '2026',
+    process: {
+      id: 'Empat KPI dipetakan ke satu layar: angka besar dulu, grafik 30 hari menyusul, komposisi trafik di panel kanan.',
+      en: 'Four KPIs mapped to one screen: big numbers first, 30-day chart second, traffic mix in the right panel.',
+    },
+    result: {
+      id: 'Layar yang bisa dipindai dari jarak satu meter — penting untuk mode TV tim.',
+      en: 'A screen scannable from a meter away — built for the team TV mode.',
     },
   },
 ]

@@ -1,0 +1,12 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Abstract apparel graphic placeholder">
+  <rect width="1600" height="900" fill="#17191f"/>
+  <g transform="translate(124.76,0) scale(0.9646302)">
+    <path d="M430 170 L560 120 L700 170 L840 120 L970 170 L920 300 L860 270 L860 810 L540 810 L540 270 L480 300 Z" fill="#02070a" stroke="#f5f4f0" stroke-width="5"/>
+    <circle cx="700" cy="470" r="130" fill="none" stroke="#88f9c0" stroke-width="6"/>
+    <path d="M640 470 h120 M700 410 v120" stroke="#88f9c0" stroke-width="6"/>
+    <rect x="590" y="640" width="220" height="8" fill="#0297de"/>
+    <text x="120" y="850" font-family="Arial, sans-serif" font-size="54" font-weight="700" fill="#f5f4f0" letter-spacing="8">THREAD</text>
+    <text x="120" y="900" font-family="Arial, sans-serif" font-size="24" fill="#0297de" letter-spacing="8">APPAREL GRAPHIC 07</text>
+    <rect x="1180" y="80" width="140" height="140" fill="#88f9c0" opacity=".2"/>
+  </g>
+</svg>

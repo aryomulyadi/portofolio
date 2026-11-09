@@ -1,5 +1,5 @@
 <#
-  Render public/images/creative/*.svg → *.png via headless Edge (fallback Chrome).
+  Render scripts/artwork-src/*.svg → public/images/creative/*.png via headless Edge (fallback Chrome).
   Usage:  powershell -File scripts/render-creative-png.ps1 [-MaxEdge 1600]
   Keeps artwork pixel-faithful (real browser raster, AA + text intact).
 #>
@@ -9,7 +9,9 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
-$dir = Join-Path $root 'public\images\creative'
+$dir = Join-Path $root 'scripts\artwork-src'
+$outDir = Join-Path $root 'public\images\creative'
+New-Item -ItemType Directory -Path $outDir -Force | Out-Null
 $svgFiles = @(Get-ChildItem -LiteralPath $dir -Filter '*.svg')
 if ($svgFiles.Count -eq 0) { throw "No SVGs found in $dir" }
 
@@ -61,7 +63,7 @@ foreach ($svg in $svgFiles) {
   $w = [int][Math]::Round($vw * $scale)
   $h = [int][Math]::Round($vh * $scale)
 
-  $outPng = [System.IO.Path]::ChangeExtension($svg.FullName, '.png')
+  $outPng = Join-Path $outDir ($svg.BaseName + '.png')
   $htmlPath = Join-Path $tmpRoot ($svg.BaseName + '.html')
   $profileDir = Join-Path $tmpRoot ('profile-' + $svg.BaseName)
   $svgUri = 'file:///' + ($svg.FullName -replace '\\', '/')
