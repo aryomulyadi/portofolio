@@ -75,12 +75,12 @@ export function CreativeWorks() {
       id="creative"
       ref={sectionRef}
       aria-labelledby="creative-title"
-      className="border-b border-line-dark bg-midnight-deep py-20 text-paper md:py-28"
+      className="relative border-b border-line-dark bg-midnight-deep py-20 text-paper md:py-28"
     >
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <header className="reveal mb-10 md:mb-14">
           <div className="mb-4 flex items-baseline gap-4">
-            <span className="font-display-bold text-sm text-electric">06</span>
+            <span className="index-num font-display-bold text-sm text-mint">06</span>
             <p className="font-body text-[0.7rem] font-bold uppercase tracking-[0.22em] text-paper/45">
               {t('creativeLabel', lang)}
             </p>
@@ -88,11 +88,9 @@ export function CreativeWorks() {
           <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <h2
               id="creative-title"
-              className="max-w-3xl font-display-bold text-[clamp(1.9rem,5vw,3.4rem)] font-medium leading-[1.05] tracking-tight text-balance"
+              className="max-w-3xl font-display-bold text-[clamp(1.9rem,4.5vw,3.1rem)] font-medium leading-[1.08] tracking-tight text-paper text-balance"
             >
-              <span className="text-paper/35">DESIGN</span>{' '}
-              <span className="text-electric">/</span>{' '}
-              <span className="text-paper">VISUAL EXPERIMENTS</span>
+              {t('creativeTitle', lang)}
             </h2>
             {showFilters && (
               <div
@@ -164,12 +162,28 @@ export function CreativeWorks() {
                 items={visible}
                 filterKey={filter}
                 lang={lang}
+                activeIndex={stageIndex}
                 onSelect={selectWork}
+                onActiveChange={setStageIndex}
+                paused={lightboxIndex >= 0}
                 selectLabel={t('openDetails', lang)}
               />
-              <p className="mt-5 px-5 font-body text-[0.7rem] uppercase tracking-[0.18em] text-paper/40 md:px-8">
-                {t('railHint', lang)}
-              </p>
+              <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
+                <span className="font-body text-xs font-bold tabular-nums tracking-[0.12em] text-electric">
+                  {String(stageIndex + 1).padStart(2, '0')}
+                  <span className="text-paper/35"> — </span>
+                  {String(visible.length).padStart(2, '0')}
+                </span>
+                <div className="h-[2px] min-w-[120px] flex-1 bg-paper/15">
+                  <div
+                    className="h-full bg-electric transition-[width] duration-500 ease-out"
+                    style={{ width: `${((stageIndex + 1) / visible.length) * 100}%` }}
+                  />
+                </div>
+                <span className="font-body text-[0.7rem] uppercase tracking-[0.18em] text-paper/40">
+                  {t('railHint', lang)}
+                </span>
+              </div>
             </div>
           </>
         )}

@@ -13,7 +13,7 @@ export const creativeWorks: CreativeWork[] = [
     title: { id: 'Horizon', en: 'Horizon' },
     category: 'poster',
     categoryLabel: { id: 'Poster', en: 'Poster' },
-    image: './images/creative/poster-horizon.svg',
+    image: './images/creative/poster-horizon.png',
     caption: {
       id: 'Studi gradien lanskap untuk seri poster editorial.',
       en: 'Landscape gradient study for an editorial poster series.',
@@ -33,7 +33,7 @@ export const creativeWorks: CreativeWork[] = [
     title: { id: 'Orbit', en: 'Orbit' },
     category: 'poster',
     categoryLabel: { id: 'Poster', en: 'Poster' },
-    image: './images/creative/poster-orbit.svg',
+    image: './images/creative/poster-orbit.png',
     caption: {
       id: 'Komposisi geometris dengan fokus ritme dan kontras.',
       en: 'Geometric composition focused on rhythm and contrast.',
@@ -53,7 +53,7 @@ export const creativeWorks: CreativeWork[] = [
     title: { id: 'Mark 03', en: 'Mark 03' },
     category: 'branding',
     categoryLabel: { id: 'Branding', en: 'Branding' },
-    image: './images/creative/brand-mark.svg',
+    image: './images/creative/brand-mark.png',
     caption: {
       id: 'Eksplorasi lambang merek berbasis bentuk segitiga.',
       en: 'Triangle-based brand mark exploration.',
@@ -73,7 +73,7 @@ export const creativeWorks: CreativeWork[] = [
     title: { id: 'Palette Grid', en: 'Palette Grid' },
     category: 'branding',
     categoryLabel: { id: 'Branding', en: 'Branding' },
-    image: './images/creative/brand-grid.svg',
+    image: './images/creative/brand-grid.png',
     caption: {
       id: 'Sistem grid dan palet warna untuk identitas visual.',
       en: 'Grid and color-palette system for a visual identity.',
@@ -93,7 +93,7 @@ export const creativeWorks: CreativeWork[] = [
     title: { id: 'Pulse', en: 'Pulse' },
     category: 'social',
     categoryLabel: { id: 'Media sosial', en: 'Social media' },
-    image: './images/creative/social-pulse.svg',
+    image: './images/creative/social-pulse.png',
     caption: {
       id: 'Materi kampanye vertikal untuk kanal sosial.',
       en: 'Vertical campaign assets for social channels.',
@@ -113,7 +113,7 @@ export const creativeWorks: CreativeWork[] = [
     title: { id: 'Countdown 45', en: 'Countdown 45' },
     category: 'social',
     categoryLabel: { id: 'Media sosial', en: 'Social media' },
-    image: './images/creative/social-countdown.svg',
+    image: './images/creative/social-countdown.png',
     caption: {
       id: 'Template hitung mundur dengan tipografi berani.',
       en: 'Countdown template with bold typography.',
@@ -133,7 +133,7 @@ export const creativeWorks: CreativeWork[] = [
     title: { id: 'Thread', en: 'Thread' },
     category: 'apparel',
     categoryLabel: { id: 'Apparel', en: 'Apparel' },
-    image: './images/creative/apparel-thread.svg',
+    image: './images/creative/apparel-thread.png',
     caption: {
       id: 'Grafik sablon untuk koleksi pakaian experimental.',
       en: 'Screen-print graphic for an experimental apparel drop.',
@@ -153,7 +153,7 @@ export const creativeWorks: CreativeWork[] = [
     title: { id: 'UI Concept', en: 'UI Concept' },
     category: 'ui',
     categoryLabel: { id: 'UI', en: 'UI' },
-    image: './images/creative/ui-concept.svg',
+    image: './images/creative/ui-concept.png',
     caption: {
       id: 'Konsep antarmuka dashboard dengan data visual.',
       en: 'Dashboard interface concept with data visualization.',
