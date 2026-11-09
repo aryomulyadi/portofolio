@@ -11,6 +11,8 @@ interface LightboxProps {
     close: string
     next: string
     prev: string
+    process: string
+    result: string
   }
   onClose: () => void
   onNavigate: (index: number) => void
@@ -44,12 +46,12 @@ export function Lightbox({ items, index, lang, labels, onClose, onNavigate }: Li
       className="fixed inset-0 z-[60] flex items-center justify-center bg-ink/92 p-4 md:p-8"
       role="dialog"
       aria-modal="true"
-      aria-label={labels.close}
+      aria-label={item.title[lang]}
       onClick={onClose}
     >
       <div
         ref={dialogRef}
-        className="relative flex max-h-full w-full max-w-5xl flex-col"
+        className="relative flex max-h-full w-full max-w-6xl flex-col"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="mb-3 flex items-center justify-between gap-4">
@@ -64,28 +66,46 @@ export function Lightbox({ items, index, lang, labels, onClose, onNavigate }: Li
             type="button"
             onClick={onClose}
             aria-label={labels.close}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-paper/25 text-paper transition-colors hover:border-paper hover:bg-paper/10"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-paper/25 text-paper transition-colors hover:border-paper hover:bg-paper/10"
           >
             <X size={18} aria-hidden />
           </button>
         </div>
 
-        <div className="relative min-h-0 flex-1">
-          <img
-            src={item.image}
-            alt={item.caption?.[lang] ?? item.title[lang]}
-            className="mx-auto max-h-[70vh] w-auto max-w-full object-contain"
-          />
+        <div className="grid min-h-0 flex-1 gap-6 overflow-y-auto lg:grid-cols-[1.5fr_1fr] lg:overflow-hidden">
+          <div className="flex min-h-0 items-start justify-center">
+            <img
+              src={item.image}
+              alt={item.caption?.[lang] ?? item.title[lang]}
+              className="max-h-[50vh] w-auto max-w-full object-contain lg:max-h-[62vh]"
+            />
+          </div>
+
+          <div className="flex min-h-0 flex-col gap-5 lg:overflow-y-auto lg:pr-1">
+            {item.caption && (
+              <p className="max-w-2xl font-body text-sm leading-relaxed text-paper/70">{item.caption[lang]}</p>
+            )}
+            {item.process && (
+              <section>
+                <h4 className="font-body text-[0.68rem] font-bold uppercase tracking-[0.22em] text-mint">
+                  {labels.process}
+                </h4>
+                <p className="mt-2 font-body text-sm leading-relaxed text-paper/70">{item.process[lang]}</p>
+              </section>
+            )}
+            {item.result && (
+              <section>
+                <h4 className="font-body text-[0.68rem] font-bold uppercase tracking-[0.22em] text-electric">
+                  {labels.result}
+                </h4>
+                <p className="mt-2 font-body text-sm leading-relaxed text-paper/70">{item.result[lang]}</p>
+              </section>
+            )}
+          </div>
         </div>
 
-        {item.caption && (
-          <p className="mt-3 max-w-2xl font-body text-sm leading-relaxed text-paper/70">
-            {item.caption[lang]}
-          </p>
-        )}
-
         {hasNav && (
-          <div className="mt-4 flex items-center justify-center gap-3">
+          <div className="mt-4 flex shrink-0 items-center justify-center gap-3">
             <button
               type="button"
               onClick={() => onNavigate((index - 1 + items.length) % items.length)}

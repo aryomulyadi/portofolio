@@ -66,6 +66,10 @@ export interface CreativeWork {
   image: string
   caption: Localized | null
   year: string | null
+  /** Case study — design process notes (optional). */
+  process?: Localized | null
+  /** Case study — outcome / result (optional). */
+  result?: Localized | null
 }
 
 export type SectionId =

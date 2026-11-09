@@ -6,6 +6,8 @@ interface ShowcaseStageProps {
   index: number
   total: number
   lang: Lang
+  /** Remounts the artwork on filter change or work change to replay fade. */
+  fadeKey: string
   onOpen: () => void
   onPrev: () => void
   onNext: () => void
@@ -17,7 +19,7 @@ interface ShowcaseStageProps {
   }
 }
 
-export function ShowcaseStage({ work, index, total, lang, onOpen, onPrev, onNext, labels }: ShowcaseStageProps) {
+export function ShowcaseStage({ work, index, total, lang, fadeKey, onOpen, onPrev, onNext, labels }: ShowcaseStageProps) {
   const single = total < 2
   const position = `${String(index + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`
 
@@ -26,12 +28,11 @@ export function ShowcaseStage({ work, index, total, lang, onOpen, onPrev, onNext
       <button
         type="button"
         onClick={onOpen}
-        data-cursor="view"
         aria-label={`${work.title[lang]} — ${labels.open}`}
-        className="showcase-media group relative block w-full text-left md:h-[70vh] lg:h-[76vh]"
+        className="group relative block w-full text-left md:h-[86vh] lg:h-[90vh]"
       >
         <img
-          key={work.id}
+          key={fadeKey}
           src={work.image}
           alt={work.caption?.[lang] ?? work.title[lang]}
           loading="eager"

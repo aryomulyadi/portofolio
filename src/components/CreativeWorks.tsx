@@ -2,8 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useLanguage } from '../hooks/useLanguage'
 import { Lightbox } from './Lightbox'
 import { ShowcaseStage } from './creative/ShowcaseStage'
-import { GalleryGrid } from './creative/GalleryGrid'
-import { GalleryCursor } from './creative/GalleryCursor'
+import { InfiniteRail } from './creative/InfiniteRail'
 import { t } from '../data/translations'
 import { creativeWorks } from '../data/creativeWorks'
 
@@ -65,11 +64,16 @@ export function CreativeWorks() {
   const showFilters = categories.length > 1
   const stageWork = visible[stageIndex] ?? visible[0]
 
+  // Selecting a work (rail click / stage open / case-study arrows) keeps stage in sync
+  const selectWork = (index: number) => {
+    setStageIndex(index)
+    setLightboxIndex(index)
+  }
+
   return (
     <section
       id="creative"
       ref={sectionRef}
-      data-cursor-zone
       aria-labelledby="creative-title"
       className="border-b border-line-dark bg-midnight-deep py-20 text-paper md:py-28"
     >
@@ -84,9 +88,11 @@ export function CreativeWorks() {
           <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <h2
               id="creative-title"
-              className="max-w-2xl font-display-bold text-[clamp(1.9rem,4.5vw,3.1rem)] font-medium leading-[1.08] tracking-tight text-paper text-balance"
+              className="max-w-3xl font-display-bold text-[clamp(1.9rem,5vw,3.4rem)] font-medium leading-[1.05] tracking-tight text-balance"
             >
-              {t('creativeTitle', lang)}
+              <span className="text-paper/35">DESIGN</span>{' '}
+              <span className="text-electric">/</span>{' '}
+              <span className="text-paper">VISUAL EXPERIMENTS</span>
             </h2>
             {showFilters && (
               <div
@@ -132,39 +138,42 @@ export function CreativeWorks() {
 
         {visible.length === 0 || !stageWork ? (
           <p className="reveal text-sm text-paper/50">{t('emptyCreative', lang)}</p>
-        ) : null}
+        ) : (
+          <>
+            <div className="reveal">
+              <ShowcaseStage
+                work={stageWork}
+                index={stageIndex < visible.length ? stageIndex : 0}
+                total={visible.length}
+                lang={lang}
+                fadeKey={`${filter}:${stageWork.id}`}
+                onOpen={() => setLightboxIndex(stageIndex < visible.length ? stageIndex : 0)}
+                onPrev={() => setStageIndex((i) => (i - 1 + visible.length) % visible.length)}
+                onNext={() => setStageIndex((i) => (i + 1) % visible.length)}
+                labels={{
+                  eyebrow: t('showcaseLabel', lang),
+                  prev: t('stagePrev', lang),
+                  next: t('stageNext', lang),
+                  open: t('openDetails', lang),
+                }}
+              />
+            </div>
+
+            <div className="mt-12 md:mt-16">
+              <InfiniteRail
+                items={visible}
+                filterKey={filter}
+                lang={lang}
+                onSelect={selectWork}
+                selectLabel={t('openDetails', lang)}
+              />
+              <p className="mt-5 px-5 font-body text-[0.7rem] uppercase tracking-[0.18em] text-paper/40 md:px-8">
+                {t('railHint', lang)}
+              </p>
+            </div>
+          </>
+        )}
       </div>
-
-      {visible.length > 0 && stageWork && (
-        <div className="reveal mt-2 md:mt-4">
-          <ShowcaseStage
-            work={stageWork}
-            index={stageIndex < visible.length ? stageIndex : 0}
-            total={visible.length}
-            lang={lang}
-            onOpen={() => setLightboxIndex(stageIndex < visible.length ? stageIndex : 0)}
-            onPrev={() => setStageIndex((i) => (i - 1 + visible.length) % visible.length)}
-            onNext={() => setStageIndex((i) => (i + 1) % visible.length)}
-            labels={{
-              eyebrow: t('showcaseLabel', lang),
-              prev: t('stagePrev', lang),
-              next: t('stageNext', lang),
-              open: t('openDetails', lang),
-            }}
-          />
-        </div>
-      )}
-
-      {visible.length > 0 && (
-        <div className="mx-auto mt-12 max-w-6xl px-5 md:mt-16 md:px-8">
-          <GalleryGrid
-            items={visible}
-            lang={lang}
-            onOpen={setLightboxIndex}
-            openLabel={t('openDetails', lang)}
-          />
-        </div>
-      )}
 
       <Lightbox
         items={visible}
@@ -174,14 +183,12 @@ export function CreativeWorks() {
           close: t('closeLightbox', lang),
           next: t('nextImage', lang),
           prev: t('prevImage', lang),
+          process: t('processLabel', lang),
+          result: t('resultLabel', lang),
         }}
         onClose={() => setLightboxIndex(-1)}
-        onNavigate={setLightboxIndex}
+        onNavigate={selectWork}
       />
-
-      {lightboxIndex < 0 && visible.length > 0 && (
-        <GalleryCursor label={t('viewBadge', lang)} />
-      )}
     </section>
   )
 }

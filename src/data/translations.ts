@@ -52,14 +52,16 @@ export const ui: Dict = {
     en: 'Projects',
   },
   creativeLabel: { id: 'Karya kreatif', en: 'Creative work' },
-  creativeTitle: {
-    id: 'Desain di luar layar',
-    en: 'Design beyond the screen',
-  },
+  creativeOpening: { id: 'DESIGN / VISUAL EXPERIMENTS', en: 'DESIGN / VISUAL EXPERIMENTS' },
   showcaseLabel: { id: 'Sorotan', en: 'Featured' },
   stagePrev: { id: 'Karya sebelumnya', en: 'Previous work' },
   stageNext: { id: 'Karya berikutnya', en: 'Next work' },
-  viewBadge: { id: 'Lihat', en: 'View' },
+  railHint: {
+    id: 'Geser atau seret untuk menjelajah',
+    en: 'Scroll or drag to explore',
+  },
+  processLabel: { id: 'Proses', en: 'Process' },
+  resultLabel: { id: 'Hasil', en: 'Result' },
   contactLabel: { id: 'Kontak', en: 'Contact' },
   contactTitle: {
     id: 'Mulai percakapan',

@@ -440,71 +440,49 @@
     }
   }
 
-  /* Custom gallery cursor — desktop fine-pointer enhancement only */
-  .gallery-cursor {
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 70;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 10px;
-    height: 10px;
-    border-radius: 999px;
-    background: var(--color-paper);
-    mix-blend-mode: difference;
-    opacity: 0;
-    pointer-events: none;
-    transition:
-      width 0.3s var(--ease-spring),
-      height 0.3s var(--ease-spring),
-      opacity 0.25s ease,
-      background-color 0.25s ease;
-    will-change: transform;
+  /* Infinite horizontal rail — drag / wheel / native touch */
+  .rail-viewport {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .gallery-cursor.is-dot,
-  .gallery-cursor.is-view {
-    opacity: 1;
+  .rail-viewport::-webkit-scrollbar {
+    display: none;
   }
 
-  .gallery-cursor.is-view {
-    width: 72px;
-    height: 72px;
-    background: var(--color-mint);
-    mix-blend-mode: normal;
+  .rail-viewport .rail-tile {
+    cursor: pointer;
   }
 
-  .gallery-cursor-label {
-    font-family: var(--font-body);
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--color-midnight);
-    opacity: 0;
-    transform: scale(0.6);
-    transition:
-      opacity 0.2s ease,
-      transform 0.3s var(--ease-spring);
+  .rail-viewport.is-dragging,
+  .rail-viewport.is-dragging .rail-tile {
+    cursor: grabbing;
   }
 
-  .gallery-cursor.is-view .gallery-cursor-label {
-    opacity: 1;
-    transform: scale(1);
+  .rail-tile-in {
+    animation: rail-in 0.55s var(--ease-out) both;
   }
 
-  /* Hide native cursor over gallery media only when custom cursor is active */
-  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-    [data-cursor-zone] .showcase-media,
-    [data-cursor-zone] .gallery-tile {
-      cursor: none;
+  @keyframes rail-in {
+    from {
+      opacity: 0;
+      transform: translateY(18px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .showcase-fade {
+    .showcase-fade,
+    .rail-tile-in {
       animation: none;
     }
   }
