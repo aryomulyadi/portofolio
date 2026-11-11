@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, ExternalLink, Github } from 'lucide-react'
 import { useLanguage } from '../hooks/useLanguage'
 import { ProjectDeck } from './ProjectDeck'
 import { useCardDeck } from '../hooks/useCardDeck'
@@ -82,7 +82,7 @@ export function Projects() {
       id="projects"
       ref={sectionRef}
       aria-labelledby="projects-title"
-      className="sec-pad border-b border-ink bg-ink text-paper"
+      className="sec-pad pb-6 sm:pb-8 lg:pb-12 border-b border-ink bg-ink text-paper"
     >
       <div className="shell">
         <div className="g">
@@ -144,7 +144,7 @@ export function Projects() {
                 <div className="order-2 lg:order-1">
                   <div key={active.id} className="desc-swap" aria-live="polite">
                     <p className="no-outline" aria-hidden="true">
-                      {String((catalogIndex[active.id] ?? 0) + 1).padStart(3, '0')}
+                      {String((catalogIndex[active.id] ?? 0) + 1).padStart(2, '0')}
                     </p>
                     <p className="mono mt-5 text-grey">{t('descriptionLabel', lang)}</p>
                     <h3 className="mt-3 font-display text-[clamp(1.8rem,4.2vw,3.4rem)] font-black uppercase leading-none tracking-tight text-paper text-balance" style={{ fontStretch: '108%' }}>
@@ -160,6 +160,30 @@ export function Projects() {
                     )}
 
                     <div className="mt-7 flex flex-wrap items-center gap-2.5">
+                      {active.liveUrl && (
+                        <a
+                          href={active.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="deck-btn is-red"
+                          data-cur="Open"
+                        >
+                          <ExternalLink size={14} aria-hidden />
+                          {t('liveLink', lang)}
+                        </a>
+                      )}
+                      {active.githubUrl && (
+                        <a
+                          href={active.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="deck-btn"
+                          data-cur="Open"
+                        >
+                          <Github size={14} aria-hidden />
+                          {t('githubLink', lang)}
+                        </a>
+                      )}
                       <button
                         type="button"
                         onClick={deck.goPrev}
@@ -181,12 +205,10 @@ export function Projects() {
                         <ArrowRight size={15} aria-hidden />
                       </button>
                       <span
-                        className="mono ml-1 text-grey"
+                        className="mono ml-2 font-bold tracking-wider text-paper"
                         aria-live="polite"
                       >
-                        {t('deckPosition', lang)
-                          .replace('{n}', String(deck.activeIndex + 1).padStart(2, '0'))
-                          .replace('{total}', String(deck.total).padStart(2, '0'))}
+                        {String(deck.activeIndex + 1).padStart(2, '0')} / {String(deck.total).padStart(2, '0')}
                       </span>
                     </div>
 

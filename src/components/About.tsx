@@ -12,7 +12,6 @@ export function About() {
       v: profile.location ? profile.location[lang] : 'Indonesia',
     },
     { k: t('factCurrentlyLabel', lang), v: t('factCurrentlyValue', lang) },
-    { k: t('factStackLabel', lang), v: t('factStackValue', lang) },
     { k: t('factOpenLabel', lang), v: t('factOpenValue', lang) },
   ]
 

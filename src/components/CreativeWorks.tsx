@@ -36,8 +36,8 @@ export function CreativeWorks() {
         label: { en: 'Digital Poster', id: 'Poster Digital' },
         title: 'Digital Poster',
         intro: {
-          id: 'Koleksi 3 Poster Editorial & Gradien',
-          en: '3 Editorial & Gradient Posters',
+          id: '',
+          en: 'Digital Poster Design for Advertising, Education & Promotion',
         },
         works: creativeWorks.filter((w) => w.category === 'digital-poster'),
       },
@@ -137,7 +137,7 @@ export function CreativeWorks() {
       ref={sectionRef}
       aria-labelledby="creative-title"
       onKeyDown={onSectionKeyDown}
-      className="sec-pad grain relative border-b border-ink bg-ink text-paper"
+      className="sec-pad pt-6 sm:pt-8 lg:pt-12 grain relative border-b border-ink bg-ink text-paper"
     >
       <div className="shell relative z-[1]">
         <div className="g">
@@ -146,12 +146,12 @@ export function CreativeWorks() {
           </div>
 
           <div className="bd">
-            <h2 id="creative-title" className="disp-h2 reveal text-paper">
+            <h2 id="creative-title" className="disp-h2 text-paper !mb-3 sm:!mb-4">
               {t('creativeTitle', lang)}
             </h2>
 
             {/* FR-CRE-01 category navbar + FR-CRE-G2 Stage|Index toggle */}
-            <div className="mb-[clamp(16px,2.8vw,32px)] flex flex-wrap items-center justify-between gap-3">
+            <div className="mb-3 sm:mb-5 flex flex-wrap items-center justify-between gap-3">
               <nav
                 className="flex gap-2 overflow-x-auto pb-1 scrollbar-none"
                 aria-label={lang === 'en' ? 'Creative categories' : 'Kategori karya'}

@@ -7,8 +7,8 @@ export const profile: Profile = {
     id: 'Creative Developer',
   },
   intro: {
-    en: 'I build interactive web products, AI-driven platforms, and digital experiences. Currently focused on Next.js, React ecosystem, and multi-agent AI systems. Based in Indonesia, open to freelance projects and collaboration.',
-    id: 'Saya membangun produk web interaktif, platform berbasis AI, dan pengalaman digital. Saat ini fokus pada ekosistem Next.js dan React serta sistem AI multi-agent. Berbasis di Indonesia, terbuka untuk freelance dan kolaborasi.',
+    en: 'Experienced Creative Developer with a strong interest in Machine Learning. Bringing a solid professional track record in crafting visual assets and translating them into functional, modern web applications. Currently expanding my technical skill set by exploring data-driven machine learning models to build smarter digital products. Open to new challenges, and collaborative opportunities!',
+    id: 'Pengembang Kreatif berpengalaman dengan minat yang kuat dalam Pembelajaran Mesin. Membawa rekam jejak profesional yang solid dalam merancang aset visual dan menerjemahkannya menjadi aplikasi web modern yang fungsional. Saat ini memperluas keterampilan teknis saya dengan mengeksplorasi model pembelajaran mesin berbasis data untuk membangun produk digital yang lebih cerdas. Terbuka untuk tantangan baru, dan peluang kolaboratif!',
   },
   location: {
     en: 'Indonesia',

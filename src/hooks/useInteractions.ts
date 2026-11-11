@@ -4,13 +4,12 @@ import type { RefObject } from 'react'
 /** Reveals elements with class `reveal` as they enter the viewport. */
 export function useReveal() {
   useEffect(() => {
-    const nodes = document.querySelectorAll<HTMLElement>('.reveal')
-    if (nodes.length === 0) return
-
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      nodes.forEach((node) => node.classList.add('is-visible'))
+      document.querySelectorAll<HTMLElement>('.reveal').forEach((node) => node.classList.add('is-visible'))
       return
     }
+
+    const observed = new WeakSet<HTMLElement>()
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -24,8 +23,28 @@ export function useReveal() {
       { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
     )
 
-    nodes.forEach((node) => observer.observe(node))
-    return () => observer.disconnect()
+    const observeNodes = () => {
+      const nodes = document.querySelectorAll<HTMLElement>('.reveal')
+      nodes.forEach((node) => {
+        if (!observed.has(node) && !node.classList.contains('is-visible')) {
+          observed.add(node)
+          observer.observe(node)
+        }
+      })
+    }
+
+    observeNodes()
+
+    // Automatically observe newly mounted nodes (e.g. lazy-loaded CreativeWorks chunk)
+    const mutationObserver = new MutationObserver(() => {
+      observeNodes()
+    })
+    mutationObserver.observe(document.body, { childList: true, subtree: true })
+
+    return () => {
+      observer.disconnect()
+      mutationObserver.disconnect()
+    }
   }, [])
 }
 

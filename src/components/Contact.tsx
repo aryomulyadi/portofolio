@@ -99,21 +99,18 @@ export function Contact() {
           <div className="bd">
             <div className="grid items-end gap-10 lg:grid-cols-[7fr_5fr] lg:gap-8">
               <div className="reveal">
-                <h2 id="contact-title" className="disp-h2 text-white">
-                  {t('contactTitle', lang)}
+                <h2 id="contact-title" className="sr-only">
+                  {t('contactLabel', lang)}
                 </h2>
-                <p className="max-w-[46ch] text-[1.02rem] leading-relaxed text-white text-balance">
-                  {t('contactBody', lang)}
-                </p>
 
                 {profile.links.email && (
                   <a
                     ref={phraseRef}
                     href={`mailto:${profile.links.email}`}
-                    className="big-link mt-8 text-white"
+                    className="big-link text-white"
                     data-cur="Mail"
                   >
-                    <span className="block font-mono text-[clamp(0.85rem,1.8vw,1.35rem)] font-bold tracking-wider text-white/80 uppercase mb-3 font-normal">
+                    <span className="block font-mono text-[clamp(0.85rem,1.8vw,1.35rem)] font-bold tracking-wider text-white/80 uppercase mb-3">
                       {t('buildPhrase0', lang)}
                     </span>
                     <span>{t('buildPhrase1', lang)}</span>

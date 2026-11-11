@@ -12,8 +12,6 @@ interface ProjectDeckProps {
   catalogTotal: number
 }
 
-const OPACITY = [1, 0.95, 0.8, 0.65] as const
-
 function clearTilt(el: HTMLElement) {
   el.style.setProperty('--tx', '0px')
   el.style.setProperty('--ty', '0px')
@@ -46,6 +44,7 @@ export function ProjectDeck({ deck, projects, lang, catalogIndex, catalogTotal }
   }
 
   const handlePointerDown = (event: ReactPointerEvent<HTMLElement>) => {
+    if ((event.target as HTMLElement).closest('a, button')) return
     clearTilt(event.currentTarget)
     deck.dragHandlers.onPointerDown(event)
   }
@@ -80,20 +79,19 @@ export function ProjectDeck({ deck, projects, lang, catalogIndex, catalogTotal }
           .filter(Boolean)
           .join(' ')
 
-        let cardStyle: CSSProperties = { zIndex: 40 - rank }
+        let cardStyle: CSSProperties = { zIndex: 40 - rank, opacity: 1 }
         if (isExiting) {
-          const sign = exitDir === 'prev' ? -1 : 1
+          const sign = exitDir === 'next' ? -1 : 1
           cardStyle = {
             ...cardStyle,
-            zIndex: 1,
+            zIndex: 50,
             opacity: 0,
-            transform: `translate(${sign * 520}px, -40px) rotate(${sign * 24}deg)`,
+            transform: `translate(${sign * 480}px, -24px) rotate(${sign * 18}deg)`,
           }
         } else if (isFront) {
           cardStyle = {
             ...cardStyle,
             zIndex: 40,
-            opacity: 1,
             ['--drag-x' as string]: `${drag.x}px`,
             ['--drag-y' as string]: `${drag.y}px`,
             ['--drag-rot' as string]: `${drag.rotate}deg`,
@@ -101,7 +99,6 @@ export function ProjectDeck({ deck, projects, lang, catalogIndex, catalogTotal }
         } else {
           cardStyle = {
             ...cardStyle,
-            opacity: OPACITY[Math.min(rank, 3)],
             ['--rank' as string]: rank,
           } as CSSProperties
         }
@@ -142,7 +139,12 @@ export function ProjectDeck({ deck, projects, lang, catalogIndex, catalogTotal }
 
               <div className="cart">
                 {project.image ? (
-                  <img src={project.image} alt="" />
+                  <img
+                    src={project.image}
+                    alt=""
+                    draggable={false}
+                    className="pointer-events-none select-none"
+                  />
                 ) : (
                   <span className="font-display text-3xl font-black uppercase tracking-tight text-[#171717]/70">
                     {project.title}
@@ -168,6 +170,7 @@ export function ProjectDeck({ deck, projects, lang, catalogIndex, catalogTotal }
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onPointerDown={(e) => e.stopPropagation()}
                       onClick={(e) => e.stopPropagation()}
                       data-cur="Open"
                     >
@@ -180,6 +183,7 @@ export function ProjectDeck({ deck, projects, lang, catalogIndex, catalogTotal }
                       href={project.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onPointerDown={(e) => e.stopPropagation()}
                       onClick={(e) => e.stopPropagation()}
                       data-cur="Open"
                     >

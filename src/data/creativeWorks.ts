@@ -97,12 +97,12 @@ export const creativeWorks: CreativeWork[] = [
     year: '2025',
     software: ['Affinity Design', 'Illustrator', 'Photoshop', 'canva'],
     process: {
-      id: 'Riset warna matahari terbit, lalu penyusunan bentuk lanskap dari tiga lapis gradien. Tipografi diuji pada tiga skala berbeda.',
-      en: 'Sunrise color research, then landscape shapes built from three gradient layers. Typography was tested at three scales.',
+      id: 'Setiap poster dikembangkan berdasarkan tujuan komunikasi spesifiknya, menggabungkan visual yang menarik, palet warna yang dipilih dengan cermat, dan tipografi yang terstruktur dengan baik. Tata letak dan elemen visual disusun secara strategis untuk membangun hierarki informasi yang jelas, memastikan pesan utama menarik, mudah dibaca, dan mudah dipahami.',
+      en: 'Each poster is developed around its specific communication objectives, combining eye-catching visuals, carefully selected color palettes, and well-structured typography. Layouts and visual elements are strategically arranged to establish a clear information hierarchy, ensuring that key messages are engaging, readable, and easy to understand.',
     },
     result: {
-      id: 'Seri poster yang tenang tapi tetap kontras, siap untuk cetak A2 maupun unggahan vertikal.',
-      en: 'A calm yet high-contrast poster series, ready for A2 print and vertical posts.',
+      id: 'Koleksi poster digital yang menarik secara visual, dirancang untuk berbagai tujuan, mulai dari iklan komersial dan kampanye edukasi hingga konten promosi. Setiap desain memberikan dampak visual yang kuat, menyampaikan pesannya secara efektif, dan dapat disesuaikan untuk platform digital maupun media cetak.',
+      en: 'A collection of visually compelling digital posters designed for different purposes, from commercial advertising and educational campaigns to promotional content. Each design delivers a strong visual impact, communicates its message effectively, and is adaptable for both digital platforms and print media.',
     },
   },
   {
@@ -143,12 +143,12 @@ export const creativeWorks: CreativeWork[] = [
     year: '2025',
     software: ['Affinity Design', 'Illustrator', 'Photoshop', 'canva'],
     process: {
-      id: 'Menyusun modul grid 8 kolom lalu menguji pasangan warna pada kontras teks dan latar sesuai WCAG AA.',
-      en: 'Built an 8-column grid module, then tested color pairs for text/background contrast against WCAG AA.',
+      id: 'Mengembangkan tata letak editorial yang terstruktur menggunakan sistem grid yang konsisten untuk mengatur judul, teks isi, dan fotografi otomotif. Tipografi, palet warna, penempatan gambar, dan spasi disempurnakan dengan cermat untuk membangun hierarki visual yang jelas sambil mempertahankan keterbacaan dan gaya editorial yang kohesif di berbagai halaman majalah.',
+      en: 'Developed a structured editorial layout using a consistent grid system to organize headlines, body text, and automotive photography. Typography, color palettes, image placement, and spacing were carefully refined to establish a clear visual hierarchy while maintaining readability and a cohesive editorial style across multiple magazine spreads.',
     },
     result: {
-      id: 'Sistem identitas yang konsisten: satu grid, satu palet, banyak format.',
-      en: 'A consistent identity system: one grid, one palette, many formats.',
+      id: 'Majalah digital otomotif yang menarik secara visual menampilkan tata letak editorial profesional, komposisi seimbang, dan identitas visual yang konsisten. Setiap halaman menggabungkan citra otomotif yang berdampak dengan konten yang terorganisir dengan baik, menciptakan pengalaman membaca yang imersif dengan estetika yang halus dan modern.',
+      en: 'A visually engaging automotive digital magazine featuring professional editorial layouts, balanced compositions, and consistent visual identity. Each spread combines impactful automotive imagery with well-organized content, creating an immersive reading experience with a polished and modern aesthetic.',
     },
   },
 
@@ -162,19 +162,19 @@ export const creativeWorks: CreativeWork[] = [
     thumb: './images/creative/thumbs/social-pulse.webp',
     aspect: '4/5',
     caption: {
-      id: 'Materi desain feed untuk kanal sosial resmi @nanang.bag.',
-      en: 'Feed design assets for official social channels of @nanang.bag.',
+      id: 'Desain feed media sosial untuk @nanang.bag.',
+      en: 'Social Media Feed Designs for @nanang.bag.',
     },
     year: '2026',
     platform: 'Instagram',
     software: ['Canva', 'CorelDRAW', 'Photoshop'],
     process: {
-      id: 'Template 4:5 dengan safe area untuk UI platform. Elemen animasi ringan diuji agar tetap terbaca dalam potongan tiga detik.',
-      en: 'A 4:5 template with platform-UI safe areas. Light motion elements were tested to stay readable in three-second cuts.',
+      id: 'Mengembangkan sistem desain media sosial yang konsisten menggunakan palet warna, tipografi, dan struktur tata letak yang kohesif. Fotografi produk, pesan promosi, dan elemen merek disusun dengan cermat untuk menciptakan visual yang menarik, membangun hierarki informasi yang jelas, dan mempertahankan konsistensi di setiap postingan.',
+      en: 'Developed a consistent social media design system using a cohesive color palette, typography, and layout structure. Product photography, promotional messages, and brand elements were carefully arranged to create engaging visuals, establish clear information hierarchy, and maintain consistency across every post.',
     },
     result: {
-      id: 'Paket materi kampanye yang bisa diperluas tim tanpa mengubah sistem visual dasar.',
-      en: 'A campaign asset package the team can extend without changing the foundational visual system.',
+      id: 'Koleksi desain feed media sosial yang kohesif dan menarik secara visual yang memperkuat identitas merek, menyoroti penawaran produk, dan menyampaikan pesan promosi secara efektif. Setiap postingan dirancang untuk menarik perhatian audiens sambil mempertahankan identitas visual yang dapat dikenali dan konsisten di seluruh platform digital @nanang.bag.',
+      en: 'A cohesive collection of eye-catching social media feed designs that strengthens brand identity, highlights product offerings, and communicates promotional messages effectively. Each post is designed to capture audience attention while maintaining a recognizable and consistent visual identity across @nanang.bag’s digital platforms.',
     },
   },
 
@@ -202,30 +202,30 @@ export const creativeWorks: CreativeWork[] = [
   // PAGE 05 — UI/UX
   {
     id: 'ui-concept',
-    title: { id: 'Fintech Analytics Dashboard', en: 'Fintech Analytics Dashboard' },
+    title: { id: 'Wara Wiri — Travel App UI/UX Design', en: 'Wara Wiri — Travel App UI/UX Design' },
     category: 'ui',
     categoryLabel: { id: 'UI/UX', en: 'UI/UX' },
     image: './images/creative/ui-concept.webp',
     thumb: './images/creative/thumbs/ui-concept.webp',
     aspect: '16/9',
     caption: {
-      id: 'Konsep antarmuka dashboard dengan data visual real-time.',
-      en: 'Dashboard interface concept with real-time data visualization.',
+      id: 'Konsep aplikasi perjalanan seluler yang dirancang untuk membantu pengguna menemukan destinasi, menjelajahi rekomendasi perjalanan, dan merencanakan petualangan berikutnya melalui antarmuka yang intuitif dan ramah pengguna.',
+      en: 'A mobile travel application concept designed to help users discover destinations, explore travel recommendations, and plan their next adventures through an intuitive and user-friendly interface.',
     },
     year: '2026',
-    software: ['Figma', 'React', 'Tailwind CSS'],
+    software: ['Figma'],
     prototypeUrl: 'https://github.com/aryomulyadi/portofolio',
     problem: {
-      id: 'Pengguna merasa kewalahan dengan tampilan grafik keuangan konvensional yang padat dan lambat dipahami.',
-      en: 'Users were overwhelmed by dense, slow-to-digest conventional financial charts.',
+      id: 'Tantangannya adalah menciptakan aplikasi perjalanan yang intuitif yang menyederhanakan penemuan destinasi dan perencanaan perjalanan. Wara Wiri bertujuan untuk menghadirkan eksplorasi destinasi, rekomendasi perjalanan, informasi destinasi yang rinci, favorit yang disimpan, fungsi pencarian, dan profil pengguna ke dalam satu pengalaman seluler yang kohesif.',
+      en: 'The challenge was to create an intuitive travel application that simplifies destination discovery and travel planning. Wara Wiri aims to bring destination exploration, travel recommendations, detailed destination information, saved favorites, search functionality, and user profiles into one cohesive mobile experience.',
     },
     research: {
-      id: 'Wawancara dengan 8 pengambil keputusan finansial menunjukkan kebutuhan akan angka kunci dalam 3 detik pertama.',
-      en: 'Interviews with 8 financial decision-makers revealed a need for key figures within the first 3 seconds.',
+      id: 'Penelitian menunjukkan bahwa pengguna menginginkan aplikasi perjalanan yang lebih sederhana dan intuitif.',
+      en: 'Identified key application features and organized content into intuitive categories to support destination discovery. Established a clear information hierarchy to ensure users can access essential features and travel information efficiently.',
     },
     wireframes: {
       id: 'Arsitektur informasi modular 3 kolom dengan kartu KPI di bagian atas dan grafik tren utama di tengah.',
-      en: '3-column modular information architecture with top KPI cards and central primary trend charts.',
+      en: 'Modular 3-column information architecture with KPI cards at the top and key trend charts in the middle.',
     },
     process: {
       id: 'Pemetaan hierarki data dulu — metrik utama selalu di atas, grafik sekunder menyusul. Mode gelap sebagai baseline agar aksen data menonjol.',
@@ -234,42 +234,6 @@ export const creativeWorks: CreativeWork[] = [
     result: {
       id: 'Konsep dashboard yang bisa dipindai dalam lima detik: angka dulu, cerita kemudian.',
       en: 'A dashboard concept scannable in five seconds: numbers first, story second.',
-    },
-  },
-  {
-    id: 'analytics-concept',
-    title: { id: 'Data Studio Control Center', en: 'Data Studio Control Center' },
-    category: 'ui',
-    categoryLabel: { id: 'UI/UX', en: 'UI/UX' },
-    image: './images/creative/ui-analytics.webp',
-    thumb: './images/creative/thumbs/ui-analytics.webp',
-    aspect: '16/9',
-    caption: {
-      id: 'Konsep dasbor analitik dengan fokus pada hierarki metrik tim.',
-      en: 'Analytics dashboard concept focused on team metric hierarchy.',
-    },
-    year: '2026',
-    software: ['Figma', 'TypeScript', 'Recharts'],
-    prototypeUrl: 'https://github.com/aryomulyadi/portofolio',
-    problem: {
-      id: 'Penyajian data lintas kanal tidak terpusat sehingga pemantauan kampanye menjadi tidak efisien.',
-      en: 'Decentralized cross-channel data made campaign monitoring inefficient.',
-    },
-    research: {
-      id: 'Audit UX pada 5 alat analitik populer menemukan kurangnya kontras visual pada mode pemantauan layar TV.',
-      en: 'UX audit across 5 popular analytics tools identified poor visual contrast in TV-screen monitoring modes.',
-    },
-    wireframes: {
-      id: 'Grid adaptif dengan kontras tinggi, widget donut chart khusus, dan bar chart yang konsisten.',
-      en: 'Adaptive high-contrast grid featuring custom donut chart widgets and consistent bar charts.',
-    },
-    process: {
-      id: 'Empat KPI dipetakan ke satu layar: angka besar dulu, grafik 30 hari menyusul, komposisi trafik di panel kanan.',
-      en: 'Four KPIs mapped to one screen: big numbers first, 30-day chart second, traffic mix in the right panel.',
-    },
-    result: {
-      id: 'Layar yang bisa dipindai dari jarak satu meter — penting untuk mode TV pameran tim.',
-      en: 'A screen scannable from a meter away — built for team exhibition TV mode.',
     },
   },
 ]

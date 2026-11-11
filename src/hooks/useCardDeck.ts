@@ -11,7 +11,7 @@ interface DragState {
   active: boolean
 }
 
-const EXIT_MS = 400
+const EXIT_MS = 380
 const DRAG_START_PX = 4
 
 function clamp(value: number, min: number, max: number) {
@@ -20,8 +20,7 @@ function clamp(value: number, min: number, max: number) {
 
 /**
  * Infinite-ish project deck: swipe / buttons / keyboard cycle front card.
- * Right → next, left → previous. Drag maps to natural rotation.
- * Guards coarse pointers are handled by CSS touch-action; reduced motion skips exit anim.
+ * Natural swipe: Left → next, Right → previous. Drag maps to natural rotation.
  */
 export function useCardDeck(projects: Project[]) {
   const ids = projects.map((p) => p.id)
@@ -33,7 +32,7 @@ export function useCardDeck(projects: Project[]) {
   const [isAnimating, setIsAnimating] = useState(false)
   const [hintDismissed, setHintDismissed] = useState(false)
 
-  const dragRef = useRef({ startX: 0, startY: 0, width: 1, moved: false, pointerId: -1 })
+  const dragRef = useRef({ startX: 0, startY: 0, startTime: 0, width: 1, moved: false, pointerId: -1 })
   const frameRef = useRef(0)
   const animatingRef = useRef(false)
   const suppressClickRef = useRef(false)
@@ -126,10 +125,12 @@ export function useCardDeck(projects: Project[]) {
     (event: ReactPointerEvent<HTMLElement>) => {
       if (animatingRef.current || order.length < 2) return
       if (event.button !== 0 && event.pointerType === 'mouse') return
+      if ((event.target as HTMLElement).closest('a, button')) return
       const el = event.currentTarget
       dragRef.current = {
         startX: event.clientX,
         startY: event.clientY,
+        startTime: Date.now(),
         width: el.getBoundingClientRect().width || 1,
         moved: false,
         pointerId: event.pointerId,
@@ -159,8 +160,10 @@ export function useCardDeck(projects: Project[]) {
   const endDrag = useCallback(
     (event: ReactPointerEvent<HTMLElement>) => {
       if (event.pointerId !== dragRef.current.pointerId) return
-      const { moved, width, startX } = dragRef.current
+      const { moved, width, startX, startTime } = dragRef.current
       const dx = event.clientX - startX
+      const dt = Date.now() - (startTime || 0)
+      const velocity = Math.abs(dx) / Math.max(1, dt)
       cancelAnimationFrame(frameRef.current)
       try {
         event.currentTarget.releasePointerCapture(event.pointerId)
@@ -176,10 +179,18 @@ export function useCardDeck(projects: Project[]) {
         }, 300)
       }
 
-      const threshold = Math.max(36, width * 0.14)
-      if (moved && Math.abs(dx) >= threshold) {
-        commit(dx > 0 ? 'next' : 'prev')
+      // Responsive threshold with flick/velocity support:
+      // quick flick (>0.35 px/ms) or deliberate drag (>= 28px or 12% width)
+      const threshold = Math.min(48, Math.max(28, width * 0.12))
+      const isSwipe = moved && (Math.abs(dx) >= threshold || velocity > 0.35)
+
+      if (isSwipe) {
+        // Natural mobile/deck swipe convention:
+        // Swiping LEFT (dx < 0) advances to NEXT card
+        // Swiping RIGHT (dx > 0) returns to PREVIOUS card
+        commit(dx < 0 ? 'next' : 'prev')
       } else {
+        // Return smoothly to front card position
         setDrag({ x: 0, y: 0, rotate: 0, active: false })
       }
     },
@@ -200,7 +211,6 @@ export function useCardDeck(projects: Project[]) {
     }
   }, [])
 
-  // Keyboard: arrows when deck region focused
   const onKeyDown = useCallback(
     (event: ReactKeyboardEvent<HTMLElement>) => {
       if (event.key === 'ArrowRight') {
