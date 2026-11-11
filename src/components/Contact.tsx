@@ -113,9 +113,12 @@ export function Contact() {
                     className="big-link mt-8 text-white"
                     data-cur="Mail"
                   >
+                    <span className="block font-mono text-[clamp(0.85rem,1.8vw,1.35rem)] font-bold tracking-wider text-white/80 uppercase mb-3 font-normal">
+                      {t('buildPhrase0', lang)}
+                    </span>
                     <span>{t('buildPhrase1', lang)}</span>
                     <br />
-                    <em className="bf-serif">{t('buildPhrase2', lang)}</em>
+                    <em className="bf-serif text-white">{t('buildPhrase2', lang)}</em>
                   </a>
                 )}
               </div>

@@ -288,7 +288,7 @@
   }
 
   .sec-pad {
-    padding-block: clamp(56px, 9vw, 128px);
+    padding-block: clamp(40px, 7vw, 96px);
   }
 
   .g {

@@ -12,7 +12,7 @@ interface DragState {
 }
 
 const EXIT_MS = 400
-const DRAG_START_PX = 8
+const DRAG_START_PX = 4
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value))
@@ -176,7 +176,7 @@ export function useCardDeck(projects: Project[]) {
         }, 300)
       }
 
-      const threshold = Math.max(100, width * 0.25)
+      const threshold = Math.max(36, width * 0.14)
       if (moved && Math.abs(dx) >= threshold) {
         commit(dx > 0 ? 'next' : 'prev')
       } else {

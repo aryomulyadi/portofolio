@@ -26,12 +26,12 @@ export const creativeWorks: CreativeWork[] = [
     year: '2026',
     software: ['CorelDRAW', 'Photoshop'],
     process: {
-      id: 'Desain dibuat terbatas dua warna tinta agar cocok untuk sablon manual, dengan garis tebal agar tidak hilang di kain knit.',
-      en: 'Limited to two ink colors for manual screen printing, with thick lines so nothing disappears on knit fabric.',
+      id: 'Setiap jersey dirancang dengan ilustrasi berbasis vektor penuh, menampilkan pola yang presisi, garis bersih, dan kombinasi warna yang seimbang. Setiap elemen, dari grafis hingga tipografi, dirancang untuk memastikan detail tajam, skalabilitas, dan kualitas siap produksi.',
+      en: 'Each jersey is carefully crafted using fully vector-based illustrations, featuring precise patterns, clean linework, and well-balanced color combinations. Every element, from graphics to typography, is designed to ensure sharp details, scalability, and production-ready quality.',
     },
     result: {
-      id: 'Grafik yang terbaca dari jauh dan stabil saat dicetak ulang batch kecil.',
-      en: 'A graphic that reads from a distance and stays stable across small reprint batches.',
+      id: 'Koleksi desain jersey yang khas dan berkualitas tinggi dengan detail vektor yang tajam, warna yang hidup, dan komposisi visual yang konsisten. Setiap desain memberikan identitas unik sambil mempertahankan kejelasan dan kualitas di berbagai ukuran dan kebutuhan produksi.',
+      en: 'A collection of distinctive, high-quality jersey designs with crisp vector details, vibrant colors, and consistent visual composition. Each design delivers a unique identity while maintaining clarity and quality across different sizes and production needs.',
     },
   },
   {
@@ -43,18 +43,18 @@ export const creativeWorks: CreativeWork[] = [
     thumb: './images/creative/thumbs/apparel-overprint.webp',
     aspect: '4/5',
     caption: {
-      id: 'Simulasi untuk mockup realistis model raglan.',
-      en: 'Simulated model for realistic raglan mockup.',
+      id: 'Simulasi 3D untuk mockup jersey raglan yang realistis.',
+      en: '3D Simulation for a Realistic Raglan Jersey Mockup.',
     },
     year: '2026',
 
     process: {
-      id: 'Dua plat warna dicetak terpisah lalu digeser beberapa milimeter — kesalahan registrasi justru menjadi bahasa visual utama.',
-      en: 'Two color plates printed separately and shifted a few millimeters — the registration error itself became the main visual language.',
+      id: 'Simulasi 3D untuk mockup jersey raglan yang realistis.',
+      en: 'A 3D-rendered model was used to visualize the jersey design, carefully applying its patterns, colors, and graphic elements to the garment surface. Fabric textures, natural folds, stitching, and lighting were incorporated to create a realistic appearance.',
     },
     result: {
-      id: 'Grafik yang terasa hand-made dan tidak bisa direplikasi persis oleh mesin digital.',
-      en: 'A graphic that feels hand-made and cannot be exactly replicated by a digital press.',
+      id: 'Simulasi 3D untuk mockup jersey raglan yang realistis.',
+      en: 'A realistic, high-quality 3D jersey mockup that showcases the design as it would appear when worn, highlighting its details, colors, fit, and overall garment construction.',
     },
   },
   {
@@ -66,18 +66,18 @@ export const creativeWorks: CreativeWork[] = [
     thumb: './images/creative/thumbs/apparel-backline.webp',
     aspect: '4/5',
     caption: {
-      id: 'Simulasi untuk mockup realistis model reguler.',
-      en: 'Simulated model for realistic regular fit mockup.',
+      id: 'Simulasi 3D untuk mockup jersey model reguler yang realistis.',
+      en: '3D Simulation for a Realistic Regular-Fit Jersey Mockup.',
     },
     year: '2026',
 
     process: {
-      id: 'Komposisi vertikal disusun agar tetap seimbang saat dipotong untuk sablon punggung, dengan jarak aman di bagian leher.',
-      en: 'A vertical composition balanced for a back-print cut, with safe spacing near the collar.',
+      id: 'Simulasi 3D untuk mockup jersey model reguler yang realistis.',
+      en: 'A 3D-rendered model was used to showcase the jersey in a regular-fit silhouette, incorporating realistic fabric textures, natural folds, stitching details, and carefully positioned graphic elements. The design was refined to highlight the color contrast, collar shape, sleeve details, and overall garment proportions.',
     },
     result: {
-      id: 'Satu grafik yang bekerja baik di kaos gelap maupun terang tanpa harus ganti tinta.',
-      en: 'One graphic that works on dark and light tees without an ink swap.',
+      id: 'Simulasi 3D untuk mockup jersey model reguler yang realistis.',
+      en: 'A realistic, high-quality 3D jersey mockup that showcases the design as it would appear when worn, highlighting its details, colors, fit, and overall garment construction.',
     },
   },
 

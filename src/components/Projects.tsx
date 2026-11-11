@@ -97,7 +97,7 @@ export function Projects() {
 
             {showFilters && (
               <div
-                className="-mt-[clamp(4px,1vw,16px)] mb-[clamp(24px,4vw,48px)] flex flex-wrap gap-2"
+                className="-mt-[clamp(4px,1vw,12px)] mb-[clamp(16px,2.8vw,32px)] flex flex-wrap gap-2"
                 role="group"
                 aria-label={lang === 'en' ? 'Filter projects' : 'Filter proyek'}
               >

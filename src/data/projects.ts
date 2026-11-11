@@ -115,7 +115,7 @@ export const projects: Project[] = [
     },
     image: './images/projects/business-compete.webp',
     githubUrl: 'https://github.com/aryomulyadi/business_compete',
-    liveUrl: null,
+    liveUrl: 'https://github.com/aryomulyadi/business_compete',
     status: {
       en: 'Open Source',
       id: 'Open Source',

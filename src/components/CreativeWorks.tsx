@@ -27,7 +27,7 @@ export function CreativeWorks() {
         title: 'Apparel',
         intro: {
           id: 'Koleksi 3 Desain Sablon & Pakaian',
-          en: '3 Screen-Print & Apparel Designs',
+          en: 'Digital & Apparel Designs',
         },
         works: creativeWorks.filter((w) => w.category === 'apparel'),
       },
@@ -151,7 +151,7 @@ export function CreativeWorks() {
             </h2>
 
             {/* FR-CRE-01 category navbar + FR-CRE-G2 Stage|Index toggle */}
-            <div className="mb-[clamp(24px,4vw,48px)] flex flex-wrap items-center justify-between gap-3">
+            <div className="mb-[clamp(16px,2.8vw,32px)] flex flex-wrap items-center justify-between gap-3">
               <nav
                 className="flex gap-2 overflow-x-auto pb-1 scrollbar-none"
                 aria-label={lang === 'en' ? 'Creative categories' : 'Kategori karya'}

@@ -230,8 +230,9 @@ export const ui: Dict = {
   nowL: { id: 'Kini', en: 'Now' },
   flip: { id: 'Balik', en: 'Flip' },
   cursorFlip: { id: 'Balik', en: 'Flip' },
-  buildPhrase1: { id: 'Ayo bangun', en: "Let's build" },
-  buildPhrase2: { id: 'sesuatu.', en: 'something.' },
+  buildPhrase0: { id: 'Punya ide proyek?', en: 'Have a project in mind?' },
+  buildPhrase1: { id: "Let's build", en: "Let's build" },
+  buildPhrase2: { id: 'something.', en: 'something.' },
   typeNoteA: {
     id: 'Tipografi A — Inter & JetBrains Mono',
     en: 'Type A — Inter & JetBrains Mono',
