@@ -11,6 +11,7 @@ const LABEL_KEYS: Record<string, keyof Dict> = {
   PDF: 'cursorPdf',
   View: 'cursorView',
   Mail: 'cursorMail',
+  Flip: 'cursorFlip',
 }
 
 /**

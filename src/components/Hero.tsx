@@ -1,22 +1,39 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ArrowDown } from 'lucide-react'
 import { useLanguage } from '../hooks/useLanguage'
 import { t } from '../data/translations'
 import { profile } from '../data/profile'
+import { HeroHalftone } from './hero/HeroHalftone'
+import { FlipCard } from './hero/FlipCard'
 
 const REDUCED = '(prefers-reduced-motion: reduce)'
 const FINE = '(hover: hover) and (pointer: fine)'
 
+const clockFormat = new Intl.DateTimeFormat('en-GB', {
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  timeZone: 'Asia/Jakarta',
+  hour12: false,
+})
+
 export function Hero() {
   const { lang } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
+  const [clock, setClock] = useState(() => `${clockFormat.format(new Date())} WIB`)
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setClock(`${clockFormat.format(new Date())} WIB`)
+    }, 1000)
+    return () => window.clearInterval(id)
+  }, [])
 
   const hasCv = profile.links.cv !== null
-  const portraitSrc = profile.portrait ?? './images/profile/portrait.png'
   const lines = profile.name.split(' ')
 
-  /* Kinetic typography (FR-HERO-03): width axis reacts to pointer proximity.
-     Fine pointers only; disabled for reduced motion. Static on touch. */
+  /* Kinetic typography (FR-HERO-03): width axis reacts to pointer proximity,
+     serif line reacts on weight axis. Fine pointers only. */
   useEffect(() => {
     const root = sectionRef.current
     if (!root) return
@@ -26,9 +43,13 @@ export function Hero() {
     const chars = Array.from(root.querySelectorAll<HTMLElement>('.kin-ch'))
     if (chars.length === 0) return
 
+    const isSerif = (ch: HTMLElement) =>
+      ch.parentElement?.classList.contains('sf') ?? false
+
     // After the load animation settles, hand control to the pointer
     let active = false
     const timer = window.setTimeout(() => {
+      for (const ch of chars) ch.style.animation = 'none'
       active = true
     }, 1400)
 
@@ -39,15 +60,27 @@ export function Hero() {
         frame = 0
         for (const ch of chars) {
           const r = ch.getBoundingClientRect()
-          const d = Math.hypot(event.clientX - (r.left + r.width / 2), event.clientY - (r.top + r.height / 2))
-          const wdth = (125 - Math.min(d / 6, 40)).toFixed(0)
-          ch.style.fontVariationSettings = `"wdth" ${wdth}`
+          const d = Math.hypot(
+            event.clientX - (r.left + r.width / 2),
+            event.clientY - (r.top + r.height / 2),
+          )
+          if (isSerif(ch)) {
+            const wght = (700 + Math.max(0, 1 - d / 240) * 200).toFixed(0)
+            ch.style.fontVariationSettings = `"wght" ${wght}`
+          } else {
+            const wdth = (125 - Math.min(d / 6, 40)).toFixed(0)
+            ch.style.fontVariationSettings = `"wdth" ${wdth}`
+          }
         }
       })
     }
 
     const onLeave = () => {
-      for (const ch of chars) ch.style.fontVariationSettings = '"wdth" 100'
+      for (const ch of chars) {
+        ch.style.fontVariationSettings = isSerif(ch)
+          ? '"wght" 800'
+          : '"wdth" 100'
+      }
     }
 
     root.addEventListener('pointermove', onMove)
@@ -74,27 +107,37 @@ export function Hero() {
       id="home"
       ref={sectionRef}
       aria-labelledby="home-title"
-      className="border-b border-ink bg-paper text-ink"
+      className="relative overflow-hidden border-b border-ink bg-paper text-ink"
       style={{ paddingTop: 'clamp(28px,5vw,64px)', paddingBottom: 0 }}
     >
-      <div className="shell">
+      <HeroHalftone />
+
+      <div className="shell relative z-[1]">
         <div className="g">
-          {/* Meta bar */}
-          <div className="mono col-span-full flex flex-wrap items-center justify-between gap-3 border-b border-ink pb-3.5">
+          {/* Meta bar — left cluster, right side reserved for the flip card */}
+          <div className="mono col-span-full flex flex-wrap items-center gap-x-6 gap-y-2 border-b border-ink pb-3.5">
             <span className="flex items-center">
               <span className="mr-2 inline-block h-[9px] w-[9px] bg-signal" aria-hidden />
-              {profile.location ? profile.location[lang] : 'Indonesia'}
+              {t('avail', lang)}
             </span>
+            <span>{profile.location ? profile.location[lang] : 'Indonesia'}</span>
             <span className="text-mute">Design &times; Code / 2026</span>
           </div>
 
-          {/* Giant kinetic name */}
+          {/* Giant kinetic name — line 2 is the serif accent */}
           <h1 id="home-title" aria-label={profile.name} className="kin-h1 col-span-full">
             {lines.map((line, i) => (
-              <span key={i} className="kin-ln" aria-hidden="true">
+              <span
+                key={i}
+                className={`kin-ln${i === 1 ? ' sf' : ''}`}
+                aria-hidden="true"
+              >
                 {charSpans(line, i)}
                 {i === lines.length - 1 && (
-                  <span className="kin-ch text-signal" style={{ fontVariationSettings: '"wdth" 100' }}>
+                  <span
+                    className="kin-ch text-signal"
+                    style={{ fontVariationSettings: '"wdth" 100' }}
+                  >
                     .
                   </span>
                 )}
@@ -102,10 +145,13 @@ export function Hero() {
             ))}
           </h1>
 
+          {/* Author flip card — absolute top-right on desktop, in-flow on mobile */}
+          <FlipCard />
+
           {/* Lead column */}
-          <div className="col-span-full max-[820px]:col-span-full min-[821px]:col-start-1 min-[821px]:col-end-8" style={{ padding: 'clamp(22px,4vw,56px) 0' }}>
+          <div className="hero-lead">
             <p className="role-line">{profile.role[lang]}</p>
-            <p className="mb-[26px] max-w-[48ch] text-[1.06rem] leading-relaxed">{profile.intro[lang]}</p>
+            <p className="lead hero-intro">{profile.intro[lang]}</p>
 
             <div className="flex flex-wrap gap-2.5">
               <a href="#projects" className="btn btn-fill" data-cur="Go">
@@ -145,31 +191,32 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Portrait — 3:4, hairline border, Signal Red corner */}
-          <div className="col-span-full pt-[clamp(22px,4vw,56px)] max-[820px]:pt-0 min-[821px]:col-start-9 min-[821px]:col-end-13">
-            <figure className="group relative aspect-[3/4] max-[820px]:aspect-[4/3] border border-ink transition-transform duration-500 ease-out hover:rotate-[1.2deg]">
-              <img
-                src={portraitSrc}
-                alt={t('portraitAlt', lang)}
-                width={700}
-                height={933}
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-                className="h-full w-full object-cover object-center grayscale contrast-[1.04]"
-                onError={(event) => {
-                  const img = event.currentTarget
-                  if (!img.src.includes('portrait.png')) {
-                    img.src = './images/profile/portrait.png'
-                  }
-                }}
-              />
-              <span
-                aria-hidden
-                className="absolute -bottom-px -right-px block aspect-square w-[28%] bg-signal"
-              />
-            </figure>
-          </div>
+          {/* Now panel — live clock, status, base, focus */}
+          <aside className="now" aria-label="Now">
+            <dl>
+              <div>
+                <dt className="mono">{t('nowL', lang)}</dt>
+                <dd className="now-clock">{clock}</dd>
+              </div>
+              <div>
+                <dt className="mono">{t('statusLabel', lang)}</dt>
+                <dd>
+                  <span className="mr-2 inline-block h-[9px] w-[9px] bg-signal align-middle" aria-hidden />
+                  {t('avail', lang)}
+                </dd>
+              </div>
+              <div>
+                <dt className="mono">{t('factBasedLabel', lang)}</dt>
+                <dd>
+                  {profile.location ? profile.location[lang] : 'Indonesia'} &middot; UTC+7
+                </dd>
+              </div>
+              <div>
+                <dt className="mono">{t('factFocusLabel', lang)}</dt>
+                <dd>{t('factFocusValue', lang)}</dd>
+              </div>
+            </dl>
+          </aside>
         </div>
       </div>
     </section>

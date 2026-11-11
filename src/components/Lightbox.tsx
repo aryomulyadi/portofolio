@@ -164,7 +164,7 @@ export function Lightbox({ items, index, lang, labels, onClose, onNavigate }: Li
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-ink/92 p-4 md:p-8"
+      className="lb fixed inset-0 z-[60] flex items-center justify-center bg-ink/92 p-4 md:p-8"
       role="dialog"
       aria-modal="true"
       aria-label={item.title[lang]}

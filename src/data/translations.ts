@@ -225,6 +225,29 @@ export const ui: Dict = {
     id: 'Portofolio Rifqi Aryo Mulyadi — pengembangan perangkat lunak dan web, desain digital, dan produksi kreatif.',
     en: 'Portfolio of Rifqi Aryo Mulyadi — software and web development, digital design, and creative production.',
   },
+
+  /* ── v3: hero Now panel, flip card, contact phrase, theme/type toggles ── */
+  nowL: { id: 'Kini', en: 'Now' },
+  flip: { id: 'Balik', en: 'Flip' },
+  cursorFlip: { id: 'Balik', en: 'Flip' },
+  buildPhrase1: { id: 'Ayo bangun', en: "Let's build" },
+  buildPhrase2: { id: 'sesuatu.', en: 'something.' },
+  typeNoteA: {
+    id: 'Tipografi A — Inter & JetBrains Mono',
+    en: 'Type A — Inter & JetBrains Mono',
+  },
+  typeNoteB: {
+    id: 'Tipografi B — Instrument Sans & IBM Plex Mono',
+    en: 'Type B — Instrument Sans & IBM Plex Mono',
+  },
+  typeToggle: {
+    id: 'Ganti pasangan tipografi',
+    en: 'Switch typeface pairing',
+  },
+  themeToggle: {
+    id: 'Ganti mode terang atau gelap',
+    en: 'Toggle light or dark mode',
+  },
 }
 
 export function t(key: keyof Dict, lang: Lang): string {

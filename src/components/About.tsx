@@ -49,16 +49,11 @@ export function About() {
                 <p className="mono mt-6 text-mute">{profile.name}</p>
               </div>
 
-              <dl className="reveal border-t border-ink" style={{ transitionDelay: '120ms' }}>
+              <dl className="fx reveal" style={{ transitionDelay: '120ms' }}>
                 {facts.map((row) => (
-                  <div
-                    key={row.k}
-                    className="flex items-baseline justify-between gap-4 border-b border-ink py-3.5"
-                  >
-                    <dt className="mono text-mute">{row.k}</dt>
-                    <dd className="text-right text-sm font-semibold text-ink text-balance">
-                      {row.v}
-                    </dd>
+                  <div key={row.k}>
+                    <dt className="mono">{row.k}</dt>
+                    <dd>{row.v}</dd>
                   </div>
                 ))}
               </dl>

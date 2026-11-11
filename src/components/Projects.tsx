@@ -175,7 +175,7 @@ export function Projects() {
                         onClick={deck.goNext}
                         disabled={deck.total < 2 || deck.isAnimating}
                         aria-label={t('deckNext', lang)}
-                        className="deck-btn"
+                        className="deck-btn is-red"
                       >
                         {lang === 'en' ? 'Next' : 'Berikutnya'}
                         <ArrowRight size={15} aria-hidden />

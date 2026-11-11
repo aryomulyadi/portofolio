@@ -30,6 +30,21 @@
     />
     <meta name="twitter:image" content="https://rifqiaryomulyadi.site/images/og.png" />
     <title>Rifqi Aryo Mulyadi — Creative Developer Portfolio</title>
+    <script>
+      // Apply stored theme/type before first paint (anti-FOUC)
+      try {
+        var t = localStorage.getItem('portfolio-theme')
+        if (t === 'dark' || t === 'light') {
+          document.documentElement.setAttribute('data-theme', t)
+        }
+        var y = localStorage.getItem('portfolio-type')
+        if (y === 'b') {
+          document.documentElement.setAttribute('data-type', 'b')
+        }
+      } catch (e) {
+        /* private mode */
+      }
+    </script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",

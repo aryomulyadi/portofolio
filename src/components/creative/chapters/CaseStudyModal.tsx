@@ -50,7 +50,7 @@ export function CaseStudyModal({ work, lang, onClose }: CaseStudyModalProps) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="case-study-title"
-      className="fixed inset-0 z-[65] flex items-center justify-center bg-ink/92 p-4"
+      className="csm fixed inset-0 z-[65] flex items-center justify-center bg-ink/92 p-4"
       onClick={onClose}
     >
       <div

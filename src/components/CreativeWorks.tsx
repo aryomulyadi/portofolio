@@ -125,11 +125,11 @@ export function CreativeWorks() {
     }
   }
 
-  // Global lightbox index (cycles across all works)
+  /* Lightbox index — cycles within the active category (v3 pattern) */
   const lightboxIndex = useMemo(() => {
     if (!lightboxWorkId) return -1
-    return creativeWorks.findIndex((w) => w.id === lightboxWorkId)
-  }, [lightboxWorkId])
+    return activeWorks.findIndex((w) => w.id === lightboxWorkId)
+  }, [lightboxWorkId, activeWorks])
 
   return (
     <section
@@ -139,7 +139,7 @@ export function CreativeWorks() {
       onKeyDown={onSectionKeyDown}
       className="sec-pad grain relative border-b border-ink bg-ink text-paper"
     >
-      <div className="shell">
+      <div className="shell relative z-[1]">
         <div className="g">
           <div className="lab mono text-grey">
             <b className="lab-num">05</b> / <span>{t('creativeLabel', lang)}</span>
@@ -280,7 +280,7 @@ export function CreativeWorks() {
 
       {/* Fullscreen Artwork Viewer (Lightbox + Loupe) */}
       <Lightbox
-        items={creativeWorks}
+        items={activeWorks}
         index={lightboxIndex}
         lang={lang}
         labels={{
@@ -292,7 +292,7 @@ export function CreativeWorks() {
           loupe: t('loupe', lang),
         }}
         onClose={() => setLightboxWorkId(null)}
-        onNavigate={(newIdx) => setLightboxWorkId(creativeWorks[newIdx]?.id ?? null)}
+        onNavigate={(newIdx) => setLightboxWorkId(activeWorks[newIdx]?.id ?? null)}
       />
 
       {/* Interactive Case Study Modal for UI/UX */}

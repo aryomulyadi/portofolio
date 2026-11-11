@@ -29,42 +29,26 @@ export function Skills() {
 
             <div className="grid gap-10 lg:grid-cols-12 lg:gap-14">
               <div className="reveal lg:col-span-4">
-                <p className="max-w-[48ch] text-[1.02rem] leading-relaxed text-mute">
-                  {t('skillsIntro', lang)}
-                </p>
+                <p className="lead text-mute">{t('skillsIntro', lang)}</p>
                 <p className="mono mt-6 border-t border-ink pt-6 text-mute">
                   {total} {t('competencies', lang)}
                 </p>
               </div>
 
-              <div className="space-y-8 lg:col-span-8">
-                {visible.map((group, index) => (
-                  <div
-                    key={group.id}
-                    className="reveal border-t border-ink pt-5"
-                    style={{ transitionDelay: `${index * 50}ms` }}
-                  >
-                    <div className="mb-4 flex items-baseline justify-between gap-4">
-                      <h3 className="font-display text-base font-extrabold uppercase tracking-tight text-ink">
-                        {group.label[lang]}
-                      </h3>
-                      <span className="index-num text-xs text-mute">
+              <div className="reveal lg:col-span-8" style={{ transitionDelay: '60ms' }}>
+                <ul className="rowl rowl-sk">
+                  {visible.map((group, index) => (
+                    <li key={group.id}>
+                      <span className="t">{group.label[lang]}</span>
+                      <span className="text-[0.95rem] leading-relaxed text-mute">
+                        {group.items.join(' · ')}
+                      </span>
+                      <span className="mono index-num text-mute">
                         {String(index + 1).padStart(2, '0')}
                       </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
-                      {group.items.map((item) => (
-                        <div
-                          key={item}
-                          className="flex items-center gap-2.5 border border-ink/25 px-3.5 py-2.5 text-xs font-semibold text-ink transition-colors hover:border-ink hover:bg-ink hover:text-paper"
-                        >
-                          <span className="h-2 w-2 shrink-0 bg-signal" aria-hidden />
-                          <span>{item}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </div>

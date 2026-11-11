@@ -1,4 +1,5 @@
-import { Github, Linkedin, Instagram, MessageCircle, ArrowUpRight } from 'lucide-react'
+import { useEffect, useRef } from 'react'
+import { Mail, Github, Linkedin, Instagram, MessageCircle, ArrowUpRight } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useLanguage } from '../hooks/useLanguage'
 import { t } from '../data/translations'
@@ -14,8 +15,45 @@ interface Channel {
 
 export function Contact() {
   const { lang } = useLanguage()
+  const phraseRef = useRef<HTMLAnchorElement>(null)
+
+  /* Magnetic effect on the big contact link (fine pointers only) */
+  useEffect(() => {
+    const el = phraseRef.current
+    if (!el) return
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const onMove = (e: PointerEvent) => {
+      const r = el.getBoundingClientRect()
+      const dx = (e.clientX - (r.left + r.width / 2)) * 0.06
+      const dy = (e.clientY - (r.top + r.height / 2)) * 0.12
+      el.style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px)`
+    }
+    const onLeave = () => {
+      el.style.transform = ''
+    }
+
+    el.addEventListener('pointermove', onMove)
+    el.addEventListener('pointerleave', onLeave)
+    return () => {
+      el.removeEventListener('pointermove', onMove)
+      el.removeEventListener('pointerleave', onLeave)
+    }
+  }, [])
 
   const channels: Channel[] = [
+    ...(profile.links.email
+      ? [
+          {
+            id: 'email',
+            label: t('email', lang),
+            meta: profile.links.email,
+            href: `mailto:${profile.links.email}`,
+            icon: Mail,
+          },
+        ]
+      : []),
     {
       id: 'whatsapp',
       label: t('whatsapp', lang),
@@ -70,11 +108,14 @@ export function Contact() {
 
                 {profile.links.email && (
                   <a
+                    ref={phraseRef}
                     href={`mailto:${profile.links.email}`}
                     className="big-link mt-8 text-white"
                     data-cur="Mail"
                   >
-                    {profile.links.email}
+                    <span>{t('buildPhrase1', lang)}</span>
+                    <br />
+                    <em className="bf-serif">{t('buildPhrase2', lang)}</em>
                   </a>
                 )}
               </div>
@@ -86,7 +127,7 @@ export function Contact() {
                       href={channel.href}
                       target={channel.href.startsWith('mailto:') ? undefined : '_blank'}
                       rel={channel.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
-                      data-cur="Open"
+                      data-cur={channel.href.startsWith('mailto:') ? 'Mail' : 'Open'}
                     >
                       <span className="flex min-w-0 items-center gap-3">
                         <channel.icon size={16} aria-hidden className="shrink-0" />

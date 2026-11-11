@@ -1,18 +1,42 @@
 import { useEffect, useRef, useState } from 'react'
-import { Menu, X, Languages } from 'lucide-react'
+import { Menu, X, Languages, Sun, Moon } from 'lucide-react'
 import { useLanguage } from '../hooks/useLanguage'
 import { useActiveSection } from '../hooks/useInteractions'
+import { usePrefs } from '../hooks/usePrefs'
 import { navLinks, t } from '../data/translations'
 import { getVisibleSectionIds } from '../data/sections'
 import type { SectionId } from '../types'
 
 export function Navbar() {
   const { lang, toggle } = useLanguage()
+  const { isDark, toggleTheme } = usePrefs()
   const visibleIds = getVisibleSectionIds()
   const active = useActiveSection(visibleIds)
   const [open, setOpen] = useState(false)
+  const [progress, setProgress] = useState(0)
   const panelRef = useRef<HTMLDivElement>(null)
   const menuButtonRef = useRef<HTMLButtonElement>(null)
+
+  /* v3: scroll progress bar under the header */
+  useEffect(() => {
+    let frame = 0
+    const update = () => {
+      frame = 0
+      const max = document.documentElement.scrollHeight - window.innerHeight
+      setProgress(max > 0 ? Math.min(100, Math.max(0, (window.scrollY / max) * 100)) : 0)
+    }
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update)
+    }
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (frame) cancelAnimationFrame(frame)
+    }
+  }, [])
 
   const visibleSet = new Set(visibleIds)
   const links = navLinks.filter((link) => visibleSet.has(link.href.slice(1) as SectionId))
@@ -44,6 +68,7 @@ export function Navbar() {
   return (
     <>
       <header className="sticky top-0 z-[60] h-[60px] border-b border-ink bg-paper text-ink">
+        <i className="nav-sp" style={{ width: `${progress}%` }} aria-hidden />
         <nav
           aria-label="Primary"
           className="shell flex h-full items-center justify-between gap-4"
@@ -76,6 +101,16 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="mono inline-flex min-h-9 items-center border border-ink px-2.5 py-1.5 text-ink transition-colors hover:bg-ink hover:text-paper"
+              aria-label={t('themeToggle', lang)}
+              aria-pressed={isDark}
+            >
+              {isDark ? <Sun size={14} aria-hidden /> : <Moon size={14} aria-hidden />}
+            </button>
+
             <button
               type="button"
               onClick={toggle}

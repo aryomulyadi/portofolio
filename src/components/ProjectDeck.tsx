@@ -78,7 +78,7 @@ export function ProjectDeck({ deck, projects, lang, catalogIndex, catalogTotal }
           isFront && !isExiting ? 'tilt' : '',
         ]
           .filter(Boolean)
-          .join('')
+          .join(' ')
 
         let cardStyle: CSSProperties = { zIndex: 40 - rank }
         if (isExiting) {
@@ -144,7 +144,7 @@ export function ProjectDeck({ deck, projects, lang, catalogIndex, catalogTotal }
                 {project.image ? (
                   <img src={project.image} alt="" />
                 ) : (
-                  <span className="font-display text-3xl font-black uppercase tracking-tight text-ink/70">
+                  <span className="font-display text-3xl font-black uppercase tracking-tight text-[#171717]/70">
                     {project.title}
                   </span>
                 )}
@@ -162,7 +162,7 @@ export function ProjectDeck({ deck, projects, lang, catalogIndex, catalogTotal }
                   commit {catNum}/{String(catalogTotal).padStart(3, '0')}
                 </span>
                 <span className="flex items-center gap-2.5">
-                  <span className="text-ink/45">RAM ©26</span>
+                  <span className="text-[#171717]/45">RAM ©26</span>
                   {project.liveUrl && (
                     <a
                       href={project.liveUrl}

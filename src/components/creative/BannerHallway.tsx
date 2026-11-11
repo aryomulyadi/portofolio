@@ -27,12 +27,14 @@ export function BannerHallway({ work, lang, onOpenLightbox }: BannerHallwayProps
 
   const goTo = useCallback((index: number) => {
     const clamped = Math.max(0, Math.min(2, index))
+    const hall = hallRef.current
     const el = stripRefs.current[clamped]
-    if (!el) return
-    el.scrollIntoView({
+    if (!el || !hall) return
+    /* Scroll ONLY the hallway — scrollIntoView would move the whole page */
+    const target = el.offsetLeft - (hall.clientWidth - el.clientWidth) / 2
+    hall.scrollTo({
+      left: Math.max(0, target),
       behavior: reduced() ? 'auto' : 'smooth',
-      inline: 'center',
-      block: 'nearest',
     })
     setActive(clamped)
   }, [])
@@ -72,6 +74,7 @@ export function BannerHallway({ work, lang, onOpenLightbox }: BannerHallwayProps
       scrollLeft: hall.scrollLeft,
       moved: false,
     }
+    hall.setPointerCapture(event.pointerId)
     setDragging(true)
   }
 
@@ -84,26 +87,31 @@ export function BannerHallway({ work, lang, onOpenLightbox }: BannerHallwayProps
     hall.scrollLeft = dragState.current.scrollLeft - dx
   }
 
-  const endDrag = () => {
+  const endDrag = (event?: ReactPointerEvent<HTMLDivElement>) => {
     if (!dragging) return
-    setDragging(false)
-    if (dragState.current.moved) {
-      // snap to nearest after manual drag
-      const hall = hallRef.current
-      if (hall) {
-        const center = hall.scrollLeft + hall.clientWidth / 2
-        let best = 0
-        let bestDist = Infinity
-        stripRefs.current.forEach((el, i) => {
-          if (!el) return
-          const dist = Math.abs(el.offsetLeft + el.offsetWidth / 2 - center)
-          if (dist < bestDist) {
-            bestDist = dist
-            best = i
-          }
-        })
-        goTo(best)
+    const hall = hallRef.current
+    if (hall && event) {
+      try {
+        hall.releasePointerCapture(event.pointerId)
+      } catch {
+        /* already released */
       }
+    }
+    setDragging(false)
+    if (dragState.current.moved && hall) {
+      // snap to nearest after manual drag
+      const center = hall.scrollLeft + hall.clientWidth / 2
+      let best = 0
+      let bestDist = Infinity
+      stripRefs.current.forEach((el, i) => {
+        if (!el) return
+        const dist = Math.abs(el.offsetLeft + el.offsetWidth / 2 - center)
+        if (dist < bestDist) {
+          bestDist = dist
+          best = i
+        }
+      })
+      goTo(best)
     }
   }
 

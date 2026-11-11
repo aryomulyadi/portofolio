@@ -56,11 +56,11 @@ function Portfolio() {
   return (
     <>
       <a
-        href="#main"
-        className="mono sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[70] focus:bg-ink focus:px-4 focus:py-3 focus:text-paper"
-      >
-        {t('skipToContent', lang)}
-      </a>
+                        href="#main"
+                        className="mono sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[70] focus:bg-signal focus:px-4 focus:py-3 focus:text-white"
+                      >
+                        {t('skipToContent', lang)}
+                      </a>
       <Navbar />
       <ContextualCursor />
       <main id="main">
