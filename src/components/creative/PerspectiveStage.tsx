@@ -1,159 +1,204 @@
-import { useState } from 'react'
-import { BookOpen, Maximize2, Sparkles } from 'lucide-react'
+import { useEffect, useRef } from 'react'
+import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react'
+import { BookOpen, Maximize2 } from 'lucide-react'
 import type { CreativeWork, Lang } from '../../types'
+import { t } from '../../data/translations'
 
 interface PerspectiveStageProps {
   works: CreativeWork[]
   lang: Lang
   categoryTitle: string
   categoryIntro: { id: string; en: string }
+  activeIndex: number
+  onActiveIndexChange: (index: number) => void
   onOpenLightbox: (globalWorkId: string) => void
   onOpenCaseStudy?: (work: CreativeWork) => void
 }
+
+const RATIO: Record<string, number> = { '16/9': 16 / 9, '5/4': 5 / 4, '4/5': 4 / 5 }
+
+const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
+const fine = () => window.matchMedia('(hover: hover) and (pointer: fine)').matches
 
 export function PerspectiveStage({
   works,
   lang,
   categoryTitle,
   categoryIntro,
+  activeIndex,
+  onActiveIndexChange,
   onOpenLightbox,
   onOpenCaseStudy,
 }: PerspectiveStageProps) {
-  const [activeIndex, setActiveIndex] = useState(0)
   const isMulti = works.length > 1
   const activeWork = works[activeIndex] ?? works[0]
+  const canvasRef = useRef<HTMLButtonElement>(null)
+
+  /* NFR-06: throttle pointermove to one frame (rAF) */
+  const rafRef = useRef(0)
+  const pendingRef = useRef<{ x: number; y: number } | null>(null)
+
+  useEffect(() => () => cancelAnimationFrame(rafRef.current), [])
 
   if (!activeWork) return null
 
+  /* FR-CRE-G3 Magnetic Stage: tilt ≤6deg, shift ≤10px, sheen follows pointer */
+  const applyStageTilt = (clientX: number, clientY: number) => {
+    const el = canvasRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const x = (clientX - rect.left) / rect.width - 0.5
+    const y = (clientY - rect.top) / rect.height - 0.5
+    el.style.transform = `translate(${(x * 20).toFixed(1)}px, ${(y * 20).toFixed(
+      1,
+    )}px) rotateY(${(x * 12).toFixed(2)}deg) rotateX(${(-y * 12).toFixed(2)}deg)`
+    el.style.setProperty('--lx', `${((x + 0.5) * 100).toFixed(1)}%`)
+    el.style.setProperty('--ly', `${((y + 0.5) * 100).toFixed(1)}%`)
+  }
+
+  const onStageMove = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    if (event.pointerType !== 'mouse' || !fine() || reduced()) return
+    pendingRef.current = { x: event.clientX, y: event.clientY }
+    if (rafRef.current) return
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = 0
+      const pending = pendingRef.current
+      pendingRef.current = null
+      if (pending) applyStageTilt(pending.x, pending.y)
+    })
+  }
+
+  const onStageLeave = () => {
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current)
+      rafRef.current = 0
+    }
+    pendingRef.current = null
+    const el = canvasRef.current
+    if (el) el.style.transform = ''
+  }
+
   return (
-    <div className="overflow-hidden rounded-2xl border border-line-dark bg-midnight shadow-xl">
-      <div className="grid lg:grid-cols-12 lg:items-stretch divide-y lg:divide-y-0 lg:divide-x divide-line-dark">
-        
-        {/* Left Column: Text Info, Selectors & Actions (42% width) */}
-        <div className="flex flex-col justify-between p-6 sm:p-8 lg:col-span-5 space-y-6">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="rounded-full bg-electric/10 px-3 py-1 font-body text-xs font-semibold uppercase tracking-wider text-electric">
-                {categoryTitle}
-              </span>
-              <span className="font-body text-xs font-bold tabular-nums text-paper/45">
-                {categoryIntro[lang]}
-              </span>
-            </div>
+    <div className="grid border border-grey shadow-[8px_8px_0_var(--color-grey)] lg:grid-cols-12">
+      {/* FR-CRE-03: image first on mobile, right column on desktop */}
+      <div className="order-1 flex items-center justify-center border-b border-grey bg-ink p-4 sm:p-6 lg:order-2 lg:col-span-7 lg:border-b-0 lg:border-l">
+        <div className="cv w-full">
+          <button
+            ref={canvasRef}
+            type="button"
+            onClick={() => onOpenLightbox(activeWork.id)}
+            onPointerMove={onStageMove}
+            onPointerLeave={onStageLeave}
+            data-cur="Zoom"
+            aria-label={`${t('cursorZoom', lang)}: ${activeWork.title[lang]}`}
+            className="cvb group w-full"
+          >
+            <span
+              className="pa"
+              style={{ ['--r' as string]: RATIO[activeWork.aspect] ?? 16 / 9 } as CSSProperties}
+            >
+              <img
+                src={activeWork.image}
+                alt={activeWork.title[lang]}
+                loading="lazy"
+                decoding="async"
+              />
+            </span>
+            <span className="sheen" aria-hidden />
+            <span className="mono absolute right-3 top-3 z-[2] bg-signal px-2.5 py-1 text-white opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+              {t('cursorZoom', lang)}
+            </span>
+          </button>
+        </div>
+      </div>
 
-            <div className="space-y-2 pt-2">
-              <h3 className="font-display-bold text-2xl font-bold tracking-tight text-paper md:text-3xl">
-                {activeWork.title[lang]}
-              </h3>
-              <p className="font-body text-sm leading-relaxed text-paper/70">
-                {activeWork.caption?.[lang]}
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2 pt-1">
-              {activeWork.year && (
-                <span className="rounded border border-paper/15 px-2.5 py-1 font-body text-xs font-semibold text-paper/60">
-                  {activeWork.year}
-                </span>
-              )}
-              {activeWork.platform && (
-                <span className="rounded border border-mint/20 bg-mint/5 px-2.5 py-1 font-body text-xs font-semibold text-mint">
-                  {activeWork.platform}
-                </span>
-              )}
-              {activeWork.software?.map((sw: string) => (
-                <span
-                  key={sw}
-                  className="rounded border border-paper/15 bg-midnight-deep px-2.5 py-1 font-body text-xs text-paper/70"
-                >
-                  {sw}
-                </span>
-              ))}
-            </div>
+      {/* Left: info panel */}
+      <div className="order-2 flex flex-col justify-between gap-6 p-5 sm:p-7 lg:order-1 lg:col-span-5">
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <span className="mono border border-paper px-2.5 py-1 text-paper">
+              {categoryTitle}
+            </span>
+            <span className="index-num text-xs text-grey">
+              {categoryIntro[lang]}
+            </span>
           </div>
 
-          {/* Bottom Bar: Mini Selectors (if multi) + Action Buttons */}
-          <div className="space-y-4 pt-4 border-t border-line-dark/60">
-            {isMulti && (
-              <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-                {works.map((w, idx) => {
-                  const isSelected = idx === activeIndex
-                  return (
-                    <button
-                      key={w.id}
-                      type="button"
-                      onClick={() => setActiveIndex(idx)}
-                      className={`flex items-center gap-2 rounded-lg border px-3 py-1.5 font-body text-xs font-semibold transition-all ${
-                        isSelected
-                          ? 'border-electric bg-electric/15 text-electric'
-                          : 'border-line-dark bg-midnight-deep text-paper/60 hover:border-paper/40 hover:text-paper'
-                      }`}
-                    >
-                      <span className="tabular-nums">0{idx + 1}</span>
-                      <span className="truncate max-w-[100px]">{w.title[lang]}</span>
-                    </button>
-                  )
-                })}
-              </div>
+          <div className="space-y-2">
+            <h3 className="font-display text-[clamp(1.5rem,3vw,2.4rem)] font-black uppercase leading-none tracking-tight text-paper text-balance">
+              {activeWork.title[lang]}
+            </h3>
+            {activeWork.caption && (
+              <p className="max-w-[46ch] text-sm leading-relaxed text-grey">
+                {activeWork.caption[lang]}
+              </p>
             )}
+          </div>
 
-            <div className="flex flex-wrap items-center gap-3">
-              <button
-                type="button"
-                onClick={() => onOpenLightbox(activeWork.id)}
-                className="inline-flex items-center gap-2 rounded-xl border border-paper/25 bg-midnight-deep px-4 py-2.5 font-body text-xs font-bold text-paper transition-colors hover:border-paper hover:text-white"
-              >
-                <Maximize2 size={14} />
-                <span>{lang === 'en' ? 'Fullscreen' : 'Layar Penuh'}</span>
-              </button>
-
-              {onOpenCaseStudy && (
-                <button
-                  type="button"
-                  onClick={() => onOpenCaseStudy(activeWork)}
-                  className="inline-flex items-center gap-2 rounded-xl border border-electric/40 bg-electric/10 px-4 py-2.5 font-body text-xs font-bold text-electric transition-colors hover:bg-electric hover:text-midnight"
-                >
-                  <BookOpen size={14} />
-                  <span>{lang === 'en' ? 'Open Case Study' : 'Buka Studi Kasus'}</span>
-                </button>
-              )}
-            </div>
+          <div className="flex flex-wrap items-center gap-2">
+            {activeWork.year && (
+              <span className="mono border border-grey px-2.5 py-1 text-grey">
+                {activeWork.year}
+              </span>
+            )}
+            {activeWork.platform && (
+              <span className="mono border border-grey px-2.5 py-1 text-paper">
+                {activeWork.platform}
+              </span>
+            )}
+            {activeWork.software?.map((sw) => (
+              <span key={sw} className="mono border border-grey px-2.5 py-1 text-grey">
+                {sw}
+              </span>
+            ))}
           </div>
         </div>
 
-        {/* Right Column: Clean Artwork Canvas (58% width) */}
-        <div className="flex items-center justify-center bg-midnight-deep p-6 sm:p-8 lg:col-span-7">
-          <div className="relative w-full">
+        <div className="space-y-4 border-t border-grey pt-5">
+          {isMulti && (
+            <div className="flex items-center gap-2" role="group" aria-label={categoryTitle}>
+              {works.map((w, idx) => (
+                <button
+                  key={w.id}
+                  type="button"
+                  onClick={() => onActiveIndexChange(idx)}
+                  aria-pressed={idx === activeIndex}
+                  aria-label={`${String(idx + 1).padStart(2, '0')} — ${w.title[lang]}`}
+                  className={`mono min-h-11 border px-3 py-2 transition-colors ${
+                    idx === activeIndex
+                      ? 'border-signal bg-signal text-white'
+                      : 'border-grey text-grey hover:border-paper hover:text-paper'
+                  }`}
+                >
+                  {String(idx + 1).padStart(2, '0')}
+                </button>
+              ))}
+            </div>
+          )}
+
+          <div className="flex flex-wrap items-center gap-3">
             <button
               type="button"
               onClick={() => onOpenLightbox(activeWork.id)}
-              className="group relative block w-full overflow-hidden rounded-xl border border-line-dark/80 bg-midnight text-left transition-all duration-300 hover:border-electric"
+              className="btn btn-inv"
             >
-              <div
-                className={`w-full overflow-hidden flex items-center justify-center p-2 ${
-                  activeWork.aspect === '16/9'
-                    ? 'aspect-[16/9]'
-                    : activeWork.aspect === '5/4'
-                    ? 'aspect-[5/4]'
-                    : 'aspect-[4/5] max-h-[460px]'
-                }`}
-              >
-                <img
-                  src={activeWork.image}
-                  alt={activeWork.title[lang]}
-                  className="h-full w-full object-contain transition-transform duration-700 ease-out group-hover:scale-102"
-                />
-              </div>
-              <div className="absolute top-3 right-3 rounded-full bg-midnight/80 px-3 py-1 backdrop-blur-sm border border-paper/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <span className="flex items-center gap-1.5 font-body text-[0.7rem] font-bold text-mint">
-                  <Sparkles size={12} />
-                  {lang === 'en' ? 'Click to Enlarge' : 'Klik untuk Memperbesar'}
-                </span>
-              </div>
+              <Maximize2 size={14} aria-hidden />
+              {t('fullscreen', lang)}
             </button>
+
+            {onOpenCaseStudy && (
+              <button
+                type="button"
+                onClick={() => onOpenCaseStudy(activeWork)}
+                className="btn btn-red"
+                data-cur="Open"
+              >
+                <BookOpen size={14} aria-hidden />
+                {t('openCaseStudy', lang)}
+              </button>
+            )}
           </div>
         </div>
-
       </div>
     </div>
   )

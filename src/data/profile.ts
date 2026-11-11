@@ -14,7 +14,7 @@ export const profile: Profile = {
     en: 'Indonesia',
     id: 'Indonesia',
   },
-  portrait: './images/profile/portrait.jpg',
+  portrait: './images/profile/portrait.png',
   links: {
     github: 'https://github.com/aryomulyadi',
     linkedin: 'https://www.linkedin.com/in/rifqiaryomulyadii/',

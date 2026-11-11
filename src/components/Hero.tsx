@@ -1,62 +1,162 @@
-import { useRef } from 'react'
-import { Github, Linkedin, Instagram } from 'lucide-react'
+import { useEffect, useRef } from 'react'
+import { ArrowDown } from 'lucide-react'
 import { useLanguage } from '../hooks/useLanguage'
-import { useMagnetic } from '../hooks/useInteractions'
 import { t } from '../data/translations'
 import { profile } from '../data/profile'
 
+const REDUCED = '(prefers-reduced-motion: reduce)'
+const FINE = '(hover: hover) and (pointer: fine)'
+
 export function Hero() {
   const { lang } = useLanguage()
-  const workBtn = useMagnetic<HTMLAnchorElement>(0.2)
-  const portraitRef = useRef<HTMLImageElement>(null)
+  const sectionRef = useRef<HTMLElement>(null)
 
   const hasCv = profile.links.cv !== null
   const portraitSrc = profile.portrait ?? './images/profile/portrait.png'
+  const lines = profile.name.split(' ')
+
+  /* Kinetic typography (FR-HERO-03): width axis reacts to pointer proximity.
+     Fine pointers only; disabled for reduced motion. Static on touch. */
+  useEffect(() => {
+    const root = sectionRef.current
+    if (!root) return
+    if (!window.matchMedia(FINE).matches) return
+    if (window.matchMedia(REDUCED).matches) return
+
+    const chars = Array.from(root.querySelectorAll<HTMLElement>('.kin-ch'))
+    if (chars.length === 0) return
+
+    // After the load animation settles, hand control to the pointer
+    let active = false
+    const timer = window.setTimeout(() => {
+      active = true
+    }, 1400)
+
+    let frame = 0
+    const onMove = (event: PointerEvent) => {
+      if (!active || frame) return
+      frame = requestAnimationFrame(() => {
+        frame = 0
+        for (const ch of chars) {
+          const r = ch.getBoundingClientRect()
+          const d = Math.hypot(event.clientX - (r.left + r.width / 2), event.clientY - (r.top + r.height / 2))
+          const wdth = (125 - Math.min(d / 6, 40)).toFixed(0)
+          ch.style.fontVariationSettings = `"wdth" ${wdth}`
+        }
+      })
+    }
+
+    const onLeave = () => {
+      for (const ch of chars) ch.style.fontVariationSettings = '"wdth" 100'
+    }
+
+    root.addEventListener('pointermove', onMove)
+    root.addEventListener('pointerleave', onLeave)
+    return () => {
+      window.clearTimeout(timer)
+      cancelAnimationFrame(frame)
+      root.removeEventListener('pointermove', onMove)
+      root.removeEventListener('pointerleave', onLeave)
+    }
+  }, [])
+
+  const charSpans = (line: string, lineIndex: number) => {
+    const chars = [...line]
+    return chars.map((c, i) => (
+      <span key={`${lineIndex}-${i}`} className="kin-ch">
+        {c}
+      </span>
+    ))
+  }
 
   return (
     <section
       id="home"
+      ref={sectionRef}
       aria-labelledby="home-title"
-      className="relative min-h-[100svh] overflow-hidden border-b border-line-dark/40 bg-midnight pt-24 pb-16 text-paper md:pt-32"
+      className="border-b border-ink bg-paper text-ink"
+      style={{ paddingTop: 'clamp(28px,5vw,64px)', paddingBottom: 0 }}
     >
-      {/* Electric blue glowing background effect */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-electric/25 blur-[140px] md:h-[700px] md:w-[700px]"
-      />
+      <div className="shell">
+        <div className="g">
+          {/* Meta bar */}
+          <div className="mono col-span-full flex flex-wrap items-center justify-between gap-3 border-b border-ink pb-3.5">
+            <span className="flex items-center">
+              <span className="mr-2 inline-block h-[9px] w-[9px] bg-signal" aria-hidden />
+              {profile.location ? profile.location[lang] : 'Indonesia'}
+            </span>
+            <span className="text-mute">Design &times; Code / 2026</span>
+          </div>
 
-      <div className="relative z-10 mx-auto flex min-h-[calc(100svh-8rem)] max-w-6xl flex-col justify-center px-5 md:px-8">
-        <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-8">
-          
-          {/* Left Column / Headline & Bio */}
-          <div className="lg:col-span-5 flex flex-col justify-center">
-            <p className="mb-4 inline-flex items-center gap-2 font-body text-xs font-bold uppercase tracking-[0.3em] text-mint">
-              <span className="h-2 w-2 rounded-full bg-mint" aria-hidden />
-              {profile.location ? profile.location[lang] : 'Creative Developer'}
-            </p>
-
-            <div className="flex flex-wrap items-start gap-x-3 gap-y-0 sm:grid sm:grid-cols-[1fr_auto] sm:gap-x-5 lg:block">
-              <div className="min-w-0 sm:col-start-1 sm:row-start-1">
-                <h1
-                  id="home-title"
-                  className="font-display-bold text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[0.98] tracking-tight text-paper text-balance"
-                >
-                  <span className="block">Rifqi Aryo</span>
-                  <span className="block mt-1 font-serif italic text-mint font-normal text-[clamp(2rem,4.5vw,3.8rem)]">
-                    Mulyadi
+          {/* Giant kinetic name */}
+          <h1 id="home-title" aria-label={profile.name} className="kin-h1 col-span-full">
+            {lines.map((line, i) => (
+              <span key={i} className="kin-ln" aria-hidden="true">
+                {charSpans(line, i)}
+                {i === lines.length - 1 && (
+                  <span className="kin-ch text-signal" style={{ fontVariationSettings: '"wdth" 100' }}>
+                    .
                   </span>
-                </h1>
+                )}
+              </span>
+            ))}
+          </h1>
 
-                <p className="mt-3 lg:mt-6 font-display text-lg font-bold tracking-tight text-electric md:text-xl">
-                  {profile.role[lang]}
-                </p>
-              </div>
+          {/* Lead column */}
+          <div className="col-span-full max-[820px]:col-span-full min-[821px]:col-start-1 min-[821px]:col-end-8" style={{ padding: 'clamp(22px,4vw,56px) 0' }}>
+            <p className="role-line">{profile.role[lang]}</p>
+            <p className="mb-[26px] max-w-[48ch] text-[1.06rem] leading-relaxed">{profile.intro[lang]}</p>
+
+            <div className="flex flex-wrap gap-2.5">
+              <a href="#projects" className="btn btn-fill" data-cur="Go">
+                {t('viewWork', lang)}
+                <ArrowDown size={15} aria-hidden />
+              </a>
+              {hasCv && (
+                <a
+                  href={profile.links.cv ?? '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn"
+                  data-cur="PDF"
+                >
+                  {t('viewCv', lang)}
+                </a>
+              )}
+            </div>
+
+            <div className="mono mt-4 flex flex-wrap gap-[18px]">
+              <a href={profile.links.github} target="_blank" rel="noopener noreferrer" className="link-underline" data-cur="Open">
+                {t('github', lang)}
+              </a>
+              <a href={profile.links.linkedin} target="_blank" rel="noopener noreferrer" className="link-underline" data-cur="Open">
+                {t('linkedin', lang)}
+              </a>
+              <a
+                href={profile.links.instagram ?? '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-underline"
+                data-cur="Open"
+                aria-disabled={profile.links.instagram === null}
+              >
+                {t('instagram', lang)}
+              </a>
+            </div>
+          </div>
+
+          {/* Portrait — 3:4, hairline border, Signal Red corner */}
+          <div className="col-span-full pt-[clamp(22px,4vw,56px)] max-[820px]:pt-0 min-[821px]:col-start-9 min-[821px]:col-end-13">
+            <figure className="group relative aspect-[3/4] max-[820px]:aspect-[4/3] border border-ink transition-transform duration-500 ease-out hover:rotate-[1.2deg]">
               <img
                 src={portraitSrc}
                 alt={t('portraitAlt', lang)}
-                width={160}
-                height={200}
-                className="aspect-[4/5] w-24 shrink-0 rounded-2xl border border-electric/30 bg-midnight-deep/60 object-cover object-center sm:col-start-2 sm:row-start-1 sm:row-span-2 sm:aspect-auto sm:w-40 lg:hidden"
+                width={700}
+                height={933}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                className="h-full w-full object-cover object-center grayscale contrast-[1.04]"
                 onError={(event) => {
                   const img = event.currentTarget
                   if (!img.src.includes('portrait.png')) {
@@ -64,86 +164,12 @@ export function Hero() {
                   }
                 }}
               />
-              <p className="mt-4 w-full text-[0.98rem] leading-relaxed text-paper/75 text-balance sm:col-start-1 sm:row-start-2 sm:w-auto">
-                {profile.intro[lang]}
-              </p>
-            </div>
-
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a
-                ref={workBtn}
-                href="#projects"
-                className="magnetic inline-flex items-center gap-2 rounded-full bg-mint px-6 py-3.5 text-sm font-bold text-midnight transition-colors hover:bg-white"
-              >
-                {t('viewWork', lang)}
-                <span className="text-lg leading-none">→</span>
-              </a>
-              {hasCv && (
-                <a
-                  href={profile.links.cv ?? '#'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-mint/30 px-6 py-3.5 text-sm font-bold text-mint transition-colors hover:border-mint hover:bg-mint/10"
-                >
-                  {t('viewCv', lang)}
-                </a>
-              )}
-            </div>
-
-            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
-              <a
-                href={profile.links.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="link-underline inline-flex items-center gap-1.5 text-sm font-semibold text-mint hover:text-paper"
-              >
-                <Github size={16} aria-hidden />
-                {t('github', lang)}
-              </a>
-              <a
-                href={profile.links.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="link-underline inline-flex items-center gap-1.5 text-sm font-semibold text-mint hover:text-paper"
-              >
-                <Linkedin size={16} aria-hidden />
-                {t('linkedin', lang)}
-              </a>
-              <a
-                href={profile.links.instagram ?? '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="link-underline inline-flex items-center gap-1.5 text-sm font-semibold text-mint hover:text-paper"
-                aria-disabled={profile.links.instagram === null}
-              >
-                <Instagram size={16} aria-hidden />
-                Instagram
-              </a>
-            </div>
-          </div>
-
-          {/* Center Column / Large Transparent Background Subject Photo */}
-          <div className="hidden lg:col-span-7 lg:flex lg:justify-center lg:items-center">
-            <figure className="relative w-full max-w-lg group">
-              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl border border-electric/30 bg-midnight-deep/60 backdrop-blur-md shadow-[0_20px_60px_rgba(2,151,222,0.2)]">
-                <img
-                  ref={portraitRef}
-                  src={portraitSrc}
-                  alt={t('portraitAlt', lang)}
-                  width={700}
-                  height={875}
-                  className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
-                  onError={(event) => {
-                    const img = event.currentTarget
-                    if (!img.src.includes('portrait.png')) {
-                      img.src = './images/profile/portrait.png'
-                    }
-                  }}
-                />
-              </div>
+              <span
+                aria-hidden
+                className="absolute -bottom-px -right-px block aspect-square w-[28%] bg-signal"
+              />
             </figure>
           </div>
-
         </div>
       </div>
     </section>

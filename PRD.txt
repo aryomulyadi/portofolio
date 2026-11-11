@@ -1,0 +1,748 @@
+================================================================================
+PRD.txt — PRODUCT REQUIREMENTS DOCUMENT
+================================================================================
+Judul          : Portofolio Personal "Rifqi Aryo Mulyadi"
+Tagline desain : Swiss Editorial x Neo-Brutalist — "Developer Trading Cards"
+Domain         : https://rifqiaryomulyadi.site/
+Pemilik        : Rifqi Aryo Mulyadi (Creative Developer)
+Versi          : 2.0 (redesign) — menggantikan 1.0
+Tanggal        : 11 November 2026
+Status         : DRAFT UNTUK REVIEW (lihat Bagian 17: Keputusan Terbuka)
+Repo           : https://github.com/aryomulyadi/portofolio.git
+Hosting        : Niagahoster hPanel — deploy via dist.zip -> public_html/
+Prototipe ref. : rifqi-portfolio-v2.html (hero + marquee + deck proyek;
+                 https://claude.ai/artifact/SPnErsfaxWs39RyEWsCgDM)
+Bahasa Dokumen : Indonesia (istilah teknis Inggris)
+
+Cara membaca dokumen ini
+  - ID persyaratan: FR-xx (fungsional), NFR-xx (non-fungsional), DR-xx
+    (keputusan desain), OD-xx (keputusan terbuka).
+  - Prioritas: P1 wajib rilis v2.0 | P2 rilis v2.1 | P3 opsional/eksperimen.
+  - "Prototipe" = berkas rifqi-portfolio-v2.html. Prototipe adalah referensi
+    visual dan interaksi, BUKAN kode produksi.
+
+================================================================================
+0. RINGKASAN PERUBAHAN v1.0 -> v2.0
+================================================================================
+  Aspek            v1.0                        v2.0
+  ---------------  --------------------------  -------------------------------
+  Arah visual      Dark tech (midnight, cyan,  Swiss Editorial x Neo-Brutalist:
+                   mint, glow, rounded pill)   warm white, black, signal red,
+                                               grid tegas, border keras,
+                                               tanpa glow/gradien dekoratif
+  Palet            midnight/electric/mint      4 warna, rasio 45:35:12:8
+  Tipografi        Space Grotesk/Inter/        Archivo (variable, sumbu wdth)
+                   Merriweather                /Inter/JetBrains Mono
+  Hero             Teks kiri + potret glow     Nama raksasa kinetik (lebar
+                                               font bereaksi pada kursor) +
+                                               potret blend ke latar
+  Kartu proyek     Frame midnight + holo       Frame Signal Red, border hitam
+                   pelangi tipis               tebal, bayangan keras, holo
+                                               monokrom, stat gaya kode
+  Navbar           Fixed, blur-md, pill        Solid, border 1px, tautan mono
+                   aktif cyan                  uppercase, garis aktif merah
+  Cursor           Dihapus (565b58c)           Contextual cursor ringan
+                                               (PERLU KONFIRMASI — OD-01)
+  Creative         Stage dua kolom + lightbox  + Chapter Wipe, Index view,
+                                               magnetic stage, loupe, serta
+                                               interaksi khas per kategori
+  Penomoran        02-07 (tanpa 01)            01-06 konsisten (isu backlog
+                                               "Hero tanpa badge 01" selesai)
+  Dependensi       Nol tambahan                Nol dependensi runtime baru
+                                               (hanya paket font @fontsource)
+
+================================================================================
+1. RINGKASAN PRODUK, TUJUAN, DAN METRIK
+================================================================================
+Portofolio personal single-page (SPA) bilingual (EN/ID), statis, yang
+menampilkan identitas, pengalaman, keahlian, proyek, dan eksibisi karya desain
+Rifqi Aryo Mulyadi.
+
+Positioning : "Creative Developer" — teknologi dan desain sebagai satu praktik.
+Pernyataan  : Portofolio ini sendiri adalah bukti kemampuan: setiap interaksi
+              harus bertujuan, ringan, dan dapat diakses.
+
+1.1 Tujuan (Goals)
+  G1  Dalam 10 detik pengunjung memahami: siapa, bidang apa, dan bukti kerja.
+  G2  Identitas visual yang berbeda dari template portofolio umum.
+  G3  Interaksi khas (kartu proyek, eksibisi Creative) yang mengesankan tanpa
+      mengorbankan keterbacaan, aksesibilitas, dan performa.
+  G4  Konversi: klik "Selected work", "View CV", dan kanal kontak.
+
+1.2 Non-Goals
+  - Backend, CMS, autentikasi, analitik pihak ketiga (tetap situs statis).
+  - Pustaka animasi eksternal (GSAP, Framer Motion, Lottie, three.js).
+  - Blog atau halaman terpisah (tetap SPA satu halaman).
+
+1.3 Metrik Keberhasilan
+  Teknis (diukur pada build produksi, mobile 4G throttled + desktop)
+    - Lighthouse: Performance >= 95, Accessibility = 100, Best Practices >= 95,
+      SEO >= 95
+    - LCP <= 2.0 s (desktop) / <= 2.5 s (mobile); CLS <= 0.05; INP <= 200 ms
+    - 0 error konsol; 0 pelanggaran axe-core level serious/critical
+  Produk (pengamatan manual, tanpa tracker)
+    - Pengunjung dapat menemukan CV dan kontak <= 2 interaksi dari halaman awal
+    - Seluruh fitur dapat dipakai hanya dengan keyboard dan hanya dengan sentuh
+
+================================================================================
+2. AUDIENS DAN SKENARIO
+================================================================================
+  Persona             Tujuan utama                 Yang dicari dalam 30 detik
+  ------------------  ---------------------------  ----------------------------
+  Klien potensial     Menilai kualitas + gaya      Proyek nyata, hasil visual,
+  (jasa desain/dev)   kerja, lalu menghubungi      cara menghubungi
+  Recruiter teknis    Memverifikasi stack dan      Stack, pengalaman, CV,
+  dan kreatif         pengalaman                   keterbacaan cepat
+  Kolaborator /       Menilai kecocokan dan        Karya kreatif, proses, kanal
+  komunitas           estetika                     sosial
+
+  Skenario kunci
+  S1  Recruiter di desktop: Hero -> About -> Experience -> unduh CV.
+  S2  Klien di ponsel: Hero -> geser kartu Projects -> kontak WhatsApp.
+  S3  Desainer: Creative -> Index -> buka karya -> loupe/lightbox -> case study.
+
+================================================================================
+3. KONSEP DAN PRINSIP DESAIN
+================================================================================
+Konsep: "Developer Trading Cards" dalam bingkai tata letak editorial Swiss.
+  - Swiss Editorial : grid 12 kolom asimetris, hierarki tipografi ekstrem,
+                      label bernomor, garis tipis, ruang kosong disengaja.
+  - Neo-Brutalist   : border tebal terlihat, bayangan keras tanpa blur,
+                      warna datar, tombol yang "tertekan", tanpa glow.
+  - Trading Card    : proyek = kartu koleksi (NO.001, tipe, stat, commit);
+                      tipe ditandai bentuk (kotak = Business Website,
+                      lingkaran = AI Platform).
+  - Creative Dev    : motif cetak/desain + kode: crop/registration mark "+",
+                      stat bergaya key-value (role: / stack:), "commit 001/004".
+
+Prinsip
+  P-1  Setiap gerak harus punya fungsi (orientasi, umpan balik, atau karakter).
+  P-2  Konten lebih dulu; dekorasi seminimal mungkin ("tanpa dekorasi tak perlu").
+  P-3  Merah (Signal Red) = perhatian. Jika semua merah, tidak ada yang merah.
+  P-4  Tiap interaksi pointer punya padanan keyboard dan sentuh.
+  P-5  Ringan: tidak ada pustaka animasi; hanya transform/opacity.
+  P-6  Hindari estetika "AI default": gradien ungu-pink, glow neon, emoji
+       sebagai ikon, kartu rounded dengan garis kiri berwarna, data palsu.
+
+================================================================================
+4. TECH STACK DAN ARSITEKTUR
+================================================================================
+Runtime/UI     : React 19.1 + React DOM 19.1 (function components, hooks)
+Bahasa         : TypeScript ~5.8 (strict, noUnusedLocals)
+Bundler        : Vite 7.x — base: './' (aset relatif, cocok untuk hPanel)
+Styling        : Tailwind CSS 4.x via @tailwindcss/vite, token via @theme
+Ikon           : lucide-react ^0.544 (hanya ikon yang dipakai, tree-shaken)
+Font (BERUBAH) : @fontsource-variable/archivo (sumbu wght + wdth; display),
+                 @fontsource/inter (body), @fontsource/jetbrains-mono (label)
+                 — self-hosted, woff2, subset latin saja, tanpa CDN.
+                 DIHAPUS: Space Grotesk, Merriweather.
+Dependensi     : Tidak ada dependensi runtime baru. Interaksi = CSS + hooks
+                 custom (+ View Transitions API bila tersedia, dengan fallback).
+
+Scripts npm    : dev -> vite | build -> tsc -b && vite build
+                 lint -> eslint . | preview -> vite preview
+
+Struktur folder (target)
+  src/components/   Navbar, Hero, Marquee, About, Experience, Skills,
+                    Projects, ProjectDeck, CreativeWorks, Lightbox, Contact,
+                    Footer, creative/{Stage,IndexView,CategoryNav,Loupe,
+                    ChapterWipe,CaseStudyModal,experiences/*}
+  src/data/         sections, translations, profile, experience, skills,
+                    projects, creativeWorks, marquee
+  src/hooks/        useCardDeck, useInteractions, useLanguage, useTheme,
+                    useContextCursor, usePointerTilt, useViewTransition
+  src/styles/       tokens.css (@theme), base.css, motion.css
+
+================================================================================
+5. DESIGN SYSTEM
+================================================================================
+5.1 Palet dan rasio area (target 45 : 35 : 12 : 8)
+  Token CSS        Hex       Rasio  Peran
+  ---------------  --------  -----  -----------------------------------------
+  --color-paper    #F2EFE8   45%    Latar utama (Hero, About, Experience,
+                                    Skills), teks pada blok gelap
+  --color-ink      #171717   35%    Teks, border, blok gelap (Marquee,
+                                    Projects, Creative, Footer)
+  --color-signal   #D52B1E   12%    Aksen: Contact (blok penuh), bingkai kartu,
+                                    nomor, garis aktif, hover, CTA sekunder
+  --color-grey     #A5A5A0    8%    Garis halus, teks sekunder PADA ink,
+                                    placeholder, bayangan keras pada ink
+
+  Pemetaan section -> latar (target):
+    Hero, About, Experience, Skills .......... paper   (~45%)
+    Marquee, Projects, Creative, Footer ...... ink     (~35%)
+    Contact .................................. signal  (~12%)
+    Garis, meta, placeholder ................. grey    (~8%)
+  Verifikasi: ambil screenshot full-page 1440px, hitung piksel per warna
+  (toleransi +/-5 poin). Cocokkan sebelum rilis.
+
+  Mode gelap (P2): token paper dan ink bertukar (--p0/--i0). Rasio 45:35
+  ikut terbalik — dapat diterima. Mengikuti prefers-color-scheme + toggle.
+
+5.2 Aturan kontras (WAJIB — hasil perhitungan WCAG)
+  Pasangan                      Rasio   Boleh dipakai untuk
+  ----------------------------  ------  ----------------------------------
+  ink  di atas paper            15.6:1  Semua teks
+  paper di atas ink             15.6:1  Semua teks
+  white di atas signal           5.0:1  Semua teks (label/tombol di atas merah)
+  signal di atas paper           4.4:1  HANYA teks besar (>=24px, atau >=18.7px
+                                        tebal), ikon, garis, fill
+  signal di atas ink             3.6:1  HANYA teks besar, ikon, garis, fill
+  ink  di atas signal            3.6:1  HANYA teks besar
+  grey di atas ink               7.2:1  Teks sekunder (boleh)
+  grey di atas paper             ~2.2:1 DILARANG untuk teks; hanya garis/dekor
+  Konsekuensi: teks kecil berwarna merah (mis. label "01", key "role:")
+  tidak boleh; gunakan ink/paper, atau letakkan di atas fill merah dengan teks
+  putih. Prototipe saat ini masih melanggar di beberapa label kecil —
+  perbaiki saat implementasi (FR-A11Y-02).
+  Teks sekunder pada paper memakai turunan ink: color-mix(ink 72%, paper).
+
+5.3 Tipografi
+  --font-display : Archivo (variable). weight 800-900, wdth 62-125.
+                   UPPERCASE untuk judul besar; letter-spacing -0.02 s/d -0.05em.
+  --font-body    : Inter 400/500/600. Body 16-17px, line-height 1.6.
+  --font-mono    : JetBrains Mono 400/700. Label, eyebrow, meta, stat kartu;
+                   uppercase, letter-spacing 0.08-0.12em, 11-12px.
+  Skala fluid (clamp):
+    H1 hero      clamp(3.2rem, 12.6vw, 13.4rem), line-height .82
+    H2 section   clamp(2.4rem, 7vw, 6rem),       line-height .92
+    H3 kartu     clamp(1.8rem, 4.2vw, 3.4rem)
+    Stmt/About   clamp(1.5rem, 3.4vw, 2.9rem)
+    Eyebrow/mono 0.72rem
+  Catatan performa: preload hanya Archivo (variable) dan Inter 400;
+  JetBrains Mono dimuat lazy. font-display: swap. Backlog v1 "faux-bold"
+  selesai karena Archivo variable memuat seluruh sumbu weight.
+
+5.4 Grid, spasi, bentuk
+  Grid        : 12 kolom, gap clamp(12px, 2vw, 28px), padding sisi
+                clamp(16px, 3.2vw, 44px). Tanpa max-width kaku pada Hero
+                (nama bleed hingga tepi); konten teks maks 54ch.
+  Section     : padding vertikal clamp(56px, 9vw, 128px). Kolom label
+                (col 1-3, "01 / About") + kolom isi (col 4-12).
+  Border      : 1px untuk struktur; 3-4px untuk kartu dan tombol brutal.
+  Radius      : 0 untuk struktur; 16px HANYA kartu proyek (metafora kartu).
+  Bayangan    : keras, tanpa blur, offset 5-8px (ink pada paper, grey pada
+                ink). DILARANG: blur-2xl, glow, backdrop-blur berat.
+  Tombol      : border 1px/3px, bayangan keras, hover = translate ke bayangan
+                (efek tertekan) atau fill merah; min-height 48px.
+
+5.5 Gerak (token)
+  --ease-out    cubic-bezier(.2,.8,.2,1)
+  --ease-spring cubic-bezier(.2,.9,.3,1.1)
+  --dur-fast 150ms | --dur-base 300ms | --dur-slow 600-900ms
+  Semua animasi dijaga prefers-reduced-motion (kill-switch CSS global + guard
+  JS di setiap hook). Hanya properti transform, opacity, font-variation-
+  settings (hero) yang dianimasikan.
+
+================================================================================
+6. KEPUTUSAN DESAIN (DR) — DIPERTAHANKAN / DIREVISI
+================================================================================
+  ID     Keputusan                                              Status v2.0
+  -----  -----------------------------------------------------  ------------
+  DR-01  Custom cursor (v1: DITOLAK, commit 565b58c)            DIREVISI —
+         v2: kursor sistem TETAP tampil; ditambah penanda kecil  lihat OD-01
+         (titik 12px) yang berubah jadi lingkaran berlabel di
+         elemen interaktif. Hanya pointer halus. Mati saat
+         reduced-motion. WAJIB disetujui pemilik sebelum rilis.
+  DR-02  Tanpa blur backdrop berat (blur-2xl ditolak)           DIPERTAHANKAN
+         Navbar v2 solid, tanpa blur.
+  DR-03  Navbar creative murni nama kategori, tanpa "PAGE 00"   DIPERTAHANKAN
+  DR-04  Tanpa teks teknis berlebih ("16:9 Aspect", badge       DIPERTAHANKAN
+         rasio, "Curatorial Note", blok Objective/Creative
+         Direction, counter berlebih)
+  DR-05  Social (9 feed) dan Banner (3 banner) diperlakukan     DIPERTAHANKAN
+         sama seperti kategori lain pada layout dasar. Interaksi
+         khas (Bagian 9) tidak mengubah layout dasar.
+  DR-06  Kategori galeri: Apparel (16:9,4:5,4:5), Digital       DIPERTAHANKAN
+         Poster (16:9,16:9,5:4), Social Media (4:5), Banner
+         (4:5), UI/UX (16:9,16:9). Rasio dipakai internal untuk
+         layout, TIDAK ditampilkan ke pengunjung.
+  DR-07  Bahasa default: EN                                     DIPERTAHANKAN
+  DR-08  Penomoran section 01-06 konsisten; Hero tidak          BARU
+         bernomor (dibaca sebagai "00")
+  DR-09  Kartu proyek mempertahankan mekanik swipe v1           BARU
+         (drag, keyboard, a11y); hanya skin yang berubah
+
+================================================================================
+7. STRUKTUR HALAMAN DAN NAVIGASI
+================================================================================
+Section dirender hanya jika visible di src/data/sections.ts (data-driven).
+
+  #   ID          Komponen       No.  Judul (EN)                    Latar
+  --  ----------  -------------  ---  ----------------------------  ------
+  0   home        Hero           —    Rifqi Aryo Mulyadi            paper
+  —   (strip)     Marquee        —    ticker stack (aria-hidden)    ink
+  1   about       About          01   Technology and design,        paper
+                                      one practice
+  2   experience  Experience     02   Where the work happened       paper
+  3   skills      Skills         03   What I work with              paper
+  4   projects    Projects       04   Selected work (deck kartu)    ink
+  5   creative    CreativeWorks  05   Design and visual experiments ink
+  6   contact     Contact        06   Start a conversation          signal
+  —   —           Footer         —    brand + copyright             ink
+
+Navbar (FR-NAV)
+  FR-NAV-01 (P1) Sticky, tinggi 60px, latar paper SOLID, border-bottom 1px
+            ink. Tanpa blur. Brand "RAM." (titik merah) -> #home.
+  FR-NAV-02 (P1) Desktop (>=820px): tautan mono uppercase; aktif via
+            scroll-spy (useActiveSection) = garis bawah merah 2px +
+            aria-current="true". Mobile: tombol Menu -> panel layar penuh,
+            tautan besar (Archivo 2.4rem), body-scroll lock, fokus pindah ke
+            panel, Escape menutup + mengembalikan fokus.
+  FR-NAV-03 (P1) Language switcher "EN / ID" (aria-label berganti), persist
+            localStorage['portfolio-lang'] (try/catch), default EN, set
+            document.documentElement.lang. Perpindahan bahasa memakai View
+            Transition (fallback: instan).
+  FR-NAV-04 (P2) Toggle tema terang/gelap (aria-label jelas).
+  FR-NAV-05 (P1) Skip-link -> #main; semua section aria-labelledby; anchor
+            memperhitungkan tinggi navbar (scroll-padding-top).
+  Label: Profile, About, Experience, Skills, Projects, Creative, Contact /
+  ID: Profil, Tentang, Pengalaman, Keahlian, Proyek, Kreatif, Kontak.
+
+================================================================================
+8. SPESIFIKASI FUNGSIONAL PER SECTION
+================================================================================
+8.1 HERO (#home)  — P1
+  FR-HERO-01 Meta bar: status "Open for freelance" (kotak merah), negara,
+             "Design x Code / 2026".
+  FR-HERO-02 H1 "RIFQI / ARYO / MULYADI." tiga baris, baris tengah menjorok
+             12.5%, ukuran terbesar di situs; aria-label pada h1, huruf
+             dipecah per-span (aria-hidden).
+  FR-HERO-03 Kinetic typography: (a) saat load, huruf masuk dari bawah dengan
+             sumbu wdth 62 -> 100 (stagger per baris, 0.9s). (b) pointer halus
+             saja: lebar huruf (wdth 85-125) mengembang berdasarkan jarak
+             kursor ke huruf; kembali ke 100 saat pointer keluar. Sentuh/
+             reduced-motion: hanya (a) atau statis.
+  FR-HERO-04 Peran "Creative Developer", intro singkat, CTA "Selected work ↓"
+             (-> #projects) dan "View CV" (public/documents/cv.pdf), tautan
+             GitHub/LinkedIn/Instagram.
+  FR-HERO-05 Potret 3:4 dengan border 1px dan blok merah di sudut kanan-bawah.
+             Foto berlatar terang diblend ke paper (mix-blend-mode: multiply)
+             atau diberi perlakuan grayscale/halftone. onError -> fallback
+             ./images/profile/portrait.png. Hover: rotasi ringan (fine only).
+  FR-HERO-06 CLS: ukuran H1 dihitung dengan lebar huruf maksimum (wdth 125)
+             agar animasi lebar tidak menyebabkan layout shift / overflow.
+  Penerimaan: nama terbaca penuh di 320px tanpa scroll horizontal; CLS <= 0.05.
+
+8.2 MARQUEE — P1
+  Strip ink, item terduplikasi, translateX(-50%) 30s linear, pause saat hover,
+  pemisah "/" merah pada item genap, aria-hidden. Reduced-motion: statis.
+
+8.3 ABOUT (#about) — P1
+  Label "01 / About". Pernyataan besar (Archivo 800) dengan satu frasa merah
+  (teks besar, aman kontras) + paragraf; kolom kanan dl Focus/Based/Currently/
+  Stack/Open to. Reveal bertahap 60/120ms.
+
+8.4 EXPERIENCE (#experience) — P1
+  Daftar berurut bergaya tabel Swiss: kiri (col 1-3) periode + status +
+  lokasi; kanan (col 4-12) role, organisasi (H3), bullet bernomor 01/02/03,
+  opsional "Visit website". Garis 1px antarbaris; hover baris = indent 14px
+  + nomor berubah merah-fill (teks putih). Reveal stagger index*70ms.
+
+8.5 SKILLS (#skills) — P1
+  Enam grup (Frontend, Backend, AI & Agents, Design Tools, Database, Tools)
+  sebagai baris tipografis (label mono | nama besar | level/jenis) atau grid
+  chip border 1px. Hover chip: fill ink, teks paper. Intro + "N Verified
+  Competencies".
+
+8.6 PROJECTS (#projects) — P1  (INTI IDENTITAS)
+  FR-PRJ-01 Filter kategori (All / Business Website / AI Platform): role=group,
+            aria-pressed, aktif = fill paper/teks ink pada blok ink. Perubahan
+            filter memakai View Transition.
+  FR-PRJ-02 Dua kolom: kiri nomor outline raksasa (NO.), judul, deskripsi
+            (aria-live="polite", crossfade), tombol Prev/Next + petunjuk;
+            kanan ProjectDeck. Mobile: deck di atas, info di bawah.
+  FR-PRJ-03 Kartu (aspect 5/7.1, lebar min(340px, 80vw)):
+            - frame Signal Red 10px, border ink 4px, radius 16px, bayangan
+              keras grey 8px;
+            - interior paper, border ink 3px: header (nama + "NO.001"),
+              penanda tipe (kotak/lingkaran + nama kategori), jendela art
+              (screenshot proyek; marka "+" merah di dua sudut),
+              baris "role:" dan "stack:" gaya kode, garis putus, footer
+              "commit 001/004" + "RAM (c)26", tautan Live/GitHub;
+            - holo monokrom (kilau putih + merah, mix-blend overlay) saat
+              hover/fokus/drag.
+  FR-PRJ-04 Mekanik useCardDeck DIPERTAHANKAN dari v1: fan 3 kartu belakang
+            (offset 16px/-12px, rotasi 3.2 deg/lapis, scale -4.5%/lapis),
+            drag kartu depan (rotasi = dx/18, threshold max(100px, 25% lebar)),
+            animasi keluar 400ms, reorder sirkular, klik diabaikan setelah
+            drag, keyboard <- / ->, kunci animasi, hint hilang setelah
+            interaksi pertama, reduced-motion = swap instan, touch-action
+            pan-y (scroll vertikal tetap berfungsi).
+  FR-PRJ-05 "Magnetic card" (fine pointer): kartu depan miring hingga +/-8 deg
+            (rotateX/Y) dan bergeser <=4px ke arah kursor; kembali saat
+            pointer keluar. Mati saat drag/reduced-motion.
+  FR-PRJ-06 Indikator "NN / NN" (aria-live) dan kontrol Prev/Next fokusabel
+            (disabled saat animasi/single).
+  FR-PRJ-07 Data 4 proyek: banjar-custom (001, Business Website; Lead
+            Developer & Designer; Laravel, Alpine.js, Tailwind CSS),
+            solusi-gim, agendaku, business-compete. Seluruh data proyek v1
+            dipertahankan apa adanya; hanya placeholder dev yang diganti.
+  Penerimaan: drag halus 60fps pada ponsel kelas menengah; tidak ada
+  jank saat filter; deck tetap dapat dipakai hanya dengan keyboard.
+
+8.7 CREATIVE (#creative) — IMMERSIVE DIGITAL EXHIBITION — P1 (+ P2/P3)
+  Latar ink + grain SVG statis (opacity .05). Struktur v1 DIPERTAHANKAN,
+  skin diganti ke Swiss/brutal. Pengayaan interaksi: Bagian 9.
+  FR-CRE-01 Navbar kategori murni (DR-03): Apparel, Digital Poster, Social
+            Media, Banner, UI/UX; scroll horizontal; aria-current="page";
+            aktif = fill signal + teks putih (kontras 5.0:1).
+  FR-CRE-02 Stage dua kolom lg:12 kolom, pembatas 1px grey: kiri col-5 teks
+            (chip kategori + jumlah karya, H3 judul, caption, tag
+            year/platform/software, mini-selector 01/02/03, tombol
+            "Fullscreen" dan — khusus UI/UX — "Open Case Study"); kanan col-7
+            kanvas ink, gambar object-contain mengikuti rasio asli, hover
+            tampilkan label "Zoom", klik -> Lightbox. Sudut persegi (tanpa
+            rounded-2xl), border 1px grey, bayangan keras grey 8px.
+  FR-CRE-03 Mobile: gambar di atas, info di bawah, tanpa scroll vertikal
+            berlebih.
+  FR-CRE-04 LIGHTBOX (role=dialog, aria-modal, focus-trap, Escape, scroll
+            lock, <- / ->, tombol prev/next 40x40, counter aria-live, panel
+            caption/Process/Result, tutup klik di luar) — dipertahankan,
+            ditambah Loupe (FR-CRE-LP, Bagian 9).
+  FR-CRE-05 CASE STUDY MODAL (UI/UX): 6 tab (Problem Definition, Research,
+            Wireframes, Design Process, Final Interface, Prototype Preview),
+            tab Prototype punya "Open Prototype" (eksternal). BARU: focus-trap
+            + Escape + scroll lock (menutup backlog v1).
+  FR-CRE-06 Data: 10 karya / 5 kategori (tidak berubah). Social = kompilasi
+            9 postingan @nanang.bag; Banner = kompilasi 3 banner pameran.
+
+8.8 CONTACT (#contact) — P1
+  Blok penuh Signal Red. Kiri: teks raksasa "Let's build something." (ink/
+  putih, ukuran besar sehingga aman kontras) + link mailto. Kanan: daftar
+  kanal (WhatsApp, Instagram, LinkedIn, GitHub — hanya yang href-nya nyata)
+  sebagai baris berborder ink 3px dengan ikon, label, handle, panah yang
+  bergeser saat hover. Fokus: outline ink 3px (kontras pada merah).
+
+8.9 FOOTER — P1
+  Ink. Kiri brand + note; kanan GitHub / LinkedIn / (c) tahun.
+
+================================================================================
+9. CREATIVE — BLUEPRINT PENGALAMAN INTERAKTIF
+================================================================================
+Tujuan: eksibisi terasa seperti galeri digital yang bisa dijelajahi, bukan
+sekadar slideshow, dengan tetap ringan dan dapat diakses. Interaksi dipilih
+dari karakter MEDIUM tiap kategori, bukan efek acak.
+
+9.1 Prinsip
+  C-1  Satu ide interaktif per kategori, tidak lebih.
+  C-2  Pointer, keyboard, dan sentuh punya padanan setara (P-4).
+  C-3  Interaksi diinisialisasi malas (lazy) saat kategori pertama kali aktif.
+  C-4  Tanpa pustaka baru; hanya transform/opacity/clip-path; 1 loop rAF
+       bersama; listener pasif; will-change hanya selama interaksi.
+  C-5  Reduced-motion: semua efek kinetik mati; fungsi inti (lihat gambar,
+       ganti karya, lightbox) tetap utuh.
+
+9.2 Mekanik global (semua kategori)
+  ID         Nama             Deskripsi                                 Prio
+  ---------  ---------------  ----------------------------------------  ----
+  FR-CRE-G1  Chapter Wipe     Pergantian kategori = wipe clip-path      P1
+                              Signal Red 480ms dari kiri (View
+                              Transitions API; fallback crossfade;
+                              reduced-motion: instan). Menutup backlog
+                              "sticky slide transition".
+  FR-CRE-G2  Index View       Toggle "Stage | Index". Index = contact   P1
+                              sheet 10 thumbnail bernomor 01-10 bergaya
+                              Swiss (garis 1px); hover/fokus = fill
+                              merah + teks putih; klik -> Stage pada
+                              karya itu. Dapat difilter per kategori.
+  FR-CRE-G3  Magnetic Stage   Gambar miring <=6 deg dan bergeser <=10px  P1
+                              mengikuti pointer + sapuan cahaya tipis
+                              (gradient overlay). Fine pointer saja.
+  FR-CRE-LP  Loupe            Lensa bulat perbesaran 2.5x mengikuti      P1
+                              pointer pada Lightbox (memakai gambar
+                              1600px). Sentuh: tahan lalu geser.
+                              Keyboard: tombol "Loupe" + panah geser.
+  FR-CRE-G5  Keyboard-first   <- / -> karya; [ / ] kategori; I = Index;  P1
+                              F = fullscreen; Esc = tutup. Bantuan
+                              ringkas muncul saat tombol "?" ditekan.
+  FR-CRE-G6  Contextual       Label kursor: "Zoom" (gambar), "Drag"      P1
+             cursor labels    (kanvas drag), "Open" (tautan), "View"
+                              (kartu). Bergantung OD-01.
+
+9.3 Interaksi khas per kategori
+  A. APPAREL — "Print Lab"  (P2)
+     Konsep: proses cetak sablon. Kontrol segmented "Base / Overprint /
+     Thread / Final" menumpuk lapisan satu per satu dengan transisi stagger
+     (opacity + translate 8px). Slider "Registration": menggeser lapisan
+     overprint beberapa piksel untuk memperlihatkan misregistrasi lalu
+     "snap" ke registrasi sempurna saat dilepas.
+     Aset: bergantung pada sumber SVG berlapis di scripts/artwork-src/*.svg
+     (perlu audit struktur <g> per lapisan — OD-04). Fallback: hanya Final.
+
+  B. DIGITAL POSTER — "Light Table"  (P3; Loupe = P1)
+     Konsep: meja cahaya perancang. Selain Loupe (P1), poster dengan
+     lapisan (SVG) mendapat parallax 2-3 lapis mengikuti pointer (<=12px)
+     dan "grid overlay" yang dapat dinyalakan (garis grid desain di atas
+     poster, bukti kerja sistematis). Sentuh: drag menggeser parallax.
+
+  C. SOCIAL MEDIA — "Feed Simulator"  (P2)
+     Konsep: profil @nanang.bag. Kompilasi 9 postingan tampil sebagai grid
+     3x3 ala profil; klik tile -> penampil pos dengan swipe antar-pos dan
+     indikator titik; mode "Scroll" menampilkan feed vertikal dalam bingkai
+     ponsel. Tile memakai 9 file terpisah (disarankan, @1080x1350 WebP)
+     atau potongan background-position dari kompilasi (perlu verifikasi
+     tata letak 3x3 — OD-03).
+
+  D. BANNER — "Exhibition Hallway"  (P1)
+     Konsep: berjalan menyusuri lorong pameran. Tiga banner berjajar dalam
+     kanvas horizontal; drag/swipe dengan inersia, snap ke tiap banner,
+     progress bar tipis 1px merah, tombol Prev/Next + <- / ->. TIDAK ada
+     pembajakan wheel (aksesibilitas). Reduced-motion: pindah banner tanpa
+     inersia.
+
+  E. UI/UX — "Case Study Walkthrough"  (P2)
+     Konsep: bukti proses berpikir. (1) Slider before/after "Wireframe <->
+     Final" pada layar yang sama (garis pembagi 3px merah, handle fokusabel
+     role=slider, aria-valuenow). (2) 3-4 hotspot "Design decision": titik
+     bernomor di atas antarmuka; hover/fokus/tap membuka popover singkat
+     (masalah -> keputusan). (3) CaseStudyModal menjadi stepper dengan
+     progress "1/6". (4) P3: pratinjau prototipe tertanam (iframe sandbox)
+     bila URL prototipe mengizinkan; default tetap tombol eksternal.
+     Aset: gambar wireframe per layar + teks hotspot (OD-05).
+
+9.4 Matriks prioritas
+  Fitur                    Dampak   Upaya   Aset baru?            Prio
+  -----------------------  -------  ------  --------------------  ----
+  Chapter Wipe             Tinggi   Rendah  Tidak                 P1
+  Index View               Tinggi   Sedang  Thumbnail WebP        P1
+  Magnetic Stage           Sedang   Rendah  Tidak                 P1
+  Loupe                    Tinggi   Sedang  Tidak (PNG 1600px)    P1
+  Keyboard shortcuts       Sedang   Rendah  Tidak                 P1
+  Banner Hallway           Tinggi   Sedang  Tidak                 P1
+  Print Lab (Apparel)      Tinggi   Tinggi  SVG berlapis          P2
+  UI/UX slider + hotspot   Tinggi   Sedang  Wireframe + teks      P2
+  Feed Simulator (Social)  Sedang   Sedang  9 file terpisah       P2
+  Poster parallax + grid   Sedang   Sedang  SVG berlapis          P3
+  Prototype embed          Rendah   Sedang  URL prototipe         P3
+
+9.5 Penerimaan Creative
+  - Setiap interaksi dapat diselesaikan dengan keyboard saja dan sentuh saja.
+  - Ganti kategori <= 100ms scripting; frame >= 55fps pada perangkat uji.
+  - Tidak ada layout shift saat gambar dimuat (rasio dikunci via aspect-ratio).
+  - Hanya gambar kategori aktif + 1 tetangga yang dimuat; sisanya lazy.
+
+================================================================================
+10. MOTION DAN MICRO-INTERACTION (KATALOG)
+================================================================================
+  Elemen               Efek                                      Gate
+  -------------------  ----------------------------------------  ------------
+  Reveal-on-scroll     opacity+translateY 26px, 0.7s ease-out,   reduced-motion
+                       stagger per item, IntersectionObserver
+  Hero kinetic         wdth anim load + proximity                fine pointer
+  Marquee              30s linear, pause on hover                reduced-motion
+  Deck kartu           drag, tilt magnetic, holo                 pointer/touch
+  Tombol brutal        hover = tertekan; fokus = outline merah   —
+  Link nav             garis bawah scaleX 0->1 (300ms)           —
+  Contextual cursor    titik 12px -> lingkaran 76px + label      fine pointer
+  Chapter Wipe         clip-path 480ms                           reduced-motion
+  Stage tilt           <=6 deg, rAF                              fine pointer
+  Bahasa/filter        View Transition 300ms crossfade           API tersedia
+  Aturan: maksimal 1 animasi "besar" aktif per viewport; tidak ada loop
+  berkelanjutan selain Marquee dan stiker/penanda yang dapat dimatikan.
+
+================================================================================
+11. BILINGUAL I18N
+================================================================================
+  - src/data/translations.ts: navLinks (Localized) + ui dictionary (~90 key,
+    termasuk label kursor, petunjuk keyboard, nama tipe kartu) + t(key, lang)
+    dengan fallback entry[lang] ?? entry.en ?? key.
+  - useLanguage.tsx: context; lang/setLang/toggle; persist
+    localStorage['portfolio-lang'] (try/catch); default 'en'; set
+    document.documentElement.lang.
+  - Data konten (profile, experience, skills, projects, creativeWorks)
+    berupa objek Localized {id, en}.
+  - PERBAIKAN: pindahkan string inline ternary lang === 'en' ? ... : ... (About,
+    Skills, heading modal) ke translations.ts agar satu sumber kebenaran.
+  - Nama proyek, merek, dan istilah teknis tidak diterjemahkan.
+
+================================================================================
+12. AKSESIBILITAS (TARGET WCAG 2.2 AA)
+================================================================================
+  FR-A11Y-01 Skip-link, landmark (header/nav/main/footer), aria-labelledby.
+  FR-A11Y-02 Kontras sesuai tabel 5.2; tidak ada teks kecil merah.
+             Audit otomatis (axe) + manual.
+  FR-A11Y-03 Fokus terlihat: outline 3px Signal Red offset 3px (outline ink 3px
+             di atas blok merah).
+  FR-A11Y-04 Keyboard: nav, filter, deck (<- / ->), kategori Creative, Index,
+             Lightbox/Modal (focus-trap + Escape + restore fokus), slider.
+  FR-A11Y-05 ARIA: aria-current (nav/tab), aria-pressed (filter),
+             role=dialog aria-modal, aria-live="polite" (deck, deskripsi
+             proyek, counter), role=slider (before/after), aria-hidden pada
+             dekorasi (marquee, huruf kinetik, marka "+").
+  FR-A11Y-06 Reduced-motion: CSS global + guard JS; semua fungsi tetap ada.
+  FR-A11Y-07 Target sentuh >= 44x44 (minimum mutlak 36px pada kontrol padat).
+  FR-A11Y-08 Teks alternatif bermakna untuk setiap gambar karya; ikon murni
+             dekoratif aria-hidden.
+  FR-A11Y-09 Zoom 200% dan reflow 320px tanpa scroll horizontal (kecuali
+             kanvas Banner yang memang horizontal dan memiliki kontrol).
+  FR-A11Y-10 Tidak ada konten berkedip > 3x/detik.
+
+Responsif
+  Breakpoint: 560 (daftar baris -> tumpuk), 820 (nav desktop/mobile, grid ->
+  1 kolom, deck di atas info), 1024 (stage Creative dua kolom), >=1440 target
+  desain. Uji: 320, 375, 390, 768, 1024, 1280, 1440, 1920.
+
+================================================================================
+13. PERFORMA DAN SEO
+================================================================================
+  NFR-01  JS awal <= 150 KB gzip; CSS <= 30 KB gzip. Code-split: Creative
+          (Lightbox, CaseStudy, experiences) dimuat saat mendekati viewport.
+  NFR-02  Font: woff2 subset latin; preload Archivo + Inter 400; mono lazy.
+  NFR-03  Gambar: WebP/AVIF + fallback; width/height atau aspect-ratio selalu
+          diset; loading="lazy" + decoding="async" kecuali LCP (potret).
+          Potret LCP: fetchpriority="high", <= 120 KB.
+  NFR-04  Anggaran gambar Creative: total <= 1.5 MB untuk 10 karya (WebP,
+          sisi terpanjang 1600px) + thumbnail Index <= 15 KB masing-masing.
+  NFR-05  Ukuran dist: v1 = dist.zip 24.34 MB / 55 entri — DITURUNKAN ke
+          <= 6 MB. Audit isi dist (kandidat penyebab: PNG legacy, varian SVG,
+          aset sumber) dan hapus yang tidak direferensikan.
+  NFR-06  Interaksi: budget scripting <= 2 ms per frame; tanpa layout thrash;
+          semua listener pointermove pasif dan di-throttle via rAF.
+  NFR-07  Tanpa permintaan jaringan eksternal (font/skrip/analitik).
+  SEO     title + meta description unik per bahasa; Open Graph + Twitter
+          card (gambar 1200x630 baru, bergaya v2); lang dinamis; robots.txt,
+          sitemap.xml (path relatif ./); JSON-LD Person (nama, jobTitle, url,
+          sameAs). Favicon baru (lihat 14).
+
+================================================================================
+14. ASET DAN PIPELINE
+================================================================================
+  public/favicon.svg        — BARU: kotak ink + titik Signal Red, "RAM"
+                              (ganti ungu #7965E8 yang di luar palet)
+  public/robots.txt, sitemap.xml
+  public/documents/cv.pdf   — target "View CV"
+  public/images/profile/    — portrait.webp (+ .png fallback) +
+                              portrait-placeholder.svg
+  public/images/creative/   — 10 karya (WebP 1600px) + thumbnail Index:
+      apparel-{thread,overprint,backline}, poster-{horizon,orbit,grid},
+      social-pulse (9 feed), banner-mark (3 banner), ui-analytics, ui-concept
+      Sumber: scripts/artwork-src/*.svg -> scripts/render-creative-png.ps1
+      (tambah langkah konversi WebP; PNG tetap sebagai fallback/loupe).
+      HAPUS: 3 file legacy (.png, 2.png, 3.png).
+  Aset baru yang diminta (bergantung keputusan Bagian 17):
+      - social-pulse-01..09 (terpisah), banner-mark-01..03 (terpisah)
+      - wireframe-* per layar UI/UX
+      - og-image.png (1200x630)
+  public/images/projects/   — banjar-custom, solusi-gim, agendaku,
+      business-compete, placeholder-web (+ varian SVG). Screenshot nyata
+      menggantikan placeholder (WebP, rasio 16:10).
+
+================================================================================
+15. KOMPONEN, HOOK, DAN DATA
+================================================================================
+Komponen aktif v2: Navbar, Hero, Marquee, About, Experience, Skills,
+  Projects, ProjectDeck, CreativeWorks, Lightbox, Contact, Footer,
+  creative/{Stage, IndexView, CategoryNav, Loupe, ChapterWipe,
+  CaseStudyModal, experiences/{PrintLab, HallwayPan, FeedSimulator,
+  WalkthroughSlider}}
+Dihapus (dead code, backlog v1): ShowcaseStage, InfiniteRail,
+  {Apparel,Poster,Social,Banner,UiUx}Exhibition, useHeroParallax, techBadges.
+Hooks: useCardDeck (dipertahankan), useInteractions (useReveal,
+  useActiveSection, useMagnetic, useLockBodyScroll, useEscape, useFocusTrap),
+  useLanguage, BARU: useTheme, useContextCursor, usePointerTilt,
+  useViewTransition.
+Data: sections, translations, profile, experience, skills, projects (4),
+  creativeWorks (10 / 5 kategori), marquee.
+Token CSS: pindahkan palet ke @theme (--color-paper/ink/signal/grey);
+  hapus midnight/electric/mint. Definisikan CSS yang dirujuk tapi belum ada
+  (.link-underline, .index-num, .scrollbar-none) atau hapus referensinya.
+
+================================================================================
+16. DEPLOY DAN QA
+================================================================================
+Deploy (tidak berubah)
+  1. npm run build
+  2. Regenerate dist.zip (System.IO.Compression, path forward-slash,
+     verifikasi entri + backslash=0)
+  3. Upload dist.zip ke
+     /home/u761552642/domains/rifqiaryomulyadi.site/public_html/
+  4. Ekstrak via File Manager (Extract) ATAU cron:
+     /bin/bash .../public_html/deploy.sh  (unzip -o dist.zip -d public_html,
+     lalu hapus zip)
+
+Smoke test: WAJIB via HTTP (npm run preview --port N + Edge headless
+  --dump-dom http://localhost:N/). file:// memblokir ES module.
+  Quirk PowerShell 5.1: "str"+expr pecah di @(); Get-Content butuh
+  -Encoding UTF8; Start-Process butuh quote manual.
+
+Checklist QA rilis
+  [ ] Lighthouse mobile+desktop memenuhi 1.3 (simpan laporan)
+  [ ] axe-core: 0 serious/critical; uji manual NVDA/VoiceOver pada deck,
+      Lightbox, Creative nav
+  [ ] Keyboard-only: seluruh fitur (nav, deck, filter, Creative, Index,
+      Lightbox, Modal, slider) dapat diselesaikan
+  [ ] Sentuh: swipe deck tidak memblokir scroll vertikal; loupe tahan+geser
+  [ ] Reduced-motion aktif: tidak ada animasi; fungsi utuh
+  [ ] EN <-> ID: tidak ada string yang tertinggal/overflow
+  [ ] Rasio warna 45:35:12:8 terverifikasi (screenshot sampling)
+  [ ] Perangkat: iPhone Safari (kecil+besar), Android Chrome kelas menengah,
+      Edge/Chrome/Firefox/Safari desktop
+  [ ] dist <= 6 MB; tidak ada 404 aset; tidak ada permintaan eksternal
+
+================================================================================
+17. KEPUTUSAN TERBUKA (OD) — PERLU JAWABAN PEMILIK
+================================================================================
+  OD-01  Contextual cursor: v1 menolak custom cursor (565b58c). Apakah versi
+         ringan (kursor sistem tetap, penanda tambahan, fine pointer saja,
+         mati di reduced-motion) diizinkan? Jika TIDAK: FR-CRE-G6 dan label
+         kursor di Projects dihapus; sisanya tidak terpengaruh.
+  OD-02  Creative tetap latar gelap (ink) atau dipindah ke paper (galeri
+         "dinding putih")? Rekomendasi: ink (karya digital kontras lebih
+         baik; ratio 35% terpenuhi).
+  OD-03  Social/Banner: boleh diekspor ulang sebagai 9 + 3 file terpisah?
+         (Menentukan Feed Simulator dan Hallway.)
+  OD-04  Apakah sumber SVG Apparel/Poster memiliki lapisan (<g>) yang bisa
+         dipisah untuk Print Lab dan parallax? Perlu audit scripts/artwork-src.
+  OD-05  Tersedia aset wireframe + catatan keputusan desain untuk UI/UX?
+  OD-06  Toggle tema gelap (FR-NAV-04) masuk lingkup v2.0 atau ditunda?
+  OD-07  Urutan section: tetap v1 (Experience sebelum Projects) — dipilih
+         untuk v2.0. Ubah bila ingin proyek lebih awal.
+
+Risiko
+  R1  Animasi wdth Archivo memicu layout shift -> mitigasi FR-HERO-06, uji CLS.
+  R2  Kursor kontekstual bertentangan dengan keputusan lama -> OD-01.
+  R3  Beban gambar Creative di mobile -> NFR-03/04, lazy + code-split.
+  R4  Interaksi pointer tidak setara di sentuh -> C-2, uji perangkat nyata.
+  R5  View Transitions belum didukung semua peramban -> fallback instan.
+
+================================================================================
+18. ROADMAP
+================================================================================
+  M1  Fondasi (P1)      Token tema + font + Navbar + Hero kinetik + Marquee +
+                        About/Experience/Skills + Contact + Footer.
+  M2  Proyek (P1)       Skin ProjectDeck v2 + filter + magnetic card + a11y.
+  M3  Creative inti(P1) Skin Stage, Chapter Wipe, Index, Magnetic Stage,
+                        Loupe, Hallway (Banner), keyboard map,
+                        focus-trap CaseStudy.
+  M4  Hardening (P1)    Performa (WebP, code-split, dist <= 6MB), SEO/OG,
+                        QA Bagian 16, hapus dead code.
+  M5  Pengayaan (P2/P3) Print Lab, UI/UX walkthrough, Feed Simulator, tema
+                        gelap, poster parallax, prototype embed.
+
+================================================================================
+19. BACKLOG v1.0 — STATUS
+================================================================================
+  [x] faux-bold font-display-bold          -> Archivo variable (selesai di v2)
+  [x] Hero tanpa badge 01                  -> DR-08
+  [x] favicon ungu di luar palet           -> Bagian 14
+  [x] 7 komponen orphan + dead code        -> dihapus (Bagian 15)
+  [x] CaseStudyModal tanpa focus-trap/Esc  -> FR-CRE-05
+  [x] Sticky slide transition kategori     -> FR-CRE-G1 (Chapter Wipe)
+  [x] Kelas CSS tak terdefinisi            -> Bagian 15
+  [x] File legacy creative (.png,2.png,3)  -> Bagian 14
+  [ ] README merujuk GANTI-GAMBAR.md       -> tulis dokumen atau hapus rujukan
+  [ ] dist.zip 24.34 MB                    -> NFR-05
+
+================================================================================
+20. RIWAYAT REVISI
+================================================================================
+  v1.0  11 Nov 2026 — Dokumen awal (living reel -> chapter filmstrip ->
+        5-chapter exhibition -> compact two-column PerspectiveStage + navbar
+        kategori murni; commit dc82897, dist.zip 55 entri / 24.34 MB).
+  v2.0  11 Nov 2026 — Redesain Swiss Editorial x Neo-Brutalist "Developer
+        Trading Cards": palet 4 warna (45:35:12:8), tipografi Archivo/Inter/
+        JetBrains Mono, hero kinetik, skin kartu proyek, blueprint
+        interaksi Creative, anggaran performa dan aksesibilitas WCAG 2.2 AA,
+        keputusan terbuka OD-01..07.
+================================================================================

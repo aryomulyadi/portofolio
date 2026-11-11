@@ -10,7 +10,7 @@ export const navLinks: NavLink[] = [
   { href: '#contact', label: { id: 'Kontak', en: 'Contact' } },
 ]
 
-type Dict = {
+export type Dict = {
   [K in keyof Record<string, unknown>]: Localized
 }
 
@@ -115,6 +115,115 @@ export const ui: Dict = {
   portraitPending: {
     id: 'Slot potret — tambahkan public/images/profile/portrait.png',
     en: 'Portrait slot — add public/images/profile/portrait.png',
+  },
+
+  /* ── v2: strings consolidated from inline ternaries (text unchanged) ── */
+  aboutQuoteBefore: {
+    id: '“Code menjadi pengalaman. Dari AI agent hingga interface pixel-perfect, saya ',
+    en: '“Code becomes experience. From AI agents to pixel-perfect interfaces, I ',
+  },
+  aboutQuoteMark: {
+    id: 'menghubungkan teknologi dengan hasil nyata',
+    en: 'connect technology to human outcomes',
+  },
+  aboutQuoteAfter: { id: '.”', en: '.”' },
+  aboutBody: {
+    id: 'Saya kerja di bidang produk web interaktif, platform berbasis AI, dan pengalaman digital. Benang merahnya: menjembatani kedalaman teknis dengan visi kreatif.',
+    en: 'I work across interactive web products, AI-driven platforms, and digital experiences. The common thread is bridging technical depth with creative vision.',
+  },
+  factFocusLabel: { id: 'Fokus', en: 'Focus' },
+  factFocusValue: {
+    id: 'Web, Platform AI, Teknologi Kreatif',
+    en: 'Web, AI Platforms, Creative Tech',
+  },
+  factBasedLabel: { id: 'Basis', en: 'Based' },
+  factCurrentlyLabel: { id: 'Saat ini', en: 'Currently' },
+  factCurrentlyValue: {
+    id: 'Creative Developer, Banjar Custom',
+    en: 'Creative Developer, Banjar Custom',
+  },
+  factStackLabel: { id: 'Stack', en: 'Stack' },
+  factStackValue: {
+    id: 'React, Next.js, Laravel, CrewAI',
+    en: 'React, Next.js, Laravel, CrewAI',
+  },
+  factOpenLabel: { id: 'Terbuka untuk', en: 'Open to' },
+  factOpenValue: {
+    id: 'Freelance, Kolaborasi, Talks',
+    en: 'Freelance, Collaboration, Talks',
+  },
+  skillsIntro: {
+    id: 'Daftar teknologi, framework, dan alur kerja utama yang digunakan dalam proyek pribadi dan klien.',
+    en: 'A curated list of core technologies, frameworks, and workflows used across personal and client projects.',
+  },
+  competencies: {
+    id: 'Kompetensi Terverifikasi',
+    en: 'Verified Competencies',
+  },
+  visitWebsite: { id: 'Kunjungi website', en: 'Visit website' },
+  avail: { id: 'Terbuka untuk freelance', en: 'Open for freelance' },
+  viewStage: { id: 'Panggung', en: 'Stage' },
+  viewIndex: { id: 'Indeks', en: 'Index' },
+  loupe: { id: 'Lup', en: 'Loupe' },
+  worksCount: { id: 'karya', en: 'works' },
+  workCount: { id: 'karya', en: 'work' },
+  enlarge: { id: 'Perbesar', en: 'Enlarge' },
+  keysHint: {
+    id: 'Tombol: ← → karya · [ ] kategori · I indeks · F layar penuh',
+    en: 'Keys: ← → work · [ ] category · I index · F fullscreen',
+  },
+  cursorZoom: { id: 'Perbesar', en: 'Zoom' },
+  cursorDrag: { id: 'Seret', en: 'Drag' },
+  cursorOpen: { id: 'Buka', en: 'Open' },
+  cursorGo: { id: 'Menuju', en: 'Go' },
+  cursorPdf: { id: 'PDF', en: 'PDF' },
+  cursorView: { id: 'Lihat', en: 'View' },
+  cursorMail: { id: 'Surel', en: 'Mail' },
+  fullscreen: { id: 'Layar Penuh', en: 'Fullscreen' },
+  openCaseStudy: { id: 'Buka Studi Kasus', en: 'Open Case Study' },
+  caseStudyKicker: {
+    id: 'Studi Kasus Proyek Interaktif',
+    en: 'Interactive Project Case Study',
+  },
+  closeCaseStudy: { id: 'Tutup studi kasus', en: 'Close case study' },
+  csProblemH: {
+    id: 'Tantangan Utama & Tujuan',
+    en: 'Core Challenge & Objective',
+  },
+  csResearchH: {
+    id: 'Riset Pengguna & Arsitektur',
+    en: 'User & Architectural Research',
+  },
+  csWireframesH: {
+    id: 'Arsitektur Tata Letak & Kerangka Garis',
+    en: 'Layout Architecture & Wireframes',
+  },
+  csProcessH: { id: 'Sistem Desain & Iterasi', en: 'Iterative Design System' },
+  csInterfaceH: { id: 'Keluaran Desain Final', en: 'Final Design Output' },
+  csPrototypeH: {
+    id: 'Simulasi Prototipe Interaktif',
+    en: 'Interactive Prototype Simulation',
+  },
+  csResearchFallback: {
+    id: 'Mengevaluasi KPI kuantitatif utama dan batas kepadatan data untuk meminimalkan beban kognitif.',
+    en: 'Evaluated key quantitative KPIs and data-density thresholds to minimize cognitive load.',
+  },
+  csWireFallback: {
+    id: 'Kisi tata letak responsif modular dengan zona KPI khusus dan grafik primer.',
+    en: 'Modular responsive layout grid with dedicated KPI zones and primary charts.',
+  },
+  csPrototypeNote: {
+    id: 'Jelajahi kode sumber lengkap dan repositori demonstrasi di GitHub.',
+    en: 'Explore full source code and live demonstrational repository on GitHub.',
+  },
+  openPrototype: { id: 'Buka Prototipe', en: 'Open Prototype' },
+  seoTitle: {
+    id: 'Rifqi Aryo Mulyadi — Portofolio Creative Developer',
+    en: 'Rifqi Aryo Mulyadi — Creative Developer Portfolio',
+  },
+  seoDesc: {
+    id: 'Portofolio Rifqi Aryo Mulyadi — pengembangan perangkat lunak dan web, desain digital, dan produksi kreatif.',
+    en: 'Portfolio of Rifqi Aryo Mulyadi — software and web development, digital design, and creative production.',
   },
 }
 

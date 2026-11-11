@@ -23,7 +23,7 @@ export const projects: Project[] = [
       en: 'Full-stack development, UI/UX design, and operational system architecture.',
       id: 'Pengembangan full-stack, desain UI/UX, dan arsitektur sistem operasional.',
     },
-    image: './images/projects/banjar-custom.png',
+    image: './images/projects/banjar-custom.webp',
     githubUrl: 'https://github.com/aryomulyadi/banjarcustome',
     liveUrl: 'https://banjarcustom.com',
     status: {
@@ -53,7 +53,7 @@ export const projects: Project[] = [
       en: 'Full-stack development from concept to deployment on Vercel.',
       id: 'Pengembangan full-stack dari konsep hingga deployment di Vercel.',
     },
-    image: './images/projects/solusi-gim.png',
+    image: './images/projects/solusi-gim.webp',
     githubUrl: 'https://github.com/aryomulyadi/solusi-gim-landing-page',
     liveUrl: 'https://solusigimx.vercel.app/',
     status: {
@@ -83,7 +83,7 @@ export const projects: Project[] = [
       en: 'End-to-end development including database design, authentication, and UI.',
       id: 'Pengembangan ujung-ke-ujung termasuk desain database, autentikasi, dan UI.',
     },
-    image: './images/projects/agendaku.png',
+    image: './images/projects/agendaku.webp',
     githubUrl: 'https://github.com/aryomulyadi/AgendaKu',
     liveUrl: 'https://agendaku.vercel.app',
     status: {
@@ -113,7 +113,7 @@ export const projects: Project[] = [
       en: 'Architecture design, agent pipeline, LLM integration, and full-stack implementation.',
       id: 'Desain arsitektur, pipeline agen, integrasi LLM, dan implementasi full-stack.',
     },
-    image: './images/projects/business-compete.png',
+    image: './images/projects/business-compete.webp',
     githubUrl: 'https://github.com/aryomulyadi/business_compete',
     liveUrl: null,
     status: {

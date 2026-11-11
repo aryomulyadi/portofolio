@@ -97,53 +97,6 @@ export function useMagnetic<T extends HTMLElement>(strength = 0.22) {
   return ref
 }
 
-/** Subtle mouse parallax for hero layers (disabled for reduced motion / touch). */
-export function useHeroParallax<T extends HTMLElement>() {
-  const ref = useRef<T>(null)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    if (!window.matchMedia('(pointer: fine)').matches) return
-
-    const layers = el.querySelectorAll<HTMLElement>('[data-depth]')
-    if (layers.length === 0) return
-
-    let frame = 0
-
-    const onMove = (event: PointerEvent) => {
-      const rect = el.getBoundingClientRect()
-      const nx = (event.clientX - rect.left) / rect.width - 0.5
-      const ny = (event.clientY - rect.top) / rect.height - 0.5
-      cancelAnimationFrame(frame)
-      frame = requestAnimationFrame(() => {
-        layers.forEach((layer) => {
-          const depth = Number(layer.dataset.depth ?? 0)
-          layer.style.transform = `translate3d(${nx * depth * 24}px, ${ny * depth * 24}px, 0)`
-        })
-      })
-    }
-
-    const onLeave = () => {
-      cancelAnimationFrame(frame)
-      layers.forEach((layer) => {
-        layer.style.transform = 'translate3d(0, 0, 0)'
-      })
-    }
-
-    el.addEventListener('pointermove', onMove)
-    el.addEventListener('pointerleave', onLeave)
-    return () => {
-      cancelAnimationFrame(frame)
-      el.removeEventListener('pointermove', onMove)
-      el.removeEventListener('pointerleave', onLeave)
-    }
-  }, [])
-
-  return ref
-}
-
 export function useLockBodyScroll(locked: boolean) {
   useEffect(() => {
     if (!locked) return

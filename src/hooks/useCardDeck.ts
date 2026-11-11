@@ -241,3 +241,5 @@ export function useCardDeck(projects: Project[]) {
     total: projects.length,
   }
 }
+
+export type DeckState = ReturnType<typeof useCardDeck>

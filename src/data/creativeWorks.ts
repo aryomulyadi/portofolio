@@ -16,7 +16,8 @@ export const creativeWorks: CreativeWork[] = [
     title: { id: 'Jersey', en: 'Jersey' },
     category: 'apparel',
     categoryLabel: { id: 'Apparel', en: 'Apparel' },
-    image: './images/creative/apparel-thread.png',
+    image: './images/creative/apparel-thread.webp',
+    thumb: './images/creative/thumbs/apparel-thread.webp',
     aspect: '16/9',
     caption: {
       id: 'Merancang desain apparel jersey dengan detail fully vector',
@@ -38,7 +39,8 @@ export const creativeWorks: CreativeWork[] = [
     title: { id: 'Simulated Model', en: 'Simulated Model' },
     category: 'apparel',
     categoryLabel: { id: 'Apparel', en: 'Apparel' },
-    image: './images/creative/apparel-overprint.png',
+    image: './images/creative/apparel-overprint.webp',
+    thumb: './images/creative/thumbs/apparel-overprint.webp',
     aspect: '4/5',
     caption: {
       id: 'Simulasi untuk mockup realistis model raglan.',
@@ -60,7 +62,8 @@ export const creativeWorks: CreativeWork[] = [
     title: { id: 'Simulated Model', en: 'Simulated Model' },
     category: 'apparel',
     categoryLabel: { id: 'Apparel', en: 'Apparel' },
-    image: './images/creative/apparel-backline.png',
+    image: './images/creative/apparel-backline.webp',
+    thumb: './images/creative/thumbs/apparel-backline.webp',
     aspect: '4/5',
     caption: {
       id: 'Simulasi untuk mockup realistis model reguler.',
@@ -84,7 +87,8 @@ export const creativeWorks: CreativeWork[] = [
     title: { id: 'Digital Poster Printing', en: 'Digital Poster Printing' },
     category: 'digital-poster',
     categoryLabel: { id: 'Poster digital', en: 'Digital poster' },
-    image: './images/creative/poster-horizon.png',
+    image: './images/creative/poster-horizon.webp',
+    thumb: './images/creative/thumbs/poster-horizon.webp',
     aspect: '16/9',
     caption: {
       id: 'Poster digital untuk iklan dengan sentuhan menarik.',
@@ -106,7 +110,8 @@ export const creativeWorks: CreativeWork[] = [
     title: { id: 'Digital Poster Printing #2', en: 'Digital Poster Printing #2' },
     category: 'digital-poster',
     categoryLabel: { id: 'Poster digital', en: 'Digital poster' },
-    image: './images/creative/poster-orbit.png',
+    image: './images/creative/poster-orbit.webp',
+    thumb: './images/creative/thumbs/poster-orbit.webp',
     aspect: '16/9',
     caption: {
       id: 'Poster digital untuk iklan dengan sentuhan menarik.',
@@ -128,7 +133,8 @@ export const creativeWorks: CreativeWork[] = [
     title: { id: 'Digital Magazine Design', en: 'Digital Magazine Design' },
     category: 'digital-poster',
     categoryLabel: { id: 'Poster digital', en: 'Digital poster' },
-    image: './images/creative/poster-grid.png',
+    image: './images/creative/poster-grid.webp',
+    thumb: './images/creative/thumbs/poster-grid.webp',
     aspect: '5/4',
     caption: {
       id: 'portofolio pribadi untuk desain majalah digital.',
@@ -152,7 +158,8 @@ export const creativeWorks: CreativeWork[] = [
     title: { id: 'Feed Designs', en: 'Feed Designs' },
     category: 'social',
     categoryLabel: { id: 'Media sosial', en: 'Social media' },
-    image: './images/creative/social-pulse.png',
+    image: './images/creative/social-pulse.webp',
+    thumb: './images/creative/thumbs/social-pulse.webp',
     aspect: '4/5',
     caption: {
       id: 'Materi desain feed untuk kanal sosial resmi @nanang.bag.',
@@ -177,7 +184,8 @@ export const creativeWorks: CreativeWork[] = [
     title: { id: 'Exhibition Banner', en: 'Exhibition Banner' },
     category: 'banner',
     categoryLabel: { id: 'Banner', en: 'Banner' },
-    image: './images/creative/banner-mark.png',
+    image: './images/creative/banner-mark.webp',
+    thumb: './images/creative/thumbs/banner-mark.webp',
     aspect: '4/5',
     caption: {
       id: 'Banner professional untuk acara instansi dan komunitas.',
@@ -188,6 +196,80 @@ export const creativeWorks: CreativeWork[] = [
     result: {
       id: 'Lambang final yang stabil di 16px dan tetap tegas saat diperbesar pada signage pameran.',
       en: 'A final mark that holds up at 16px and stays bold when scaled up on exhibition signage.',
+    },
+  },
+
+  // PAGE 05 — UI/UX
+  {
+    id: 'ui-concept',
+    title: { id: 'Fintech Analytics Dashboard', en: 'Fintech Analytics Dashboard' },
+    category: 'ui',
+    categoryLabel: { id: 'UI/UX', en: 'UI/UX' },
+    image: './images/creative/ui-concept.webp',
+    thumb: './images/creative/thumbs/ui-concept.webp',
+    aspect: '16/9',
+    caption: {
+      id: 'Konsep antarmuka dashboard dengan data visual real-time.',
+      en: 'Dashboard interface concept with real-time data visualization.',
+    },
+    year: '2026',
+    software: ['Figma', 'React', 'Tailwind CSS'],
+    prototypeUrl: 'https://github.com/aryomulyadi/portofolio',
+    problem: {
+      id: 'Pengguna merasa kewalahan dengan tampilan grafik keuangan konvensional yang padat dan lambat dipahami.',
+      en: 'Users were overwhelmed by dense, slow-to-digest conventional financial charts.',
+    },
+    research: {
+      id: 'Wawancara dengan 8 pengambil keputusan finansial menunjukkan kebutuhan akan angka kunci dalam 3 detik pertama.',
+      en: 'Interviews with 8 financial decision-makers revealed a need for key figures within the first 3 seconds.',
+    },
+    wireframes: {
+      id: 'Arsitektur informasi modular 3 kolom dengan kartu KPI di bagian atas dan grafik tren utama di tengah.',
+      en: '3-column modular information architecture with top KPI cards and central primary trend charts.',
+    },
+    process: {
+      id: 'Pemetaan hierarki data dulu — metrik utama selalu di atas, grafik sekunder menyusul. Mode gelap sebagai baseline agar aksen data menonjol.',
+      en: 'Mapped data hierarchy first — key metrics always on top, secondary charts below. Dark mode as baseline so data accents pop.',
+    },
+    result: {
+      id: 'Konsep dashboard yang bisa dipindai dalam lima detik: angka dulu, cerita kemudian.',
+      en: 'A dashboard concept scannable in five seconds: numbers first, story second.',
+    },
+  },
+  {
+    id: 'analytics-concept',
+    title: { id: 'Data Studio Control Center', en: 'Data Studio Control Center' },
+    category: 'ui',
+    categoryLabel: { id: 'UI/UX', en: 'UI/UX' },
+    image: './images/creative/ui-analytics.webp',
+    thumb: './images/creative/thumbs/ui-analytics.webp',
+    aspect: '16/9',
+    caption: {
+      id: 'Konsep dasbor analitik dengan fokus pada hierarki metrik tim.',
+      en: 'Analytics dashboard concept focused on team metric hierarchy.',
+    },
+    year: '2026',
+    software: ['Figma', 'TypeScript', 'Recharts'],
+    prototypeUrl: 'https://github.com/aryomulyadi/portofolio',
+    problem: {
+      id: 'Penyajian data lintas kanal tidak terpusat sehingga pemantauan kampanye menjadi tidak efisien.',
+      en: 'Decentralized cross-channel data made campaign monitoring inefficient.',
+    },
+    research: {
+      id: 'Audit UX pada 5 alat analitik populer menemukan kurangnya kontras visual pada mode pemantauan layar TV.',
+      en: 'UX audit across 5 popular analytics tools identified poor visual contrast in TV-screen monitoring modes.',
+    },
+    wireframes: {
+      id: 'Grid adaptif dengan kontras tinggi, widget donut chart khusus, dan bar chart yang konsisten.',
+      en: 'Adaptive high-contrast grid featuring custom donut chart widgets and consistent bar charts.',
+    },
+    process: {
+      id: 'Empat KPI dipetakan ke satu layar: angka besar dulu, grafik 30 hari menyusul, komposisi trafik di panel kanan.',
+      en: 'Four KPIs mapped to one screen: big numbers first, 30-day chart second, traffic mix in the right panel.',
+    },
+    result: {
+      id: 'Layar yang bisa dipindai dari jarak satu meter — penting untuk mode TV pameran tim.',
+      en: 'A screen scannable from a meter away — built for team exhibition TV mode.',
     },
   },
 ]

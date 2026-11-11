@@ -7,23 +7,23 @@ export function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="bg-midnight-deep py-12 text-paper border-t border-line-dark/60">
-      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 md:flex-row md:items-center md:justify-between md:px-8">
+    <footer className="bg-ink text-paper">
+      <div className="shell flex flex-col gap-6 py-12 md:flex-row md:items-center md:justify-between">
         <div>
-          <p className="font-display text-sm font-bold text-paper">
-            <span className="text-mint" aria-hidden>
-              ✦
-            </span>{' '}
+          <p className="font-display text-sm font-black uppercase tracking-tight text-paper">
+            <span className="mr-1.5 inline-block h-2.5 w-2.5 bg-signal align-middle" aria-hidden />
             {profile.name}
           </p>
-          <p className="mt-1.5 font-body text-xs text-paper/45">{t('footerNote', lang)}</p>
+          <p className="mono mt-2.5 text-grey">{t('footerNote', lang)}</p>
         </div>
-        <div className="flex items-center gap-6">
+
+        <div className="flex flex-wrap items-center gap-6">
           <a
             href={profile.links.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="link-underline font-body text-xs text-paper/60 hover:text-mint"
+            className="mono link-underline text-grey hover:text-paper"
+            data-cur="Open"
           >
             GitHub
           </a>
@@ -31,11 +31,12 @@ export function Footer() {
             href={profile.links.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="link-underline font-body text-xs text-paper/60 hover:text-mint"
+            className="mono link-underline text-grey hover:text-paper"
+            data-cur="Open"
           >
             LinkedIn
           </a>
-          <p className="font-body text-xs text-paper/35 tabular-nums">© {year}</p>
+          <p className="mono text-grey tabular-nums">© {year}</p>
         </div>
       </div>
     </footer>

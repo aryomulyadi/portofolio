@@ -64,6 +64,8 @@ export interface CreativeWork {
   category: string
   categoryLabel: Localized
   image: string
+  /** Small Index-view thumbnail (NFR-04 ≤15KB). Falls back to `image`. */
+  thumb?: string | null
   /** Native presentation ratio — tiles and stage honor it (no crop). */
   aspect: '16/9' | '4/5' | '5/4'
   caption: Localized | null

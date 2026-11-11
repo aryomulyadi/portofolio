@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components -- provider + hook belong together */
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
+import { flushSync } from 'react-dom'
 import type { Lang } from '../types'
 
 const STORAGE_KEY = 'portfolio-lang'
@@ -24,6 +25,17 @@ function readStoredLang(): Lang {
   return 'en'
 }
 
+/** QA: language switch uses View Transition 300ms crossfade when available. */
+function withViewTransition(update: () => void) {
+  const doc = document as Document & { startViewTransition?: (cb: () => void) => unknown }
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (typeof doc.startViewTransition === 'function' && !reduced) {
+    doc.startViewTransition(() => flushSync(update))
+  } else {
+    update()
+  }
+}
+
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>(readStoredLang)
 
@@ -32,25 +44,27 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, [lang])
 
   const setLang = useCallback((next: Lang) => {
-    setLangState(next)
-    try {
-      window.localStorage.setItem(STORAGE_KEY, next)
-    } catch {
-      // ignore storage failures
-    }
-  }, [])
-
-  const toggle = useCallback(() => {
-    setLangState((prev) => {
-      const next: Lang = prev === 'en' ? 'id' : 'en'
+    withViewTransition(() => {
+      setLangState(next)
       try {
         window.localStorage.setItem(STORAGE_KEY, next)
       } catch {
         // ignore storage failures
       }
-      return next
     })
   }, [])
+
+  const toggle = useCallback(() => {
+    const next: Lang = lang === 'en' ? 'id' : 'en'
+    withViewTransition(() => {
+      setLangState(next)
+      try {
+        window.localStorage.setItem(STORAGE_KEY, next)
+      } catch {
+        // ignore storage failures
+      }
+    })
+  }, [lang])
 
   return (
     <LanguageContext.Provider value={{ lang, setLang, toggle }}>

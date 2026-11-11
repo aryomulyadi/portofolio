@@ -3,7 +3,6 @@ import { Menu, X, Languages } from 'lucide-react'
 import { useLanguage } from '../hooks/useLanguage'
 import { useActiveSection } from '../hooks/useInteractions'
 import { navLinks, t } from '../data/translations'
-import { profile } from '../data/profile'
 import { getVisibleSectionIds } from '../data/sections'
 import type { SectionId } from '../types'
 
@@ -44,23 +43,22 @@ export function Navbar() {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-line-dark/60 bg-midnight/92 text-paper backdrop-blur-md">
+      <header className="sticky top-0 z-[60] h-[60px] border-b border-ink bg-paper text-ink">
         <nav
           aria-label="Primary"
-          className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 md:px-8"
+          className="shell flex h-full items-center justify-between gap-4"
         >
           <a
             href="#home"
-            className="font-display text-sm font-bold tracking-tight text-paper transition-colors hover:text-electric"
+            aria-label="Rifqi Aryo Mulyadi, home"
+            className="font-display text-[1.2rem] font-black tracking-tight text-ink no-underline"
+            style={{ fontStretch: '125%' }}
             onClick={() => setOpen(false)}
           >
-            <span className="text-mint" aria-hidden>
-              ✦
-            </span>{' '}
-            {profile.name}
+            RAM<i className="not-italic text-signal">.</i>
           </a>
 
-          <div className="hidden items-center gap-1 lg:flex">
+          <div className="hidden items-center gap-[clamp(14px,2.4vw,34px)] min-[821px]:flex">
             {links.map((link) => {
               const id = link.href.slice(1)
               const isActive = active === id
@@ -69,11 +67,7 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   aria-current={isActive ? 'true' : undefined}
-                  className={`rounded-full px-3.5 py-1.5 text-[0.8rem] font-medium transition-colors ${
-                    isActive
-                      ? 'bg-electric text-midnight font-bold'
-                      : 'text-paper/70 hover:bg-paper/10 hover:text-paper'
-                  }`}
+                  className="mono relative py-1.5 text-ink no-underline after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-left after:scale-x-0 after:bg-signal after:transition-transform after:duration-300 hover:after:scale-x-100 aria-current:after:scale-x-100"
                 >
                   {link.label[lang]}
                 </a>
@@ -81,71 +75,63 @@ export function Navbar() {
             })}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <button
               type="button"
               onClick={toggle}
-              className="inline-flex h-9 items-center gap-1.5 rounded-full border border-electric/30 px-3 text-xs font-semibold text-electric transition-colors hover:border-electric hover:bg-electric/10"
+              className="mono inline-flex min-h-9 items-center gap-1.5 border border-ink px-3 py-1.5 text-ink transition-colors hover:bg-ink hover:text-paper"
               aria-label={lang === 'en' ? t('switchToId', lang) : t('switchToEn', lang)}
             >
               <Languages aria-hidden size={14} />
               <span className="tracking-wide">{lang.toUpperCase()}</span>
-              <span aria-hidden className="text-paper/40">
+              <span aria-hidden className="opacity-40">
                 /
               </span>
-              <span className="text-paper/40">{otherLang.toUpperCase()}</span>
+              <span className="opacity-40">{otherLang.toUpperCase()}</span>
             </button>
 
             <button
               ref={menuButtonRef}
               type="button"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-paper/25 text-paper transition-colors hover:border-paper lg:hidden"
+              className="mono inline-flex min-h-9 items-center border border-ink px-3 py-1.5 text-ink transition-colors hover:bg-ink hover:text-paper min-[821px]:hidden"
               aria-expanded={open}
               aria-controls="mobile-menu"
               aria-label={open ? t('menuClose', lang) : t('menuOpen', lang)}
               onClick={() => setOpen((v) => !v)}
             >
-              {open ? <X size={18} aria-hidden /> : <Menu size={18} aria-hidden />}
+              {open ? <X size={16} aria-hidden /> : <Menu size={16} aria-hidden />}
             </button>
           </div>
         </nav>
       </header>
 
       {open && (
-        <>
-          <div
-            className="fixed inset-0 top-16 z-40 bg-midnight-deep/70 backdrop-blur-sm lg:hidden"
-            aria-hidden
-            onClick={() => setOpen(false)}
-          />
-          <div
-            id="mobile-menu"
-            ref={panelRef}
-            tabIndex={-1}
-            className="fixed inset-x-0 top-16 z-40 max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t border-line-dark bg-midnight px-5 pt-6 pb-10 text-paper outline-none lg:hidden"
-          >
-            <ul className="flex flex-col gap-1">
-              {links.map((link) => {
-                const id = link.href.slice(1)
-                const isActive = active === id
-                return (
-                  <li key={link.href}>
-                    <a
-                      href={link.href}
-                      aria-current={isActive ? 'true' : undefined}
-                      onClick={() => setOpen(false)}
-                      className={`flex items-center justify-between border-b border-line-dark py-4 font-display text-lg font-medium transition-colors ${
-                        isActive ? 'text-electric font-bold' : 'text-paper hover:text-electric'
-                      }`}
-                    >
-                      {link.label[lang]}
-                    </a>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-        </>
+        <div
+          id="mobile-menu"
+          ref={panelRef}
+          tabIndex={-1}
+          className="fixed inset-x-0 bottom-0 top-[60px] z-50 overflow-y-auto overscroll-contain bg-paper px-[clamp(16px,3.2vw,44px)] pt-6 pb-10 text-ink outline-none min-[821px]:hidden"
+        >
+          <ul className="flex flex-col">
+            {links.map((link) => {
+              const id = link.href.slice(1)
+              const isActive = active === id
+              return (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    aria-current={isActive ? 'true' : undefined}
+                    onClick={() => setOpen(false)}
+                    className="block border-b border-ink py-2.5 font-display text-[clamp(1.8rem,9vw,2.4rem)] font-black uppercase leading-[1.3] tracking-tight text-ink no-underline transition-colors hover:text-signal"
+                    style={{ fontStretch: '112%' }}
+                  >
+                    {link.label[lang]}
+                  </a>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
       )}
     </>
   )

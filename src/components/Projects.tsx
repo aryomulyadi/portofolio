@@ -1,19 +1,16 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { useLanguage } from '../hooks/useLanguage'
 import { ProjectDeck } from './ProjectDeck'
+import { useCardDeck } from '../hooks/useCardDeck'
 import { t } from '../data/translations'
 import { projects } from '../data/projects'
-import type { Project } from '../types'
 
 export function Projects() {
   const { lang } = useLanguage()
   const [filter, setFilter] = useState<string>('all')
-  const [activeId, setActiveId] = useState<string>(projects[0]?.id ?? '')
   const sectionRef = useRef<HTMLElement>(null)
-
-  const handleActiveChange = useCallback((project: Project) => {
-    setActiveId(project.id)
-  }, [])
 
   const categories = useMemo(() => {
     const keys = new Set(projects.map((p) => p.categoryKey))
@@ -61,17 +58,22 @@ export function Projects() {
     () => (filter === 'all' ? projects : projects.filter((p) => p.categoryKey === filter)),
     [filter],
   )
-  const visibleKey = visible.map((p) => p.id).join('|')
 
-  const active = projects.find((p) => p.id === activeId) ?? visible[0] ?? null
-
-  // When the filtered set changes, reset the description to the first visible card
-  useEffect(() => {
-    if (visible.length > 0 && !visible.some((p) => p.id === activeId)) {
-      setActiveId(visible[0].id)
+  /* FR-PRJ-01: filter change via View Transitions API, instant fallback (R5) */
+  const applyFilter = (key: string) => {
+    const doc = document as Document & { startViewTransition?: (cb: () => void) => unknown }
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (typeof doc.startViewTransition === 'function' && !reduced) {
+      doc.startViewTransition(() => {
+        flushSync(() => setFilter(key))
+      })
+    } else {
+      setFilter(key)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visibleKey])
+  }
+
+  const deck = useCardDeck(visible)
+  const active = deck.activeProject ?? null
 
   if (projects.length === 0) return null
 
@@ -80,37 +82,33 @@ export function Projects() {
       id="projects"
       ref={sectionRef}
       aria-labelledby="projects-title"
-      className="border-b border-line-dark bg-midnight py-20 text-paper md:py-28"
+      className="sec-pad border-b border-ink bg-ink text-paper"
     >
-      <div className="mx-auto max-w-6xl px-5 md:px-8">
-        <header className="reveal mb-10 md:mb-14">
-          <div className="mb-4 flex items-baseline gap-4">
-            <span className="index-num font-display-bold text-sm text-mint">05</span>
-            <p className="font-body text-[0.7rem] font-bold uppercase tracking-[0.22em] text-paper/45">
-              {t('projectsLabel', lang)}
-            </p>
+      <div className="shell">
+        <div className="g">
+          <div className="lab mono text-grey">
+            <b className="lab-num">04</b> / <span>{t('projectsLabel', lang)}</span>
           </div>
-          <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-            <h2
-              id="projects-title"
-              className="max-w-2xl font-display-bold text-[clamp(1.9rem,4.5vw,3.1rem)] font-medium leading-[1.08] tracking-tight text-paper text-balance"
-            >
+
+          <div className="bd">
+            <h2 id="projects-title" className="disp-h2 reveal text-paper">
               {t('projectsTitle', lang)}
             </h2>
+
             {showFilters && (
               <div
-                className="flex flex-wrap gap-2"
+                className="-mt-[clamp(4px,1vw,16px)] mb-[clamp(24px,4vw,48px)] flex flex-wrap gap-2"
                 role="group"
                 aria-label={lang === 'en' ? 'Filter projects' : 'Filter proyek'}
               >
                 <button
                   type="button"
-                  onClick={() => setFilter('all')}
+                  onClick={() => applyFilter('all')}
                   aria-pressed={filter === 'all'}
-                  className={`rounded-full px-4 py-2 text-xs font-bold transition-colors ${
+                  className={`mono min-h-10 border px-3.5 py-2 transition-colors ${
                     filter === 'all'
-                      ? 'bg-mint text-midnight'
-                      : 'border border-paper/25 text-paper/70 hover:border-paper hover:text-paper'
+                      ? 'border-paper bg-paper text-ink'
+                      : 'border-grey text-paper hover:border-signal hover:text-signal'
                   }`}
                 >
                   {t('filterAll', lang)}
@@ -123,12 +121,12 @@ export function Projects() {
                     <button
                       key={key}
                       type="button"
-                      onClick={() => setFilter(key)}
+                      onClick={() => applyFilter(key)}
                       aria-pressed={activeFilter}
-                      className={`rounded-full px-4 py-2 text-xs font-bold transition-colors ${
+                      className={`mono min-h-10 border px-3.5 py-2 transition-colors ${
                         activeFilter
-                          ? 'bg-mint text-midnight'
-                          : 'border border-paper/25 text-paper/70 hover:border-paper hover:text-paper'
+                          ? 'border-paper bg-paper text-ink'
+                          : 'border-grey text-paper hover:border-signal hover:text-signal'
                       }`}
                     >
                       {label}
@@ -137,49 +135,81 @@ export function Projects() {
                 })}
               </div>
             )}
-          </div>
-          <div className="rule-electric mt-8" />
-        </header>
 
-        {visible.length === 0 || !active ? (
-          <p className="reveal text-sm text-paper/50">{t('emptyProjects', lang)}</p>
-        ) : (
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-start lg:gap-14">
-            <div className="order-2 lg:order-1">
-              <div
-                key={active.id}
-                className="desc-swap"
-                aria-live="polite"
-              >
-                <p className="font-body text-[0.7rem] font-bold uppercase tracking-[0.22em] text-mint">
-                  {t('descriptionLabel', lang)}
-                </p>
-                <h3 className="mt-3 font-display-bold text-[clamp(1.4rem,2.5vw,1.9rem)] font-bold tracking-tight text-paper text-balance">
-                  {active.title}
-                </h3>
-                <p className="mt-4 text-[0.95rem] leading-relaxed text-paper/80 text-balance">
-                  {active.summary[lang]}
-                </p>
-                {active.description && (
-                  <p className="mt-4 text-sm leading-relaxed text-paper/60 text-balance">
-                    {active.description[lang]}
-                  </p>
-                )}
-                <div className="mt-6 h-px w-16 bg-electric/50" aria-hidden />
+            {visible.length === 0 || !active ? (
+              <p className="reveal text-sm text-grey">{t('emptyProjects', lang)}</p>
+            ) : (
+              <div className="grid items-center gap-[clamp(24px,5vw,72px)] lg:grid-cols-2" onKeyDown={deck.onKeyDown}>
+                {/* Info panel — outline number, title, description, controls */}
+                <div className="order-2 lg:order-1">
+                  <div key={active.id} className="desc-swap" aria-live="polite">
+                    <p className="no-outline" aria-hidden="true">
+                      {String((catalogIndex[active.id] ?? 0) + 1).padStart(3, '0')}
+                    </p>
+                    <p className="mono mt-5 text-grey">{t('descriptionLabel', lang)}</p>
+                    <h3 className="mt-3 font-display text-[clamp(1.8rem,4.2vw,3.4rem)] font-black uppercase leading-none tracking-tight text-paper text-balance" style={{ fontStretch: '108%' }}>
+                      {active.title}
+                    </h3>
+                    <p className="mt-4 max-w-[46ch] text-[0.98rem] leading-relaxed text-grey text-balance">
+                      {active.summary[lang]}
+                    </p>
+                    {active.description && (
+                      <p className="mt-3 max-w-[46ch] text-sm leading-relaxed text-grey/85 text-balance">
+                        {active.description[lang]}
+                      </p>
+                    )}
+
+                    <div className="mt-7 flex flex-wrap items-center gap-2.5">
+                      <button
+                        type="button"
+                        onClick={deck.goPrev}
+                        disabled={deck.total < 2 || deck.isAnimating}
+                        aria-label={t('deckPrev', lang)}
+                        className="deck-btn"
+                      >
+                        <ArrowLeft size={15} aria-hidden />
+                        {lang === 'en' ? 'Prev' : 'Sebelumnya'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={deck.goNext}
+                        disabled={deck.total < 2 || deck.isAnimating}
+                        aria-label={t('deckNext', lang)}
+                        className="deck-btn"
+                      >
+                        {lang === 'en' ? 'Next' : 'Berikutnya'}
+                        <ArrowRight size={15} aria-hidden />
+                      </button>
+                      <span
+                        className="mono ml-1 text-grey"
+                        aria-live="polite"
+                      >
+                        {t('deckPosition', lang)
+                          .replace('{n}', String(deck.activeIndex + 1).padStart(2, '0'))
+                          .replace('{total}', String(deck.total).padStart(2, '0'))}
+                      </span>
+                    </div>
+
+                    {deck.total > 1 && !deck.hintDismissed && (
+                      <p className="deck-hint mono mt-4 text-grey">{t('deckHint', lang)}</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Card deck */}
+                <div className="order-1 lg:order-2">
+                  <ProjectDeck
+                    deck={deck}
+                    projects={visible}
+                    lang={lang}
+                    catalogIndex={catalogIndex}
+                    catalogTotal={projects.length}
+                  />
+                </div>
               </div>
-            </div>
-
-            <div className="order-1 reveal lg:order-2">
-              <ProjectDeck
-                projects={visible}
-                lang={lang}
-                catalogIndex={catalogIndex}
-                catalogTotal={projects.length}
-                onActiveChange={handleActiveChange}
-              />
-            </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </section>
   )

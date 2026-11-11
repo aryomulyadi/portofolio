@@ -1,23 +1,19 @@
+import { Fragment } from 'react'
 import { marqueeItems } from '../data/marquee'
 
 export function Marquee() {
+  const sequence = [...marqueeItems, ...marqueeItems]
+
   return (
-    <div
-      className="overflow-hidden border-y border-line-dark bg-midnight-deep py-4"
-      aria-hidden
-    >
-      <div className="marquee-track gap-12 pr-12">
-        {marqueeItems.concat(marqueeItems).map((item, index) => (
-          <span
-            key={`${item}-${index}`}
-            className="flex shrink-0 items-center gap-12 font-display text-sm font-medium tracking-[0.18em] uppercase text-electric/80"
-          >
-            {item}
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-mint" />
-          </span>
+    <div className="overflow-hidden border-b border-ink bg-ink text-paper" aria-hidden>
+      <div className="marquee-track">
+        {sequence.map((item, index) => (
+          <Fragment key={`${item}-${index}`}>
+            <span>{item}</span>
+            <span className="text-signal">/</span>
+          </Fragment>
         ))}
       </div>
     </div>
   )
 }
-

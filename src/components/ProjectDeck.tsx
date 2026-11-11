@@ -1,151 +1,178 @@
-import { useEffect, useMemo } from 'react'
-import type { CSSProperties } from 'react'
-import { ArrowLeft, ArrowRight, ExternalLink, Github } from 'lucide-react'
-import type { Lang, Project } from '../types'
+import type { CSSProperties, PointerEvent as ReactPointerEvent } from 'react'
+import { ExternalLink, Github } from 'lucide-react'
 import { t } from '../data/translations'
-import { useCardDeck } from '../hooks/useCardDeck'
-
-function cardNumber(index: number, total: number) {
-  const n = String(index + 1).padStart(3, '0')
-  const d = String(total).padStart(3, '0')
-  return `${n}/${d}`
-}
+import type { DeckState } from '../hooks/useCardDeck'
+import type { Project } from '../types'
 
 interface ProjectDeckProps {
+  deck: DeckState
   projects: Project[]
-  lang: Lang
-  /** Stable index in the unfiltered catalog, for card numbers like 001/004 */
+  lang: 'id' | 'en'
   catalogIndex: Record<string, number>
   catalogTotal: number
-  /** Fires when the front card changes (filter reset, swipe, buttons) */
-  onActiveChange?: (project: Project) => void
 }
 
-export function ProjectDeck({ projects, lang, catalogIndex, catalogTotal, onActiveChange }: ProjectDeckProps) {
-  const deck = useCardDeck(projects)
-  const { order, drag, exitDir, activeProject, activeIndex, total } = deck
+const OPACITY = [1, 0.95, 0.8, 0.65] as const
 
-  const byId = useMemo(() => {
-    const map = new Map<string, Project>()
-    projects.forEach((p) => map.set(p.id, p))
-    return map
-  }, [projects])
+function clearTilt(el: HTMLElement) {
+  el.style.setProperty('--tx', '0px')
+  el.style.setProperty('--ty', '0px')
+  el.style.setProperty('--rx', '0deg')
+  el.style.setProperty('--ry', '0deg')
+}
 
-  // Keep parent description panel in sync with the front card
-  useEffect(() => {
-    if (activeProject) onActiveChange?.(activeProject)
-  }, [activeProject, onActiveChange])
+export function ProjectDeck({ deck, projects, lang, catalogIndex, catalogTotal }: ProjectDeckProps) {
+  const { order, activeIndex, drag, exitDir, isAnimating, total } = deck
 
-  if (projects.length === 0 || !activeProject) return null
+  if (total === 0) return null
 
-  const single = total < 2
+  const handlePointerMove = (event: ReactPointerEvent<HTMLElement>, isFront: boolean) => {
+    deck.dragHandlers.onPointerMove(event)
+    if (!isFront || drag.active || exitDir !== null) return
+    if (!window.matchMedia('(pointer: fine)').matches) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const el = event.currentTarget
+    const rect = el.getBoundingClientRect()
+    const x = (event.clientX - rect.left) / rect.width - 0.5
+    const y = (event.clientY - rect.top) / rect.height - 0.5
+
+    el.style.setProperty('--rx', `${(-y * 8).toFixed(2)}deg`)
+    el.style.setProperty('--ry', `${(x * 8).toFixed(2)}deg`)
+    el.style.setProperty('--tx', `${(x * 4).toFixed(1)}px`)
+    el.style.setProperty('--ty', `${(y * 4).toFixed(1)}px`)
+    el.style.setProperty('--mx', `${((x + 0.5) * 100).toFixed(1)}%`)
+    el.style.setProperty('--my', `${((y + 0.5) * 100).toFixed(1)}%`)
+  }
+
+  const handlePointerDown = (event: ReactPointerEvent<HTMLElement>) => {
+    clearTilt(event.currentTarget)
+    deck.dragHandlers.onPointerDown(event)
+  }
+
+  const handlePointerLeave = (event: ReactPointerEvent<HTMLElement>) => {
+    if (!drag.active) clearTilt(event.currentTarget)
+  }
 
   return (
-    <div className="flex flex-col items-center gap-6">
-      <div
-        role="region"
-        aria-roledescription="card deck"
-        aria-label={t('projectsTitle', lang)}
-        tabIndex={0}
-        onKeyDown={deck.onKeyDown}
-        className="deck relative w-[85vw] max-w-[460px] aspect-[5/7]"
-      >
-        {order.map((id, rank) => {
-          const project = byId.get(id)
-          if (!project) return null
-          const isFront = rank === 0
-          const exiting = isFront && exitDir !== null
-          const showBehind = rank >= 1 && rank <= 3
+    <div
+      className="deck w-full"
+      role="group"
+      aria-label={t('projectsLabel', lang)}
+      tabIndex={0}
+      onKeyDown={deck.onKeyDown}
+    >
+      {order.map((projectId, rank) => {
+        const project = projects.find((p) => p.id === projectId)
+        if (!project) return null
 
-          const stackStyle = {
-            '--rank': rank,
-            zIndex: exiting ? 1 : 40 - rank,
+        const isFront = rank === 0
+        const isExiting = isFront && exitDir !== null
+        const catNum = String((catalogIndex[projectId] ?? 0) + 1).padStart(3, '0')
+        const round = project.categoryKey === 'ai'
+
+        const classes = [
+          'deck-card',
+          isExiting ? `is-exit-${exitDir}` : isFront ? 'is-front' : 'is-behind',
+          isFront && !isExiting && drag.active ? 'is-dragging' : '',
+          isFront && !isExiting ? 'tilt' : '',
+        ]
+          .filter(Boolean)
+          .join('')
+
+        let cardStyle: CSSProperties = { zIndex: 40 - rank }
+        if (isExiting) {
+          const sign = exitDir === 'prev' ? -1 : 1
+          cardStyle = {
+            ...cardStyle,
+            zIndex: 1,
+            opacity: 0,
+            transform: `translate(${sign * 520}px, -40px) rotate(${sign * 24}deg)`,
+          }
+        } else if (isFront) {
+          cardStyle = {
+            ...cardStyle,
+            zIndex: 40,
+            opacity: 1,
+            ['--drag-x' as string]: `${drag.x}px`,
+            ['--drag-y' as string]: `${drag.y}px`,
+            ['--drag-rot' as string]: `${drag.rotate}deg`,
           } as CSSProperties
+        } else {
+          cardStyle = {
+            ...cardStyle,
+            opacity: OPACITY[Math.min(rank, 3)],
+            ['--rank' as string]: rank,
+          } as CSSProperties
+        }
 
-          // Pure horizontal fan — shared perspective, natural rotation, depth (CSS vars: desktop/mobile)
-          let transform = `translateX(calc(var(--fan-x) * ${rank})) rotate(calc(var(--fan-rot) * ${rank})) translateZ(calc(var(--fan-z) * ${rank})) scale(calc(1 - var(--fan-scale-step) * ${rank}))`
-          let opacity = rank <= 3 ? [0, 0.95, 0.8, 0.65][rank] : 0
+        const handlers =
+          isFront && !isExiting && total > 1 && !isAnimating
+            ? {
+                onPointerDown: handlePointerDown,
+                onPointerMove: (e: ReactPointerEvent<HTMLElement>) => handlePointerMove(e, true),
+                onPointerLeave: handlePointerLeave,
+                onPointerUp: deck.dragHandlers.onPointerUp,
+                onPointerCancel: deck.dragHandlers.onPointerCancel,
+                onClickCapture: deck.dragHandlers.onClickCapture,
+              }
+            : undefined
 
-          if (isFront) {
-            transform = `translate(${drag.x}px, ${drag.y}px) rotate(${drag.rotate}deg)`
-            opacity = 1
-          }
-          if (exiting) {
-            const dirSign = exitDir === 'next' ? 1 : -1
-            // Slight move-out + rotation, then shrink + depth back into fan
-            transform = `translateX(${dirSign * 36}%) rotate(${dirSign * 10}deg) scale(0.9) translateZ(-100px)`
-            opacity = 0
-          }
+        return (
+          <article
+            key={projectId}
+            className={classes}
+            style={cardStyle}
+            {...handlers}
+            data-cur={isFront && !isExiting ? 'Drag' : undefined}
+            aria-hidden={!isFront}
+          >
+            <div className="cin">
+              <div className="cin-header">
+                <span className="cnm">{project.title}</span>
+                <span className="cno">
+                  NO.<b>{catNum}</b>
+                </span>
+              </div>
 
-          return (
-            <article
-              key={project.id}
-              className={`deck-card${isFront ? ' is-front' : ''}${!isFront && showBehind ? ' is-behind' : ''}${exiting ? (exitDir === 'next' ? ' is-exit-next' : ' is-exit-prev') : ''}`}
-              style={{
-                ...stackStyle,
-                transform,
-                opacity,
-                ...(isFront && !exiting && drag.active ? { transition: 'none' } : null),
-                ...(!isFront && !showBehind && !exiting ? { visibility: 'hidden' } : null),
-              }}
-              aria-hidden={!isFront}
-              inert={!isFront}
-              {...(isFront && !single ? deck.dragHandlers : {})}
-            >
-              <div className="card-frame flex h-full flex-col">
-                <header className="card-name">{project.title}</header>
+              <span className="ctp">
+                <i className={round ? 'round' : undefined} aria-hidden />
+                {project.category[lang]}
+              </span>
 
-                <div className="card-artwork">
-                  {project.image ? (
-                    <img
-                      src={project.image}
-                      alt=""
-                      loading={rank <= 1 ? 'eager' : 'lazy'}
-                      width={16}
-                      height={9}
-                      draggable={false}
-                      className="h-full w-full object-contain"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-midnight text-xs text-paper/40">
-                      {project.title}
-                    </div>
-                  )}
-                  <div className="card-holo" aria-hidden />
-                </div>
-
-                <div className="card-meta-row">
-                  <span className="card-badge">{project.category[lang]}</span>
-                  <span className="card-number">
-                    {cardNumber(catalogIndex[project.id] ?? 0, catalogTotal)}
+              <div className="cart">
+                {project.image ? (
+                  <img src={project.image} alt="" />
+                ) : (
+                  <span className="font-display text-3xl font-black uppercase tracking-tight text-ink/70">
+                    {project.title}
                   </span>
-                </div>
+                )}
+              </div>
 
-                <div className="card-info">
-                  {project.role && (
-                    <p className="card-info-line">
-                      <span className="card-info-label">{t('roleLabel', lang)}</span>
-                      <span>{project.role[lang]}</span>
-                    </p>
-                  )}
-                  {project.stack.length > 0 && (
-                    <p className="card-info-line">
-                      <span className="card-info-label">{t('stackLabel', lang)}</span>
-                      <span className="truncate">{project.stack.join(' · ')}</span>
-                    </p>
-                  )}
-                </div>
+              <dl className="cmv">
+                <dt>{t('roleLabel', lang)}</dt>
+                <dd>{project.role ? project.role[lang] : project.category[lang]}</dd>
+                <dt>{t('stackLabel', lang)}</dt>
+                <dd>{project.stack.length > 0 ? project.stack.join(', ') : '—'}</dd>
+              </dl>
 
-                <footer className="card-links">
+              <div className="cft">
+                <span>
+                  commit {catNum}/{String(catalogTotal).padStart(3, '0')}
+                </span>
+                <span className="flex items-center gap-2.5">
+                  <span className="text-ink/45">RAM ©26</span>
                   {project.liveUrl && (
                     <a
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="card-link"
+                      onClick={(e) => e.stopPropagation()}
+                      data-cur="Open"
                     >
-                      <ExternalLink size={13} aria-hidden />
-                      {t('liveLink', lang)}
+                      <ExternalLink size={12} aria-hidden />
+                      Live
                     </a>
                   )}
                   {project.githubUrl && (
@@ -153,54 +180,26 @@ export function ProjectDeck({ projects, lang, catalogIndex, catalogTotal, onActi
                       href={project.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="card-link card-link-muted"
+                      onClick={(e) => e.stopPropagation()}
+                      data-cur="Open"
                     >
-                      <Github size={13} aria-hidden />
-                      {t('githubLink', lang)}
+                      <Github size={12} aria-hidden />
+                      GitHub
                     </a>
                   )}
-                </footer>
+                </span>
               </div>
-            </article>
-          )
-        })}
-      </div>
+            </div>
+            <div className="holo" aria-hidden />
+          </article>
+        )
+      })}
 
-      <div className="deck-controls flex w-full max-w-[460px] items-center justify-between gap-4">
-        <button
-          type="button"
-          onClick={deck.goPrev}
-          disabled={single || deck.isAnimating}
-          aria-label={t('deckPrev', lang)}
-          className="deck-btn"
-        >
-          <ArrowLeft size={16} aria-hidden />
-          <span className="hidden sm:inline">{t('deckPrev', lang)}</span>
-        </button>
-
-        <p className="deck-indicator whitespace-nowrap font-body text-xs font-bold tracking-[0.16em] text-paper/55" aria-live="polite">
-          {t('deckPosition', lang)
-            .replace('{n}', String(activeIndex + 1).padStart(2, '0'))
-            .replace('{total}', String(total).padStart(2, '0'))}
-        </p>
-
-        <button
-          type="button"
-          onClick={deck.goNext}
-          disabled={single || deck.isAnimating}
-          aria-label={t('deckNext', lang)}
-          className="deck-btn"
-        >
-          <span className="hidden sm:inline">{t('deckNext', lang)}</span>
-          <ArrowRight size={16} aria-hidden />
-        </button>
-      </div>
-
-      {!single && !deck.hintDismissed && (
-        <p className="deck-hint font-body text-[0.7rem] uppercase tracking-[0.18em] text-paper/40">
-          {t('deckHint', lang)}
-        </p>
-      )}
+      <p className="sr-only" aria-live="polite">
+        {lang === 'en'
+          ? `Project ${activeIndex + 1} of ${total}: ${deck.activeProject?.title ?? ''}`
+          : `Proyek ${activeIndex + 1} dari ${total}: ${deck.activeProject?.title ?? ''}`}
+      </p>
     </div>
   )
 }
